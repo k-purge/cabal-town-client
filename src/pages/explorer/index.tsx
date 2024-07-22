@@ -1,20 +1,36 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Box, Fade } from "@mui/material";
-import { IJetton, useJettonList } from "hooks/useJettonList";
 import { SearchBar } from "components/header/headerSearchBar";
 import { ListContainer, ScreenHeading } from "./styles";
 import { Screen, ScreenContent } from "components/Screen";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
+import { ROUTES } from "consts";
 import { Card } from "./card";
+import useJettonListStore from "store/jetton-list-store/useJettonListStore";
+import { IJetton } from "store/jetton-list-store";
 
 function ExplorerPage() {
+  const { setSelectedJetton, jettonList, getJettonList } = useJettonListStore();
   const [isLoading, setIsLoading] = useState(false);
   const [example, setExample] = useState<string | undefined>(undefined);
   const navigate = useNavigatePreserveQuery();
-  const { list } = useJettonList();
 
   const resetExample = useCallback(() => {
     setExample(undefined);
+  }, []);
+
+  const onClickCard = useCallback(
+    (jetton: IJetton | undefined) => {
+      if (jetton) {
+        setSelectedJetton(jetton);
+        navigate(ROUTES.jettonId.replace(":id", jetton.masterAddress));
+      }
+    },
+    [navigate, setSelectedJetton],
+  );
+
+  useEffect(() => {
+    getJettonList();
   }, []);
 
   return (
@@ -35,8 +51,8 @@ function ExplorerPage() {
             </Box>
 
             <ListContainer>
-              {list.map((item, index) => (
-                <Card key={index} item={item} />
+              {jettonList.map((item, index) => (
+                <Card key={index} item={item} onClickCard={onClickCard} />
               ))}
             </ListContainer>
           </Box>

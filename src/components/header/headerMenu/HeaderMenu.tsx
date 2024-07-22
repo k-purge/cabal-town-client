@@ -1,4 +1,4 @@
-import { Box, Drawer, styled } from "@mui/material";
+import { Drawer, styled } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppLogo } from "components/appLogo";
 import { LogoContainer, CloseMenuButton, DrawerContent, AppMenu, HeaderTypography } from "./styled";
@@ -21,19 +21,14 @@ const MobileMenu: React.FC<MenuProps> = ({ closeMenu, showMenu }) => {
           width: "70vw",
         },
       }}>
-      <Box
-        sx={{
-          borderBottom: "1px solid #FFB800",
-        }}>
-        <LogoContainer>
-          <AppLogo />
-        </LogoContainer>
+      <LogoContainer>
+        <AppLogo />
+      </LogoContainer>
 
-        <CloseMenuButton onClick={closeMenu}>
-          <CloseRoundedIcon style={{ width: 38, height: 38 }} />
-        </CloseMenuButton>
-      </Box>
-
+      <CloseMenuButton onClick={closeMenu}>
+        <CloseRoundedIcon style={{ width: 38, height: 38 }} />
+      </CloseMenuButton>
+      
       <DrawerContent>
         <HeaderTypography>EDIT TELEGRAM</HeaderTypography>
         <HeaderTypography>DISCONNECT</HeaderTypography>

@@ -13,32 +13,24 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const StyledCategory = styled(Box)(({ theme }) => ({
-  width: "calc(50% - 15px)",
-  padding: "20px 30px 30px 30px",
-  [theme.breakpoints.down("lg")]: {
-    width: "100%",
-    padding: "20px 25px 20px 25px",
-  },
-}));
-
 const StyledCategoryFields = styled(Box)({
   display: "flex",
   flexDirection: "column",
   gap: 20,
 });
 
-const StyledBlock = styled(StyledCategory)({
+const StyledBlock = styled(Box)(({ height }: { height: string | number }) => ({
   boxShadow: "2px 2px 0px 0px #000000",
   border: "2px solid #000",
   background: "#1E1E1E",
-  width: "353px",
-  height: "394px",
+  width: "100%",
+  height,
   display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
   textAlign: "center",
-});
+  alignItems: "center",
+  flexDirection: "column",
+  padding: "20px 25px 20px 25px",
+}));
 
 const StyledTop = styled(Box)({
   display: "flex",
@@ -104,12 +96,35 @@ const BorderLinearProgress = styled(LinearProgress)(({ value }) => ({
   },
 }));
 
+const StyledBody = styled(Box)({
+  width: "100%",
+});
+
+const StyledBodyBlock = styled(Box)(({ height }: { height: string | number }) => ({
+  background: "#1E1E1E",
+  width: "100%",
+  height,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  textAlign: "center",
+  marginBottom: "24px",
+}));
+
+const StyledSelectBox = styled(Box)(() => ({
+  paddingInline: "30px",
+  paddingBlock: "18px",
+  background: "#000",
+}));
+
 export {
+  StyledSelectBox,
+  StyledBody,
+  StyledBodyBlock,
   StyledBlock,
   StyledTop,
   StyledTopImg,
   StyledTopText,
-  StyledCategory,
   StyledCategoryFields,
   StyledContainer,
   StyledCardBody,

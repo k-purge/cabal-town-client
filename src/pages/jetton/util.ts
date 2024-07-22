@@ -1,3 +1,5 @@
+import BN from "bn.js";
+import { isValidAddress } from "utils";
 import { PersistenceType } from "lib/jetton-minter";
 import BurnJettonsAction from "./actions/BurnJettonsAction";
 import MintJettonsAction from "./actions/MintJettonsAction";
@@ -90,5 +92,22 @@ export const getTotalSupplyWarning = (
       type: "warning",
       text: `The admin can mint more of this jetton without warning. [Read more](${commonGithubUrl})`,
     };
+  }
+};
+
+export const validateTradeParams = (
+  toAddress?: string,
+  amount?: number,
+): string | undefined | JSX.Element => {
+  if (!toAddress) {
+    return "Sender wallet address required";
+  }
+
+  if (toAddress && !isValidAddress(toAddress)) {
+    return "Invalid Sender wallet address";
+  }
+
+  if (!amount) {
+    return "Transfer amount required";
   }
 };

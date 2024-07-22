@@ -21,6 +21,8 @@ enum OPS {
   InternalTransfer = 0x178d4519,
   Transfer = 0xf8a7ea5,
   Burn = 0x595f07bc,
+  BuyJetton = 31,
+  SellJetton = 51,
 }
 
 export type JettonMetaDataKeys =
@@ -267,6 +269,24 @@ export function transfer(to: Address, from: Address, jettonAmount: BN) {
     .storeBit(false)
     .storeCoins(toNano(0.001))
     .storeBit(false) // forward_payload in this slice, not separate cell
+    .endCell();
+}
+
+export function buyJetton(jettonAmount: number) {
+  return beginCell()
+    .storeUint(OPS.BuyJetton, 32)
+    .storeUint(1, 64)
+    .storeCoins(jettonAmount)
+    .storeRef(beginCell().endCell())
+    .endCell();
+}
+
+export function sellJetton(jettonAmount: number) {
+  return beginCell()
+    .storeUint(OPS.SellJetton, 32)
+    .storeUint(1, 64)
+    .storeCoins(jettonAmount)
+    .storeRef(beginCell().endCell())
     .endCell();
 }
 

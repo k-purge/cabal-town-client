@@ -7,7 +7,9 @@ import { zeroAddress } from "./utils";
 import {
   buildJettonOnchainMetadata,
   burn,
+  buyJetton,
   mintBody,
+  sellJetton,
   transfer,
   updateMetadataBody,
 } from "./jetton-minter";
@@ -181,6 +183,74 @@ class JettonDeployController {
     await waiter();
   }
 
+  async buyJettons(
+    tonConnection: TonConnectUI,
+    amount: number,
+    fromAddress: string,
+    jettonMaster: string,
+    msgValue: number,
+  ) {
+    const tc = await getClient();
+
+    const waiter = await waitForSeqno(
+      tc.openWalletFromAddress({
+        source: Address.parse(fromAddress),
+      }),
+    );
+
+    const tx: SendTransactionRequest = {
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address: jettonMaster,
+          amount: msgValue.toFixed(0),
+          stateInit: undefined,
+          payload: buyJetton(amount)
+            .toBoc()
+            .toString("base64"),
+        },
+      ],
+    };
+
+    await tonConnection.sendTransaction(tx);
+
+    await waiter();
+  }
+
+  async sellJettons(
+    tonConnection: TonConnectUI,
+    amount: number,
+    fromAddress: string,
+    jettonMaster: string,
+    msgValue: number,
+  ) {
+    const tc = await getClient();
+
+    const waiter = await waitForSeqno(
+      tc.openWalletFromAddress({
+        source: Address.parse(fromAddress),
+      }),
+    );
+
+    const tx: SendTransactionRequest = {
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address: jettonMaster,
+          amount: msgValue.toFixed(0),
+          stateInit: undefined,
+          payload: sellJetton(amount)
+            .toBoc()
+            .toString("base64"),
+        },
+      ],
+    };
+
+    await tonConnection.sendTransaction(tx);
+
+    await waiter();
+  }
+
   async burnJettons(
     tonConnection: TonConnectUI,
     amount: BN,
@@ -257,6 +327,18 @@ class JettonDeployController {
       minter,
       jettonWallet,
     };
+  }
+
+  async getJettonPrice(contractAddr: Address, amt: number) {
+    const tc = await getClient();
+    const jettonPrice = await makeGetCall(
+      contractAddr,
+      "get_token_price",
+      [new BN(amt)],
+      async ([price]) => price,
+      tc,
+    );
+    return jettonPrice?.toString();
   }
 
   async fixFaultyJetton(

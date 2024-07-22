@@ -9,14 +9,15 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { Address } from "ton";
 import { getUrlParam, isValidAddress } from "utils";
 import { jettonStateAtom } from ".";
+import axiosService from "services/axios";
 
 let i = 0;
 
 function useJettonStore() {
   const [state, setState] = useRecoilState(jettonStateAtom);
   const reset = useResetRecoilState(jettonStateAtom);
-  const { showNotification } = useNotification();
   const connectedWalletAddress = useTonAddress();
+  const { showNotification } = useNotification();
   const { jettonAddress } = useJettonAddress();
 
   const getJettonDetails = useCallback(async () => {
@@ -54,6 +55,16 @@ function useJettonStore() {
         parsedJettonMaster,
         address ? Address.parse(address) : zeroAddress(),
       );
+
+      // get jetton price
+      const price = await jettonDeployController.getJettonPrice(parsedJettonMaster, 1);
+      const jettonPrice = parseInt(price ?? "0");
+
+      // get ton price
+      const {
+        rates: { TON },
+      } = await axiosService.getTonPrice();
+      const tonPrice = TON.prices.USD;
 
       if (!result) {
         console.log("empty");
@@ -115,6 +126,8 @@ function useJettonStore() {
           jettonMaster: jettonAddress,
           isMyWallet,
           selectedWalletAddress: address,
+          jettonPrice,
+          tonPrice,
         };
       });
     } catch (error) {

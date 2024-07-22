@@ -18,7 +18,7 @@ export const Wallet = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   return (
-    <StyledBlock sx={{ width: "calc(45% - 15px)" }}>
+    <StyledBlock height="394px" sx={{ width: "calc(45% - 15px)" }}>
       <AppHeading
         text={`${!params.get("address") ? "Connected" : ""} Jetton wallet`}
         variant="h4"
