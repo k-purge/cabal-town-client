@@ -53,7 +53,7 @@ const SearchResultsWrapper = styled(Box)(({ theme }) => ({
   borderRadius: 16,
   width: "100%",
   maxHeight: 450,
-  overflowY: "auto",
+  overflowY: "hidden",
 
   [theme.breakpoints.down("md")]: {
     display: "none",

@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { TextConainer, HolderBox, HeaderText } from "./styled";
 import { Box, Typography } from "@mui/material";
-import useJettonStore from "store/jetton-store/useJettonStore";
 import { DECIMAL_SCALER } from "consts";
 
 interface IProps {
@@ -21,21 +20,20 @@ export default function HolderCard({
   isUser,
   circulatingSupply,
 }: IProps) {
-  const { decimals } = useJettonStore();
-
-  const calJettonAmt = useCallback(
-    (balance: number) => {
-      return (balance / DECIMAL_SCALER).toFixed(2);
-    },
-    [decimals],
-  );
+  const calJettonAmt = useCallback((balance: number) => {
+    return (balance / DECIMAL_SCALER).toFixed(2);
+  }, []);
 
   const calJettonDistribution = useCallback(
     (balance: number) => {
       return ((balance / circulatingSupply) * 100).toFixed(2);
     },
-    [decimals],
+    [circulatingSupply],
   );
+
+  if (!address) {
+    return <></>;
+  }
 
   return (
     <HolderBox bgcolor={bgcolor}>

@@ -56,7 +56,7 @@ const TradeButton = styled(LoadingButton, {
   "&:disabled": {
     background: "#D8D8D8",
     color: "#606060",
-  }
+  },
 }));
 
 const BoxConainer = styled(Box)({
@@ -86,7 +86,7 @@ const blink = keyframes`
 const BlinkingText = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "blinked",
 })<{ blinked?: boolean }>(({ blinked }) => ({
-  marginLeft: "42px",
+  marginLeft: "12px",
   fontSize: 12,
   color: "#939393",
   alignSelf: "self-start",

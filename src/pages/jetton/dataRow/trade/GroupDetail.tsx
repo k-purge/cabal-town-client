@@ -5,13 +5,12 @@ import useNotification from "hooks/useNotification";
 import CopyToClipboard from "react-copy-to-clipboard";
 import CopyImg from "assets/icons/copy.svg";
 import useJettonStore from "store/jetton-store/useJettonStore";
-import useJettonListStore from "store/jetton-list-store/useJettonListStore";
 import { BoxConainer, EllipsisText, StyledImg } from "./styled";
 import { DECIMAL_SCALER } from "consts";
 
 export const GroupDetail = () => {
-  const { symbol, jettonMaster, jettonWalletAddress, jettonPrice, tonPrice } = useJettonStore();
-  const { selectedJetton } = useJettonListStore();
+  const { symbol, jettonMaster, jettonWalletAddress, jettonPrice, tonPrice, selectedJetton } =
+    useJettonStore();
   const { showNotification } = useNotification();
 
   const onCopy = () => {
@@ -20,10 +19,11 @@ export const GroupDetail = () => {
 
   const marketCap = useMemo(() => {
     if (selectedJetton) {
-      const balance = selectedJetton.holders.reduce(
-        (balance, holder) => balance + parseInt(holder.balance),
-        0,
-      );
+      const balance =
+        selectedJetton.holders?.reduce(
+          (balance, holder) => balance + parseInt(holder.balance),
+          0,
+        ) ?? 0;
       // assume the game start  balance is 1000 * DECIMAL_SCALER
       // console.log(balance)
       const cap = (balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) / DECIMAL_SCALER;

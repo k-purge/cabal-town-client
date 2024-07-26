@@ -16,10 +16,10 @@ function useJettonListStore() {
         jettonLoading: true,
       }));
 
-      const { res } = await axiosService.getJettonList();
-      console.log("res: ", res);
+      const { res: jettonList } = await axiosService.getJettonList();
+      console.log("jettonList", jettonList);
 
-      if (!res?.results) {
+      if (!jettonList) {
         console.log("empty");
 
         return;
@@ -28,7 +28,7 @@ function useJettonListStore() {
       setState((prevState) => {
         return {
           ...prevState,
-          jettonList: res.results,
+          jettonList,
         };
       });
     } catch (error) {

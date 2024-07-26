@@ -1,17 +1,27 @@
 import { atom } from "recoil";
 
+export interface IHolder {
+  address: string;
+  balance: string;
+  owner: {
+    address: string;
+  };
+}
+
 export interface IJetton {
   masterAddress: string;
-  ownerAddress: string;
+  ownerAddress?: string;
   imageUri: string;
   name: string;
-  holders: any[];
-  players: any[];
-  txns: any[];
-  minStartedAmt: number;
-  lastSurvivors: number;
+  numOfPlayers?: number;
+  holders?: IHolder[];
+  players?: any[];
+  txns?: any[];
+  minStartedAmt?: number;
+  lastSurvivors?: number;
   numOfRounds?: number;
   nextPurgeAt?: Date;
+  tgLink?: string;
 }
 
 export interface JettonListStoreState {

@@ -205,9 +205,7 @@ class JettonDeployController {
           address: jettonMaster,
           amount: msgValue.toFixed(0),
           stateInit: undefined,
-          payload: buyJetton(amount)
-            .toBoc()
-            .toString("base64"),
+          payload: buyJetton(amount).toBoc().toString("base64"),
         },
       ],
     };
@@ -239,9 +237,7 @@ class JettonDeployController {
           address: jettonMaster,
           amount: msgValue.toFixed(0),
           stateInit: undefined,
-          payload: sellJetton(amount)
-            .toBoc()
-            .toString("base64"),
+          payload: sellJetton(amount).toBoc().toString("base64"),
         },
       ],
     };
@@ -282,13 +278,13 @@ class JettonDeployController {
     await waiter();
   }
 
-  async getJettonDetails(contractAddr: Address, owner: Address) {
+  async getJettonDetails(contractAddr: Address) {
     const tc = await getClient();
     const minter = await makeGetCall(
       contractAddr,
       "get_jetton_data",
       [],
-      async ([totalSupply, __, adminCell, contentCell]) => ({
+      async ([totalSupply, _, adminCell, contentCell]) => ({
         ...(await readJettonMetadata(contentCell as unknown as Cell)),
         admin: cellToAddress(adminCell),
         totalSupply: totalSupply as BN,
@@ -299,7 +295,7 @@ class JettonDeployController {
     const jWalletAddress = await makeGetCall(
       contractAddr,
       "get_wallet_address",
-      [beginCell().storeAddress(owner).endCell()],
+      [beginCell().storeAddress(minter.admin).endCell()],
       ([addressCell]) => cellToAddress(addressCell),
       tc,
     );

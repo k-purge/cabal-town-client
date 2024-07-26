@@ -2,37 +2,48 @@ import { useMemo } from "react";
 import { StyledBlock, HolderContainer, BoxConainer, BoxText, DotBox } from "./styled";
 import { Typography } from "@mui/material";
 import { useTonAddress } from "@tonconnect/ui-react";
-import useJettonListStore from "store/jetton-list-store/useJettonListStore";
 import HolderCard from "./HolderCard";
+import useJettonStore from "store/jetton-store/useJettonStore";
 
 export const Holder = () => {
   const rawAddress = useTonAddress(false);
-  const { selectedJetton } = useJettonListStore();
+  const { selectedJetton, userBalance } = useJettonStore();
 
   const userHolding = useMemo(() => {
-    let place = 0;
-    const holdings = selectedJetton?.holders.filter((obj, i) => {
-      place = i+1;
-      return obj.owner.address === rawAddress;
-    });
+    if (selectedJetton?.holders) {
+      let place = 0;
+      for (let i = 0; i < selectedJetton?.holders?.length; i++) {
+        const ele = selectedJetton?.holders[i];
+        if (ele.owner.address === rawAddress) {
+          place = i + 1;
+          continue;
+        }
+      }
 
-    if (holdings?.length) {
-      return {
-        place,
-        holding: holdings[0],
-      };
+      if (userBalance) {
+        return {
+          place,
+          holding: userBalance,
+        };
+      }
     }
-  }, [selectedJetton]);
+  }, [rawAddress, selectedJetton?.holders, userBalance]);
 
   const circulatingSupply = useMemo(() => {
-    return selectedJetton?.holders.reduce(
-      (balance, holder) => balance + parseInt(holder.balance),
-      0,
+    return (
+      selectedJetton?.holders?.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ??
+      0
     );
   }, [selectedJetton]);
 
-  const highestHolders = useMemo(() => selectedJetton?.holders.slice(0, 5), []);
-  const lowestHolders = useMemo(() => selectedJetton?.holders.slice(-5), []);
+  const highestHolders = useMemo(
+    () => selectedJetton?.holders?.slice(0, 5),
+    [selectedJetton?.holders],
+  );
+  const lowestHolders = useMemo(
+    () => selectedJetton?.holders?.slice(-5),
+    [selectedJetton?.holders],
+  );
 
   return (
     <StyledBlock height="100%">
@@ -46,8 +57,8 @@ export const Holder = () => {
           isUser={true}
           bgcolor="#FFB800"
           place={userHolding?.place ?? 0}
-          address={userHolding?.holding.owner.address}
-          balance={parseFloat(userHolding?.holding.balance)}
+          address={rawAddress}
+          balance={userHolding?.holding ?? 0}
           circulatingSupply={circulatingSupply}
         />
 
@@ -65,6 +76,7 @@ export const Holder = () => {
               />
             );
           }
+          return <></>;
         })}
         <DotBox>...</DotBox>
         <DotBox sx={{ background: "#C50B37" }}>

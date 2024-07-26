@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import {
   StyledBlock,
   HolderContainer,
@@ -7,40 +7,19 @@ import {
   HolderBox,
   HeaderText,
   BoxText,
-  DotBox,
 } from "./styled";
 import { Box, Typography } from "@mui/material";
 import useJettonStore from "store/jetton-store/useJettonStore";
-import useJettonListStore from "store/jetton-list-store/useJettonListStore";
 import { DECIMAL_SCALER } from "consts";
 
 export const Txn = () => {
-  const {
-    jettonImage,
-    adminAddress,
-    isAdmin,
-    adminRevokedOwnership,
-    symbol,
-    name,
-    description,
-    jettonMaster,
-    persistenceType,
-    totalSupply,
-    jettonWalletAddress,
-    isJettonDeployerFaultyOnChainData,
-    jettonLoading,
-    decimals,
-    isImageBroken,
-  } = useJettonStore();
-  const { selectedJetton } = useJettonListStore();
+  const { symbol, selectedJetton } = useJettonStore();
 
   const txns = useMemo(() => {
-    return selectedJetton?.txns.filter(
+    return selectedJetton?.txns?.filter(
       (txn) => txn.success && [31, 51].includes(parseInt(txn.in_msg.op_code, 16)),
     );
   }, [selectedJetton]);
-
-  console.log("txns: ", txns);
 
   const dateConverter = useCallback((timestamp: number) => {
     const date = new Date(timestamp * 1000); // convert seconds to milliseconds

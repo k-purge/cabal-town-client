@@ -1,4 +1,3 @@
-import BN from "bn.js";
 import { isValidAddress } from "utils";
 import { PersistenceType } from "lib/jetton-minter";
 import BurnJettonsAction from "./actions/BurnJettonsAction";
@@ -96,8 +95,10 @@ export const getTotalSupplyWarning = (
 };
 
 export const validateTradeParams = (
+  type: string,
   toAddress?: string,
   amount?: number,
+  balance?: number,
 ): string | undefined | JSX.Element => {
   if (!toAddress) {
     return "Sender wallet address required";
@@ -109,5 +110,13 @@ export const validateTradeParams = (
 
   if (!amount) {
     return "Transfer amount required";
+  }
+
+  if (type === "sell" && !balance) {
+    return "No balance";
+  }
+
+  if (type === "sell" && amount > balance!) {
+    return "Not enough balance";
   }
 };

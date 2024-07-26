@@ -32,6 +32,8 @@ const FooterBox = styled(Box)(() => ({
 const ScreensWrapper = styled(Box)({
   flex: "1 1 auto",
   overflowY: "auto",
+  overflowX: "hidden",
+  width: "100vw",
 
   "*::-webkit-scrollbar": {
     display: "none",

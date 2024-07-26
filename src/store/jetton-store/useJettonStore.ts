@@ -2,6 +2,7 @@ import { useTonAddress } from "@tonconnect/ui-react";
 import QuestiomMarkImg from "assets/icons/question.png";
 import { useJettonAddress } from "hooks/useJettonAddress";
 import useNotification from "hooks/useNotification";
+import axiosService from "services/axios";
 import { jettonDeployController } from "lib/deploy-controller";
 import { zeroAddress } from "lib/utils";
 import { useCallback } from "react";
@@ -9,7 +10,7 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { Address } from "ton";
 import { getUrlParam, isValidAddress } from "utils";
 import { jettonStateAtom } from ".";
-import axiosService from "services/axios";
+import { IHolder } from "../jetton-list-store";
 
 let i = 0;
 
@@ -17,8 +18,9 @@ function useJettonStore() {
   const [state, setState] = useRecoilState(jettonStateAtom);
   const reset = useResetRecoilState(jettonStateAtom);
   const connectedWalletAddress = useTonAddress();
+  const rawAddress = useTonAddress(false);
   const { showNotification } = useNotification();
-  const { jettonAddress } = useJettonAddress();
+  const { jettonAddress, jettonFriendlyAddress } = useJettonAddress();
 
   const getJettonDetails = useCallback(async () => {
     i++;
@@ -33,8 +35,10 @@ function useJettonStore() {
     }
 
     const address = queryAddress || connectedWalletAddress;
+    console.log("address", address);
 
     const isMyWallet = address ? address === connectedWalletAddress : false;
+    console.log("isMyWallet", isMyWallet);
 
     reset();
 
@@ -43,7 +47,8 @@ function useJettonStore() {
       return;
     }
 
-    const parsedJettonMaster = Address.parse(jettonAddress);
+    const jettonMaster = Address.parse(jettonAddress);
+    const parsedJettonMaster = Address.parse(jettonFriendlyAddress!);
 
     try {
       setState((prevState) => ({
@@ -51,13 +56,22 @@ function useJettonStore() {
         jettonLoading: true,
       }));
 
-      const result = await jettonDeployController.getJettonDetails(
-        parsedJettonMaster,
-        address ? Address.parse(address) : zeroAddress(),
-      );
+      const result = await jettonDeployController.getJettonDetails(parsedJettonMaster);
+
+      // get jetton detail from db
+      const { res: selectedJetton } = await axiosService.getJetton(jettonAddress);
+
+      console.log("rawAddress", rawAddress);
+      let userBalance: number;
+      if (selectedJetton.holders) {
+        const balance = selectedJetton.holders
+          .filter((holder: IHolder) => holder.owner.address === rawAddress)
+          .map((holding: IHolder) => parseInt(holding.balance));
+        userBalance = balance[0];
+      }
 
       // get jetton price
-      const price = await jettonDeployController.getJettonPrice(parsedJettonMaster, 1);
+      const price = await jettonDeployController.getJettonPrice(jettonMaster, 1);
       const jettonPrice = parseInt(price ?? "0");
 
       // get ton price
@@ -107,6 +121,7 @@ function useJettonStore() {
       if (myIndex !== i) {
         return;
       }
+
       setState((prevState) => {
         return {
           ...prevState,
@@ -128,6 +143,8 @@ function useJettonStore() {
           selectedWalletAddress: address,
           jettonPrice,
           tonPrice,
+          selectedJetton,
+          userBalance,
         };
       });
     } catch (error) {
@@ -146,11 +163,47 @@ function useJettonStore() {
         jettonLoading: false,
       }));
     }
-  }, [setState, showNotification, connectedWalletAddress, jettonAddress, reset]);
+  }, [
+    connectedWalletAddress,
+    reset,
+    jettonAddress,
+    jettonFriendlyAddress,
+    showNotification,
+    setState,
+    rawAddress,
+  ]);
+
+  const getJettonPrice = useCallback(
+    async (limit: number) => {
+      try {
+        if (jettonAddress) {
+          const { res } = await axiosService.getJettonPrice(jettonAddress, limit);
+          setState((prevState) => {
+            return {
+              ...prevState,
+              jettonPriceList: res.results,
+            };
+          });
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          showNotification(
+            !!error.message.match(/exit_code: (11|32)/g)
+              ? `Unable to query. This is probably not a Jetton Contract (${error.message})`
+              : error.message,
+            "error",
+          );
+        }
+      }
+    },
+    [setState, showNotification, jettonAddress],
+  );
 
   return {
     ...state,
     getJettonDetails,
+    getJettonPrice,
     reset,
   };
 }

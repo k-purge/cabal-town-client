@@ -16,7 +16,7 @@ export default function SelectType({ type, handleChange }: { type: string; handl
             background: "#ffff",
             textAlign: "left",
             color: "#606060",
-            width: "341px",
+            width: "100%",
             height: "48px",
             svg: {
               color: "#000",

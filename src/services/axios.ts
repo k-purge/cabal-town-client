@@ -8,15 +8,33 @@ async function getJettonList() {
   };
 }
 
+async function getJetton(masterAddress: string) {
+  const endpoint = "https://purge-fun-sever.onrender.com/v1/jettons/" + masterAddress;
+
+  return {
+    res: (await axios.get(endpoint)).data,
+  };
+}
+
+async function getJettonPrice(masterAddress: string, limit: number) {
+  const endpoint = `https://purge-fun-sever.onrender.com/v1/jettons/${masterAddress}/price?limit=${limit}`;
+
+  return {
+    res: (await axios.get(endpoint)).data,
+  };
+}
+
 async function getTonPrice() {
   const endpoint = "https://tonapi.io/v2/rates?tokens=ton&currencies=usd";
 
-  return (await axios.get(endpoint)).data
+  return (await axios.get(endpoint)).data;
 }
 
 const axiosService = {
+  getJettonPrice,
   getJettonList,
-  getTonPrice
+  getTonPrice,
+  getJetton,
 };
 
 export default axiosService;

@@ -11,7 +11,7 @@ body {
 @media screen and (max-height: 850px) {
   body {
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: hidden;
   }
 }
 

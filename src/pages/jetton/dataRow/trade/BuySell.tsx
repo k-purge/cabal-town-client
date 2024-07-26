@@ -1,4 +1,4 @@
-import { MouseEvent, useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { Address, toNano } from "ton";
 import { useRecoilState } from "recoil";
 import { CircularProgress } from "@mui/material";
@@ -27,14 +27,13 @@ import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 export const BuySell = () => {
   const senderAddress = useTonAddress();
   const {
+    userBalance,
     jettonImage,
     symbol,
     isImageBroken,
     getJettonDetails,
-    jettonWalletAddress,
     jettonMaster,
     jettonPrice,
-    decimals,
   } = useJettonStore();
   const { jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
@@ -42,58 +41,78 @@ export const BuySell = () => {
   const [actionInProgress, setActionInProgress] = useRecoilState(jettonActionsState);
   const [tradeType, setTradeType] = useState("buy");
   const [price, setPrice] = useState(jettonPrice);
-  const [amt, setAmt] = useState(1);
+  const [amt, setAmt] = useState<number>(1);
   const [blinked, setBlinked] = useState(false);
 
-  console.log("blinked:", blinked);
-
-  const handleChangeType = (event: MouseEvent<HTMLElement, MouseEvent>, newTradeType: string) => {
+  const handleChangeType = (event: any, newTradeType: string) => {
     setTradeType(newTradeType);
+    setAmt(0);
   };
 
   const onChangeAmt = (e: any) => {
     const val = e.target.value;
-    if (val > 0) {
-      setAmt(val);
-      setBlinked(true);
+    if (val.slice(-1) === ".") {
+      return setAmt(val);
+    } else if (!val) {
+      setBlinked(false);
+      return setAmt(0);
+    }
+
+    try {
+      const float = parseFloat(val);
+      if (float >= 0) {
+        setBlinked(true);
+        return setAmt(float);
+      }
+    } catch (e) {
+      return;
     }
   };
 
-  const buyTrade = async (jettonPrice: number) => {
-    console.log("buyTrade");
-    const fee = (jettonPrice * 5) / 100;
-    const msgValue = toNano(0.02).toNumber() + jettonPrice + fee;
+  const buyTrade = useCallback(
+    async (jettonPrice: number) => {
+      console.log("buyTrade");
+      const fee = (jettonPrice * 5) / 100;
+      const msgValue = toNano(0.02).toNumber() + jettonPrice + fee;
 
-    await jettonDeployController.buyJettons(
-      tonconnect,
-      amt,
-      senderAddress!,
-      jettonMaster!,
-      msgValue,
-    );
-  };
+      if (amt > 0) {
+        await jettonDeployController.buyJettons(
+          tonconnect,
+          amt,
+          senderAddress!,
+          jettonMaster!,
+          msgValue,
+        );
+      }
+    },
+    [amt, jettonMaster, senderAddress, tonconnect],
+  );
 
-  const sellTrade = async (jettonPrice: number) => {
-    console.log("sellTrade");
-    const fee = (jettonPrice * 5) / 100;
-    console.log("fee", fee);
-    const msgValue = toNano(0.02).toNumber() + fee;
-    console.log("msgValue", msgValue);
-    console.log("amt", amt);
-
-    await jettonDeployController.sellJettons(
-      tonconnect,
-      amt,
-      senderAddress!,
-      jettonMaster!,
-      msgValue,
-    );
-  };
+  const sellTrade = useCallback(
+    async (jettonPrice: number) => {
+      console.log("sellTrade");
+      const fee = (jettonPrice * 5) / 100;
+      console.log("fee", fee);
+      const msgValue = toNano(0.02).toNumber() + fee;
+      console.log("msgValue", msgValue);
+      console.log("amt", amt);
+      if (amt > 0) {
+        await jettonDeployController.sellJettons(
+          tonconnect,
+          amt,
+          senderAddress!,
+          jettonMaster!,
+          msgValue,
+        );
+      }
+    },
+    [amt, jettonMaster, senderAddress, tonconnect],
+  );
 
   const onClickTrade = useCallback(async () => {
-    console.log("onClickTrade: ", tradeType);
+    const nanoAmt = toNano(amt).toNumber();
 
-    const error = validateTradeParams(senderAddress, amt);
+    const error = validateTradeParams(tradeType, senderAddress, nanoAmt, userBalance);
     if (error) {
       showNotification(error, "warning", undefined, 3000);
       return;
@@ -113,7 +132,18 @@ export const BuySell = () => {
       getJettonDetails();
       setActionInProgress(false);
     }
-  }, [tradeType, price]);
+  }, [
+    tradeType,
+    userBalance,
+    senderAddress,
+    amt,
+    setActionInProgress,
+    showNotification,
+    buyTrade,
+    price,
+    sellTrade,
+    getJettonDetails,
+  ]);
 
   const getPrice = useCallback(async () => {
     if (!jettonAddress || !isValidAddress(jettonAddress)) {
@@ -121,12 +151,14 @@ export const BuySell = () => {
       return;
     }
 
-    const parsedJettonMaster = Address.parse(jettonAddress);
-    const price = await jettonDeployController.getJettonPrice(parsedJettonMaster, amt);
-    const jettonPrice = parseInt(price ?? "0");
-    setBlinked(false);
-    setPrice(jettonPrice);
-  }, [amt, jettonAddress, showNotification, isValidAddress]);
+    if (amt > 0) {
+      const parsedJettonMaster = Address.parse(jettonAddress);
+      const price = await jettonDeployController.getJettonPrice(parsedJettonMaster, amt);
+      const jettonPrice = parseInt(price ?? "0");
+      setBlinked(false);
+      setPrice(jettonPrice);
+    }
+  }, [amt, jettonAddress, showNotification]);
 
   return (
     <StyledBodyBlock height="313px">
@@ -141,7 +173,6 @@ export const BuySell = () => {
           value={amt}
           onChange={onChangeAmt}
           onBlur={getPrice}
-          type="number"
         />
         <SymbolField
           disabled
@@ -150,7 +181,7 @@ export const BuySell = () => {
             startAdornment: (
               <img
                 src={!isImageBroken ? jettonImage : brokenImage}
-                alt="jetton image"
+                alt="jetton symbol"
                 style={{ objectFit: "contain", width: "32px", marginRight: "6px" }}
               />
             ),
@@ -159,7 +190,7 @@ export const BuySell = () => {
       </AmtContainer>
 
       <BlinkingText blinked={blinked}>
-        {blinked ? "Previewing..." : price / DECIMAL_SCALER + " TON = " + amt + " " + symbol}
+        {blinked ? "Previewing..." : price / DECIMAL_SCALER + " TON = " + (amt ?? 0) + " " + symbol}
       </BlinkingText>
 
       <DividerLine />

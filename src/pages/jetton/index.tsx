@@ -14,6 +14,7 @@ import useNotification from "hooks/useNotification";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import FaultyDeploy from "./FaultyDeploy";
 import SelectType from "./SelectType";
+import { Chart } from "./dataRow/chart";
 
 export const Jetton = () => {
   const { getJettonDetails } = useJettonStore();
@@ -59,6 +60,7 @@ export const Jetton = () => {
       <ScreenContent>
         <StyledContainer>
           <Token />
+          <Chart />
           <StyledBody>
             <SelectType type={type} handleChange={handleChange} />
             {renderSwitch()}

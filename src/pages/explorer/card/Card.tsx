@@ -18,7 +18,7 @@ export const Card = ({
       <CardHeader>{item?.name}</CardHeader>
       <Box display="flex" flexDirection={"row"} gap={"5px"}>
         <img src={UserImg} alt="user" style={{ marginTop: "3px" }} />
-        <CardBody>{item?.holders.length} Players in game</CardBody>
+        <CardBody>{item?.numOfPlayers} Players in game</CardBody>
       </Box>
     </CardContainer>
   );
