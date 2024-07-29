@@ -22,7 +22,7 @@ root.render(
         <CssBaseline />
         <Router>
           <SnackbarProvider maxSnack={3}>
-            <TonConnectUIProvider manifestUrl="https://purgefun-client-ketherchaus-projects-5e6fed9e.vercel.app/tonconnect-manifest.json">
+            <TonConnectUIProvider manifestUrl="https://app.purge.fun/tonconnect-manifest.json">
               <App />
             </TonConnectUIProvider>
           </SnackbarProvider>

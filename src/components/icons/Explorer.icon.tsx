@@ -1,7 +1,6 @@
 import SvgIcon from "@mui/material/SvgIcon";
 
 export default function ExplorerIcon(props: any) {
-  console.log("isFocus: ", props.isFocus);
   return (
     <SvgIcon {...props} sx={{ cursor: "pointer" }}>
       <svg
