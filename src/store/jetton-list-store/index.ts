@@ -8,6 +8,14 @@ export interface IHolder {
   };
 }
 
+export interface IInsertJetton {
+  name: string;
+  imageUri: string;
+  masterAddress: string;
+  ownerAddress?: string;
+  lastSurvivors?: number;
+}
+
 export interface IJetton {
   masterAddress: string;
   ownerAddress?: string;
@@ -22,6 +30,7 @@ export interface IJetton {
   numOfRounds?: number;
   nextPurgeAt?: Date;
   tgLink?: string;
+  id: string;
 }
 
 export interface JettonListStoreState {

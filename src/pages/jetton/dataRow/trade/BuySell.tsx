@@ -11,6 +11,7 @@ import ToggleButton from "./ToggleButton";
 import useNotification from "hooks/useNotification";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { isValidAddress } from "utils";
+import { toDecimalsBN } from "utils";
 import {
   BlinkingText,
   AmtContainer,
@@ -31,9 +32,11 @@ export const BuySell = () => {
     jettonImage,
     symbol,
     isImageBroken,
-    getJettonDetails,
     jettonMaster,
     jettonPrice,
+    decimals,
+    getJettonUpdates,
+    selectedJetton,
   } = useJettonStore();
   const { jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
@@ -71,35 +74,32 @@ export const BuySell = () => {
 
   const buyTrade = useCallback(
     async (jettonPrice: number) => {
-      console.log("buyTrade");
-      const fee = (jettonPrice * 5) / 100;
-      const msgValue = toNano(0.02).toNumber() + jettonPrice + fee;
+      // const nanoAmt = toNano(amt).toNumber();
+      const valueDecimals = toDecimalsBN(amt, decimals!);
 
       if (amt > 0) {
         await jettonDeployController.buyJettons(
           tonconnect,
-          amt,
+          valueDecimals,
           senderAddress!,
           jettonMaster!,
-          msgValue,
+          jettonPrice,
         );
       }
     },
-    [amt, jettonMaster, senderAddress, tonconnect],
+    [amt, decimals, jettonMaster, senderAddress, tonconnect],
   );
 
   const sellTrade = useCallback(
     async (jettonPrice: number) => {
-      console.log("sellTrade");
       const fee = (jettonPrice * 5) / 100;
-      console.log("fee", fee);
       const msgValue = toNano(0.02).toNumber() + fee;
-      console.log("msgValue", msgValue);
-      console.log("amt", amt);
-      if (amt > 0) {
+      const nanoAmt = toNano(amt).toNumber();
+
+      if (nanoAmt > 0) {
         await jettonDeployController.sellJettons(
           tonconnect,
-          amt,
+          nanoAmt,
           senderAddress!,
           jettonMaster!,
           msgValue,
@@ -129,20 +129,24 @@ export const BuySell = () => {
       }
     } finally {
       setAmt(0);
-      getJettonDetails();
       setActionInProgress(false);
+      if (selectedJetton) {
+        const lt = selectedJetton.txns?.length ? selectedJetton.txns[0].lt : 1;
+        getJettonUpdates(selectedJetton.id, lt);
+      }
     }
   }, [
-    tradeType,
-    userBalance,
-    senderAddress,
     amt,
+    tradeType,
+    senderAddress,
+    userBalance,
     setActionInProgress,
     showNotification,
     buyTrade,
     price,
     sellTrade,
-    getJettonDetails,
+    selectedJetton,
+    getJettonUpdates,
   ]);
 
   const getPrice = useCallback(async () => {

@@ -12,7 +12,7 @@ const LOCAL_STORAGE_PROVIDER = "wallet_provider";
 
 const APP_DISPLAY_NAME = "Purge.fun";
 
-const JETTON_DEPLOYER_CONTRACTS_GITHUB = "https://github.com/ton-blockchain/minter-contract";
+const JETTON_DEPLOYER_CONTRACTS_GITHUB = "https://github.com/";
 
 const EXAMPLE_ADDRESS =
   getNetwork(new URLSearchParams(window.location.search)) === "testnet"
@@ -23,6 +23,8 @@ const SEARCH_HISTORY = "searchHistory";
 
 const DECIMAL_SCALER = 1000000000;
 
+const SCALING_FACTOR = 100000;
+
 export {
   ROUTES,
   LOCAL_STORAGE_PROVIDER,
@@ -31,5 +33,6 @@ export {
   APP_DISPLAY_NAME,
   EXAMPLE_ADDRESS,
   SEARCH_HISTORY,
-  DECIMAL_SCALER
+  DECIMAL_SCALER,
+  SCALING_FACTOR,
 };

@@ -36,22 +36,25 @@ export function Popup({
         style: {
           maxWidth: maxWidth || "unset",
           width: "100%",
-          borderRadius: "10px",
           padding: 0,
           overflow: "unset",
           margin: 20,
+          background: "#1E1E1E",
+          boxShadow: "0px 2px 16px #7A828A",
         },
       }}
-      BackdropProps={{
-        style: {
-          backgroundColor,
+      slotProps={{
+        backdrop: {
+          style: {
+            backgroundColor,
+          },
         },
       }}>
       <Box>
         {!hideCloseButton && (
           <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
             <StyledClose onClick={onClose}>
-              <CloseRoundedIcon style={{ width: 23, height: 23 }} />
+              <CloseRoundedIcon style={{ width: 23, height: 23, color: "#ffff" }} />
             </StyledClose>
           </Box>
         )}

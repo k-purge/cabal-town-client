@@ -25,7 +25,6 @@ export const GroupDetail = () => {
           0,
         ) ?? 0;
       // assume the game start  balance is 1000 * DECIMAL_SCALER
-      // console.log(balance)
       const cap = (balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) / DECIMAL_SCALER;
       return cap.toLocaleString();
     }

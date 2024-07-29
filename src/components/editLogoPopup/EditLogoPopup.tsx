@@ -41,7 +41,7 @@ export const EditLogoPopup = ({
 
   useEffect(() => {
     setTempUrl(jettonLogo.logoUrl);
-  }, [showPopup]);
+  }, [jettonLogo.logoUrl, showPopup]);
 
   return (
     <Popup open={showPopup} onClose={close} maxWidth={644}>
@@ -70,26 +70,16 @@ export const EditLogoPopup = ({
             </span>
           )}
         </PopupDescription>
-        <Box mx={2} mt={!tempUrl ? 0 : 1} sx={{ display: "inline-flex" }}>
-          <PopupLink
-            href="https://github.com/ton-blockchain/minter-contract#jetton-metadata-field-best-practices"
-            target="_blank">
-            Best practices for storing logo
-            <img alt="Open icon" src={openLink} width={11} height={11} style={{ marginLeft: 4 }} />
-          </PopupLink>
-        </Box>
         <Box>
           <AppButton
             disabled={!tempUrl}
             height={44}
             width={118}
-            fontWeight={700}
             type="button"
             onClick={() => {
               setLogoUrl(tempUrl);
               close();
-            }}
-            background="#0088CC">
+            }}>
             Save URL
           </AppButton>
         </Box>

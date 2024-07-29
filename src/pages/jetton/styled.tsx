@@ -47,21 +47,11 @@ const StyledTopText = styled(Box)({
 });
 
 const StyledTopImg = styled(Box)(({ theme }) => ({
-  width: 101,
-  height: 101,
-  borderRadius: "50%",
+  width: 200,
+  height: 200,
   overflow: "hidden",
-  background: "rgba(0,0,0, 0.1)",
-  "& img": {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  },
-  [theme.breakpoints.down("sm")]: {
-    width: 60,
-    height: 60,
-    border: "2px solid #D9D9D9",
-  },
+  background: "#C5C5C5",
+  border: "4px solid #FFFFFF",
 }));
 
 const StyledCardBody = styled(Typography)(() => ({

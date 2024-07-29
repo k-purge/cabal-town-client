@@ -22,6 +22,16 @@ function useJettonStore() {
   const { showNotification } = useNotification();
   const { jettonAddress, jettonFriendlyAddress } = useJettonAddress();
 
+  const _filterUserBalance = useCallback(
+    (holders: IHolder[]) => {
+      const balance = holders
+        .filter((holder: IHolder) => holder.owner.address === rawAddress)
+        .map((holding: IHolder) => parseInt(holding.balance));
+      return balance[0];
+    },
+    [rawAddress],
+  );
+
   const getJettonDetails = useCallback(async () => {
     i++;
     const myIndex = i;
@@ -35,10 +45,7 @@ function useJettonStore() {
     }
 
     const address = queryAddress || connectedWalletAddress;
-    console.log("address", address);
-
     const isMyWallet = address ? address === connectedWalletAddress : false;
-    console.log("isMyWallet", isMyWallet);
 
     reset();
 
@@ -60,15 +67,7 @@ function useJettonStore() {
 
       // get jetton detail from db
       const { res: selectedJetton } = await axiosService.getJetton(jettonAddress);
-
-      console.log("rawAddress", rawAddress);
-      let userBalance: number;
-      if (selectedJetton.holders) {
-        const balance = selectedJetton.holders
-          .filter((holder: IHolder) => holder.owner.address === rawAddress)
-          .map((holding: IHolder) => parseInt(holding.balance));
-        userBalance = balance[0];
-      }
+      const userBalance = _filterUserBalance(selectedJetton.holders);
 
       // get jetton price
       const price = await jettonDeployController.getJettonPrice(jettonMaster, 1);
@@ -170,7 +169,7 @@ function useJettonStore() {
     jettonFriendlyAddress,
     showNotification,
     setState,
-    rawAddress,
+    _filterUserBalance,
   ]);
 
   const getJettonPrice = useCallback(
@@ -200,9 +199,44 @@ function useJettonStore() {
     [setState, showNotification, jettonAddress],
   );
 
+  const getJettonUpdates = useCallback(
+    async (jettonId: string, lt: number) => {
+      try {
+        if (jettonAddress) {
+          const { res: selectedJetton } = await axiosService.getJettonUpdates(
+            jettonAddress,
+            jettonId,
+            lt,
+          );
+          const userBalance = _filterUserBalance(selectedJetton.holders);
+
+          setState((prevState) => {
+            return {
+              ...prevState,
+              selectedJetton,
+              userBalance,
+            };
+          });
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          showNotification(
+            !!error.message.match(/exit_code: (11|32)/g)
+              ? `Unable to query. This is probably not a Jetton Contract (${error.message})`
+              : error.message,
+            "error",
+          );
+        }
+      }
+    },
+    [jettonAddress, _filterUserBalance, setState, showNotification],
+  );
+
   return {
     ...state,
     getJettonDetails,
+    getJettonUpdates,
     getJettonPrice,
     reset,
   };

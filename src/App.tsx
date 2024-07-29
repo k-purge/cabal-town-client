@@ -67,7 +67,7 @@ const PageNotFound = () => {
 
   useEffect(() => {
     showNotification("Page not found", "error");
-  }, []);
+  }, [showNotification]);
 
   return <Box />;
 };
@@ -91,7 +91,7 @@ const App = () => {
 
   useEffect(() => {
     resetJetton();
-  }, [location.pathname]);
+  }, [location.pathname, resetJetton]);
 
   return (
     <AppWrapper>

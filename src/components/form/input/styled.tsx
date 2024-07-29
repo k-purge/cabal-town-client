@@ -6,14 +6,9 @@ const StyledContainer = styled(Box)({
 });
 
 const StyledInputContainer = styled(Box)(({ error }: { error: boolean }) => ({
-  width: "100%",
-  height: 45,
   display: "flex",
   alignItems: "center",
-  background: "#F7F9FB",
-  border: "0.5px solid rgba(114, 138, 150, 0.16)",
-  borderRadius: 40,
-  paddingRight: 5,
+  border: error ? "2.5px solid red" : "0.5px solid rgba(114, 138, 150, 0.16)",
   transition: "0.2s all",
   "& .base-button": {
     height: "calc(100% - 10px)",
@@ -22,8 +17,15 @@ const StyledInputContainer = styled(Box)(({ error }: { error: boolean }) => ({
   },
 }));
 
+const StyledInputWrapper = styled(Box)({
+  backgroundColor: "#F7F9FB",
+  width: "100%",
+  height: 45,
+});
+
 const StyledInput = styled("input")({
   flex: 1,
+  width: "100%",
   height: "100%",
   border: "unset",
   textIndent: 16,
@@ -45,4 +47,4 @@ const StyledInput = styled("input")({
   },
 });
 
-export { StyledInput, StyledInputContainer, StyledContainer };
+export { StyledInputWrapper, StyledInput, StyledInputContainer, StyledContainer };

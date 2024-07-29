@@ -15,7 +15,7 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import { DECIMAL_SCALER } from "consts";
 
 export const Chart = () => {
-  const { getJettonPrice, jettonPriceList } = useJettonStore();
+  const { getJettonPrice, jettonPriceList, decimals } = useJettonStore();
   const containerRef = useRef(null);
 
   function formatTime(utcTimestamp: UTCTimestamp): string {
@@ -59,6 +59,7 @@ export const Chart = () => {
       };
       return createChart(containerRef.current, chartOptions);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerRef.current]);
 
   let candlestickSeries = useMemo(() => {
@@ -134,7 +135,7 @@ export const Chart = () => {
         lineLeft.setData(
           priceList.map((data) => ({
             time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
-            value: data.circulatingSupply,
+            value: data.circulatingSupply / DECIMAL_SCALER,
           })),
         );
 
@@ -176,7 +177,11 @@ export const Chart = () => {
         candlestickSeries.update(newCandle);
       }
     }
-  }, [chart, candlestickSeries, jettonPriceList]);
+  }, [chart, candlestickSeries, jettonPriceList, decimals]);
+
+  if (!jettonPriceList?.length) {
+    return <></>;
+  }
 
   return (
     <StyledBlock height="320px" style={{ padding: "10px 0 0 10px" }}>

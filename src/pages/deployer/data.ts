@@ -1,9 +1,9 @@
-import { checkImageURL, checkDecimals } from "helpers";
+import { checkImageURL } from "helpers";
 
 const onchainFormSpec = [
   {
     name: "name",
-    label: "Jetton Name",
+    label: "Token Name",
     description: "Your project unabbreviated name with spaces (usually 1-3 words).",
     type: "text",
     default: "Bitcoin Cash",
@@ -12,33 +12,33 @@ const onchainFormSpec = [
   },
   {
     name: "symbol",
-    label: "Jetton Symbol",
+    label: "Token Symbol",
     description: "Currency symbol appearing in balance (usually 3-5 uppercase chars).",
     type: "text",
     default: "BCH",
     required: true,
     errorMessage: "Symbol required",
   },
-  {
-    name: "decimals",
-    label: "Jetton Decimals",
-    description: "The decimal precision of your token (9 is TON default).",
-    type: "number",
-    validate: checkDecimals,
-    default: 9,
-    showDefault: true,
-    required: true,
-    errorMessage: "Decimals amount from 0 to 255 is required", // https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-attributes
-  },
-  {
-    name: "mintAmount",
-    label: "Tokens to Mint",
-    description: "Number of initial tokens to mint and send to your wallet address (float).",
-    type: "number",
-    default: 21000000,
-    required: true,
-    errorMessage: "Mint amount required",
-  },
+  // {
+  //   name: "decimals",
+  //   label: "Jetton Decimals",
+  //   description: "The decimal precision of your token (9 is TON default).",
+  //   type: "number",
+  //   validate: checkDecimals,
+  //   default: 9,
+  //   showDefault: true,
+  //   required: true,
+  //   errorMessage: "Decimals amount from 0 to 255 is required", // https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-attributes
+  // },
+  // {
+  //   name: "mintAmount",
+  //   label: "Tokens to Mint",
+  //   description: "Number of initial tokens to mint and send to your wallet address (float).",
+  //   type: "number",
+  //   default: 21000000,
+  //   required: true,
+  //   errorMessage: "Mint amount required",
+  // },
   {
     name: "description",
     label: "Description",
@@ -80,4 +80,18 @@ const offchainFormSpec = [
   },
 ];
 
-export { onchainFormSpec, offchainFormSpec };
+const gameDetailSpec = [
+  {
+    name: "numOfSurvivors",
+    label: "Number of Survivors",
+    description: "Number of survivors allowed at the last round.",
+    type: "gameDetail-number",
+    default: 1,
+    required: true,
+    errorMessage: "Number of Survivors required",
+    disabled: undefined,
+    showDefault: true,
+  },
+];
+
+export { onchainFormSpec, offchainFormSpec, gameDetailSpec };

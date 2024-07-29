@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import coinLogo from "assets/icons/coin-logo.svg";
 import { atom, useRecoilState } from "recoil";
 import useJettonStore from "store/jetton-store/useJettonStore";
@@ -23,23 +23,31 @@ export const useJettonLogo = () => {
   const { jettonImage } = useJettonStore();
   const { jettonAddress } = useJettonAddress();
 
-  const resetJetton = () => setJettonLogo(defaultState);
+  const resetJetton = useCallback(() => setJettonLogo(defaultState), [setJettonLogo]);
 
-  const setLogoUrl = (val: string) =>
-    setJettonLogo((prev) => {
-      return {
-        ...prev,
-        logoUrl: val,
-      };
-    });
+  const setLogoUrl = useCallback(
+    (val: string) => {
+      setJettonLogo((prev) => {
+        return {
+          ...prev,
+          logoUrl: val,
+        };
+      });
+    },
+    [setJettonLogo],
+  );
 
-  const setImage = (val: string) =>
-    setJettonLogo((prev) => {
-      return {
-        ...prev,
-        image: val,
-      };
-    });
+  const setImage = useCallback(
+    (val: string) => {
+      setJettonLogo((prev) => {
+        return {
+          ...prev,
+          image: val,
+        };
+      });
+    },
+    [setJettonLogo],
+  );
 
   const setIconHover = (val: boolean) =>
     setJettonLogo((prev) => {
@@ -49,46 +57,57 @@ export const useJettonLogo = () => {
       };
     });
 
-  const setIsLoading = (val: boolean) =>
-    setJettonLogo((prev) => {
-      return {
-        ...prev,
-        isLoading: val,
-      };
-    });
+  const setIsLoading = useCallback(
+    (val: boolean) => {
+      setJettonLogo((prev) => {
+        return {
+          ...prev,
+          isLoading: val,
+        };
+      });
+    },
+    [setJettonLogo],
+  );
 
-  const setHasError = (val: boolean) =>
-    setJettonLogo((prev) => {
-      return {
-        ...prev,
-        hasError: val,
-      };
-    });
+  const setHasError = useCallback(
+    (val: boolean) => {
+      setJettonLogo((prev) => {
+        return {
+          ...prev,
+          hasError: val,
+        };
+      });
+    },
+    [setJettonLogo],
+  );
 
-  const fetchImage = (url: string) => {
-    const image = new Image();
-    image.src = url;
-    image.onload = () => {
-      setIsLoading(false);
-      setImage(url);
-    };
-    image.onerror = () => {
-      setHasError(true);
-      setIsLoading(false);
-      setImage(brokenImage);
-    };
-  };
+  const fetchImage = useCallback(
+    (url: string) => {
+      const image = new Image();
+      image.src = url;
+      image.onload = () => {
+        setIsLoading(false);
+        setImage(url);
+      };
+      image.onerror = () => {
+        setHasError(true);
+        setIsLoading(false);
+        setImage(brokenImage);
+      };
+    },
+    [setHasError, setImage, setIsLoading],
+  );
 
   useEffect(() => {
     setHasError(false);
     setIsLoading(true);
     jettonLogo.logoUrl && fetchImage(jettonLogo.logoUrl);
-  }, [jettonLogo.logoUrl]);
+  }, [fetchImage, jettonLogo.logoUrl, setHasError, setIsLoading]);
 
   useEffect(() => {
     jettonAddress ? jettonImage && setLogoUrl(jettonImage) : resetJetton();
     return () => resetJetton();
-  }, [jettonAddress]);
+  }, [jettonAddress, jettonImage, resetJetton, setLogoUrl]);
 
   return { jettonLogo, setLogoUrl, setIconHover, resetJetton };
 };

@@ -17,8 +17,9 @@ import { readJettonMetadata, changeAdminBody, JettonMetaDataKeys } from "./jetto
 import { getClient } from "./get-ton-client";
 import { cellToAddress, makeGetCall } from "./make-get-call";
 import { SendTransactionRequest, TonConnectUI } from "@tonconnect/ui-react";
+import { DECIMAL_SCALER } from "consts";
 
-export const JETTON_DEPLOY_GAS = toNano(0.25);
+export const JETTON_DEPLOY_GAS = toNano(0.01);
 
 export enum JettonDeployState {
   NOT_STARTED,
@@ -42,7 +43,7 @@ export interface JettonDeployParams {
   };
   offchainUri?: string;
   owner: Address;
-  amountToMint: BN;
+  deployer: Address;
 }
 
 class JettonDeployController {
@@ -55,8 +56,9 @@ class JettonDeployController {
     const tc = await getClient();
 
     // params.onProgress?.(JettonDeployState.BALANCE_CHECK);
-    const balance = await tc.getBalance(params.owner);
+    const balance = await tc.getBalance(params.deployer);
     if (balance.lt(JETTON_DEPLOY_GAS)) throw new Error("Not enough balance in deployer wallet");
+
     const deployParams = createDeployParams(params, params.offchainUri);
     const contractAddr = contractDeployer.addressForContract(deployParams);
 
@@ -71,13 +73,14 @@ class JettonDeployController {
     const ownerJWalletAddr = await makeGetCall(
       contractAddr,
       "get_wallet_address",
-      [beginCell().storeAddress(params.owner).endCell()],
+      [beginCell().storeAddress(params.deployer).endCell()],
       ([addr]) => (addr as Cell).beginParse().readAddress()!,
       tc,
     );
+    console.log("ownerJWalletAddr", ownerJWalletAddr.toFriendly());
 
     // params.onProgress?.(JettonDeployState.AWAITING_JWALLET_DEPLOY);
-    await waitForContractDeploy(ownerJWalletAddr, tc);
+    // await waitForContractDeploy(ownerJWalletAddr, tc);
 
     // params.onProgress?.(
     //   JettonDeployState.VERIFY_MINT,
@@ -185,10 +188,10 @@ class JettonDeployController {
 
   async buyJettons(
     tonConnection: TonConnectUI,
-    amount: number,
+    amount: BN,
     fromAddress: string,
     jettonMaster: string,
-    msgValue: number,
+    jettonPrice: number,
   ) {
     const tc = await getClient();
 
@@ -197,6 +200,9 @@ class JettonDeployController {
         source: Address.parse(fromAddress),
       }),
     );
+
+    const fee = (jettonPrice * 5) / 100;
+    const msgValue = toNano(0.02).toNumber() + jettonPrice + fee;
 
     const tx: SendTransactionRequest = {
       validUntil: Date.now() + 5 * 60 * 1000,
@@ -330,7 +336,7 @@ class JettonDeployController {
     const jettonPrice = await makeGetCall(
       contractAddr,
       "get_token_price",
-      [new BN(amt)],
+      [new BN(amt * DECIMAL_SCALER)],
       async ([price]) => price,
       tc,
     );

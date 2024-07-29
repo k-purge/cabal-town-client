@@ -16,8 +16,15 @@ import UserImg from "assets/icons/userGrey.svg";
 import { DividerLine, TradeButton } from "../trade/styled";
 
 export const Token = () => {
-  const { userBalance, jettonImage, name, jettonLoading, isImageBroken, tonPrice, selectedJetton } =
-    useJettonStore();
+  const {
+    userBalance,
+    jettonImage,
+    name,
+    jettonLoading,
+    isImageBroken,
+    jettonPrice,
+    selectedJetton,
+  } = useJettonStore();
   const [timeString, setTimeString] = useState("--");
 
   useEffect(() => {
@@ -52,13 +59,17 @@ export const Token = () => {
           (balance, holder) => balance + parseInt(holder.balance),
           0,
         ) ?? 0;
-      // assume the game start  balance is 1000 * DECIMAL_SCALER
-      // console.log(balance)
-      return ((balance * tonPrice) / DECIMAL_SCALER / (selectedJetton.minStartedAmt ?? 1)) * 100;
+      return (
+        ((balance * jettonPrice) /
+          DECIMAL_SCALER /
+          DECIMAL_SCALER /
+          (selectedJetton.minStartedAmt ?? 1)) *
+        100
+      );
     }
 
     return 0;
-  }, [selectedJetton, tonPrice]);
+  }, [selectedJetton, jettonPrice]);
 
   const onClickJoinGame = useCallback(() => {
     if (window) {
@@ -114,7 +125,7 @@ export const Token = () => {
 
       <StyledBottomText>
         <Typography>Game Initiation Progress</Typography>
-        <Typography>{progress.toFixed(2)}%</Typography>
+        <Typography>{progress.toFixed(4)}%</Typography>
       </StyledBottomText>
 
       <BorderLinearProgress variant="determinate" value={progress} />

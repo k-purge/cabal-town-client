@@ -1,36 +1,53 @@
+import { useCallback, useState } from "react";
+import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { FooterWrapper, SocialsWrapper } from "./styled";
 import { FooterLogo } from "./FooterLogo";
 import { Outlet } from "react-router-dom";
-import explorer from "assets/icons/explorer.svg";
-import profile from "assets/icons/profile.svg";
-import createToken from "assets/icons/create-token.svg";
-import howItWorks from "assets/icons/how-it-works.svg";
+import { ROUTES } from "consts";
 
 const footerLogos = [
   {
     title: "Explorer",
-    icon: explorer,
+    route: ROUTES.explorer,
   },
   {
     title: "Profile",
-    icon: profile,
+    route: ROUTES.explorer,
   },
   {
     title: "Create token",
-    icon: createToken,
+    route: ROUTES.deployer,
   },
   {
     title: "How it works",
-    icon: howItWorks,
+    route: ROUTES.explorer,
   },
 ];
 
 export const Footer = () => {
+  const navigate = useNavigatePreserveQuery();
+  const [selectedRoute, setSelectedRoute] = useState("Explorer");
+
+  const onClickIcon = useCallback(
+    (title: string, route: string) => {
+      setSelectedRoute(title);
+      navigate(route);
+    },
+    [navigate],
+  );
+
   return (
     <FooterWrapper>
       <SocialsWrapper>
-        {footerLogos.map(({ title, icon }, index) => {
-          return <FooterLogo key={index} logo={icon} title={title} />;
+        {footerLogos.map(({ title, route }, index) => {
+          return (
+            <FooterLogo
+              key={index}
+              title={title}
+              selectedRoute={selectedRoute}
+              onClickIcon={() => onClickIcon(title, route)}
+            />
+          );
         })}
       </SocialsWrapper>
       <Outlet />

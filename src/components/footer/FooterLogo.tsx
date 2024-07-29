@@ -1,17 +1,38 @@
-import { Chip, Typography } from "@mui/material";
-import { ROUTES } from "consts";
+import { useCallback } from "react";
+import { Typography } from "@mui/material";
 import { LogoWrapper, ImageWrapper } from "./styled";
-import { useNetwork } from "lib/hooks/useNetwork";
-import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
+import ExplorerIcon from "components/icons/Explorer.icon";
+import ProfileIcon from "components/icons/Profile.icon";
+import DeployerIcon from "components/icons/Deployer.icon";
+import HowItWorksIcon from "components/icons/HowItWorks.icon ";
 
-export const FooterLogo = ({ title, logo }: { title: string; logo: string }) => {
-  const navigate = useNavigatePreserveQuery();
-  const { network } = useNetwork();
+export const FooterLogo = ({
+  selectedRoute,
+  title,
+  onClickIcon,
+}: {
+  selectedRoute: string;
+  title: string;
+  onClickIcon: any;
+}) => {
+  // const { network } = useNetwork();
+
+  const renderIcon = useCallback(() => {
+    switch (title) {
+      case "Explorer":
+        return <ExplorerIcon isFocus={selectedRoute === title} />;
+      case "Profile":
+        return <ProfileIcon isFocus={selectedRoute === title} />;
+      case "Create token":
+        return <DeployerIcon isFocus={selectedRoute === title} />;
+      default:
+        return <HowItWorksIcon isFocus={selectedRoute === title} />;
+    }
+  }, [selectedRoute, title]);
+
   return (
-    <LogoWrapper onClick={() => navigate(ROUTES.explorer)}>
-      <ImageWrapper>
-        <img src={logo} alt="Logo" />
-      </ImageWrapper>
+    <LogoWrapper onClick={onClickIcon}>
+      <ImageWrapper>{renderIcon()}</ImageWrapper>
       <Typography variant="h4">{title}</Typography>
     </LogoWrapper>
   );

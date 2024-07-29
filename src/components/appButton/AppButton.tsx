@@ -24,15 +24,18 @@ const StyledButton = styled(LoadingButton)((props: StyledButtonProps) => ({
   fontSize: props.fontSize || 14,
   boxShadow: "none",
   fontWeight: props.fontWeight || 600,
-  borderRadius: 40,
-  border: props.transparent ? "1px solid #50A7EA" : "",
-  background: props.background || "",
+  fontFamily: "Bungee, Sans-Serif",
+  border: "2px solid #FFB800",
+  borderRadius: 0,
+  color: "#ffff",
+  background: "none",
   whiteSpace: "nowrap",
   "& img": {
     maxWidth: 22,
   },
   "&:disabled": {
     background: "#D9D9D9",
+    color: "#9CADB6",
   },
 }));
 

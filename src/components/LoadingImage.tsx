@@ -1,6 +1,5 @@
 import { Skeleton, styled } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
 
 interface Props {
   src?: string;
@@ -10,18 +9,17 @@ interface Props {
 
 const StyledContainer = styled(Box)({
   position: "relative",
-  width: "200px",
-  height: "200px",
   borderRadius: "inherit",
 });
 
 function LoadingImage({ loading, src, alt = "Image" }: Props) {
+  const objectFit = src?.includes("coin-logo") ? "none" : "contain";
   return (
     <StyledContainer>
       {loading ? (
         <Skeleton variant="circular" width="100%" height="100%" />
       ) : src ? (
-        <img alt={alt} src={src} style={{ objectFit: "contain", width: "100%" }} />
+        <img alt={alt} src={src} style={{ objectFit, width: "100%" }} />
       ) : null}
     </StyledContainer>
   );

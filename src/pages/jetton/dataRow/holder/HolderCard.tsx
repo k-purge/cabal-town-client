@@ -31,7 +31,7 @@ export default function HolderCard({
     [circulatingSupply],
   );
 
-  if (!address) {
+  if (!address || !balance) {
     return <></>;
   }
 

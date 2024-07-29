@@ -16,9 +16,9 @@ export const Txn = () => {
   const { symbol, selectedJetton } = useJettonStore();
 
   const txns = useMemo(() => {
-    return selectedJetton?.txns?.filter(
-      (txn) => txn.success && [31, 51].includes(parseInt(txn.in_msg.op_code, 16)),
-    );
+    return selectedJetton?.txns
+      ?.filter((txn) => txn.success && [31, 51].includes(parseInt(txn.in_msg.op_code, 16)))
+      ?.sort((a, b) => b.in_msg?.created_at - a.in_msg?.created_at);
   }, [selectedJetton]);
 
   const dateConverter = useCallback((timestamp: number) => {

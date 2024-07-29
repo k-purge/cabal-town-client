@@ -10,8 +10,8 @@ export enum AnalyticsAction {
 }
 
 const sendEvent = (category: AnalyticsCategory, action: AnalyticsAction, label: string) => {
-  if(!ReactGA.isInitialized){
-    return 
+  if (!ReactGA.isInitialized) {
+    return;
   }
   try {
     ReactGA.event({
@@ -25,12 +25,12 @@ const sendEvent = (category: AnalyticsCategory, action: AnalyticsAction, label: 
 };
 
 const init = () => {
- try {
-  ReactGA.initialize(process.env.REACT_APP_GA!!);
-  ReactGA.send(window.location.pathname + window.location.search);
- } catch (error) {
-  
- }
+  try {
+    ReactGA.initialize(process.env.REACT_APP_GA!!);
+    ReactGA.send(window.location.pathname + window.location.search);
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
 const analytics = {

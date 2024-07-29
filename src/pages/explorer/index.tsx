@@ -11,7 +11,7 @@ import { IJetton } from "store/jetton-list-store";
 
 function ExplorerPage() {
   const { setSelectedJetton, jettonList, getJettonList } = useJettonListStore();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [example, setExample] = useState<string | undefined>(undefined);
   const navigate = useNavigatePreserveQuery();
 
@@ -31,7 +31,7 @@ function ExplorerPage() {
 
   useEffect(() => {
     getJettonList();
-  }, []);
+  }, [getJettonList]);
 
   return (
     <Screen>

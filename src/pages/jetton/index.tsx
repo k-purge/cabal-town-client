@@ -31,11 +31,11 @@ export const Jetton = () => {
     if (jettonAddress) {
       getJettonDetails();
     }
-  }, [jettonAddress, address]);
+  }, [jettonAddress, address, getJettonDetails]);
 
   useEffect(() => {
     !isAddressEmpty && !jettonAddress && showNotification("Invalid jetton address", "error");
-  }, []);
+  }, [isAddressEmpty, jettonAddress, showNotification]);
 
   const renderSwitch = () => {
     switch (type) {

@@ -38,22 +38,17 @@ const StyledDescription = styled(Box)(({ theme }) => ({
 }));
 
 const ScreenHeading = styled(Typography)(({ theme }) => ({
-  fontWeight: 800,
-  color: "#161C28",
-  fontSize: 44,
-  [theme.breakpoints.down("md")]: {
-    fontSize: 28,
-    textAlign: "center",
-  },
-  [theme.breakpoints.down("sm")]: {
-    marginTop: theme.spacing(8),
-  },
+  color: "#ffff",
+  fontSize: 32,
+  fontFamily: "Bungee, sans-serif",
+  textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 3px 3px 1px #000",
 }));
 
 const FormWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "stretch",
   gap: theme.spacing(5),
+  marginTop: 9,
   [theme.breakpoints.down("lg")]: {
     flexDirection: "column",
   },
@@ -61,18 +56,18 @@ const FormWrapper = styled(Box)(({ theme }) => ({
 
 const SubHeadingWrapper = styled(Box)(({ theme }) => ({
   flex: 5,
-  background: "#FFFFFF",
-  border: "0.5px solid rgba(114, 138, 150, 0.24)",
-  boxShadow: "0px 2px 16px rgba(114, 138, 150, 0.08)",
-  borderRadius: "24px",
-  padding: theme.spacing(3),
+  background: "#1E1E1E",
+  border: "2px solid #000000",
+  boxShadow: "2px 2px 0px 0px #000000",
+  padding: "16px",
 }));
 
 const FormHeading = styled(Typography)(({ theme }) => ({
-  color: "#161C28",
-  fontSize: 20,
-  fontWeight: 800,
-  marginBottom: theme.spacing(3),
+  color: "#ffff",
+  fontSize: 16,
+  fontFamily: "Bungee, sans-serif",
+  textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 3px 3px 1px #000",
+  marginBottom: theme.spacing(2),
 }));
 
 export {

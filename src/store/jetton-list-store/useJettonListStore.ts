@@ -17,7 +17,6 @@ function useJettonListStore() {
       }));
 
       const { res: jettonList } = await axiosService.getJettonList();
-      console.log("jettonList", jettonList);
 
       if (!jettonList) {
         console.log("empty");

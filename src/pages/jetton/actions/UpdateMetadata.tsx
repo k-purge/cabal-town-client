@@ -1,5 +1,5 @@
 import useJettonStore from "store/jetton-store/useJettonStore";
-import { onchainFormSpec } from "pages/deployer/data";
+import { onchainFormSpec, gameDetailSpec } from "pages/deployer/data";
 import { Form } from "components/form";
 import { JettonStoreState } from "store/jetton-store";
 import { jettonDeployController } from "lib/deploy-controller";
@@ -97,6 +97,7 @@ function UpdateMetadata({ setOpen }: UpdateMetadataProps) {
       isLoading={actionInProgress}
       defaultValues={defaultValues}
       onCancel={() => setOpen(false)}
+      gameDetailInputs={gameDetailSpec}
     />
   );
 }

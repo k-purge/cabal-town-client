@@ -1,7 +1,6 @@
-import BN from "bn.js";
-import { Address, beginCell, Cell, toNano, TonClient, Wallet } from "ton";
+import { Address, beginCell, TonClient, Wallet } from "ton";
 import { JettonDeployParams, JETTON_DEPLOY_GAS } from "./deploy-controller";
-import { initData, JettonMetaDataKeys, JETTON_MINTER_CODE, mintBody } from "./jetton-minter";
+import { initData, JETTON_MINTER_CODE, bouncedBody } from "./jetton-minter";
 
 export async function sleep(time: number) {
   return new Promise((resolve) => {
@@ -46,13 +45,12 @@ export async function waitForContractDeploy(address: Address, client: TonClient)
 }
 
 export const createDeployParams = (params: JettonDeployParams, offchainUri?: string) => {
-  const queryId = parseInt(process.env.REACT_APP_DEPLOY_QUERY_ID ?? "0");
-
+  // const queryId = parseInt(process.env.REACT_APP_DEPLOY_QUERY_ID ?? "0");
   return {
     code: JETTON_MINTER_CODE,
     data: initData(params.owner, params.onchainMetaData, offchainUri),
-    deployer: params.owner,
+    deployer: params.deployer,
     value: JETTON_DEPLOY_GAS,
-    message: mintBody(params.owner, params.amountToMint, toNano(0.2), queryId),
+    message: bouncedBody(),
   };
 };

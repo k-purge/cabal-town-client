@@ -23,6 +23,7 @@ enum OPS {
   Burn = 0x595f07bc,
   BuyJetton = 31,
   SellJetton = 51,
+  Bounced = 0xffffffff,
 }
 
 export type JettonMetaDataKeys =
@@ -217,8 +218,8 @@ export function initData(
       offchainUri ? buildJettonOffChainMetadata(offchainUri) : buildJettonOnchainMetadata(data!),
     )
     .storeRef(JETTON_WALLET_CODE)
-    .storeCoins(500000) //midpoint_supply
-    .storeCoins(1) //max_price
+    .storeCoins(new BN("5000000000000000")) //midpoint_supply
+    .storeCoins(1000000000) //max_price
     .storeCoins(10) //steepness
     .endCell();
 }
@@ -272,7 +273,7 @@ export function transfer(to: Address, from: Address, jettonAmount: BN) {
     .endCell();
 }
 
-export function buyJetton(jettonAmount: number) {
+export function buyJetton(jettonAmount: BN) {
   return beginCell()
     .storeUint(OPS.BuyJetton, 32)
     .storeUint(1, 64)
@@ -303,5 +304,16 @@ export function updateMetadataBody(metadata: Cell): Cell {
     .storeUint(OPS.ReplaceMetadata, 32)
     .storeUint(0, 64) // queryid
     .storeRef(metadata)
+    .endCell();
+}
+
+export function bouncedBody(): Cell {
+  return beginCell()
+    .storeUint(OPS.Bounced, 32)
+    .storeUint(0, 64) // queryid
+    .storeRef(
+      // internal transfer message
+      beginCell().endCell(),
+    )
     .endCell();
 }
