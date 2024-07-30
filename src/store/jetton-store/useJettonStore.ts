@@ -68,7 +68,7 @@ function useJettonStore() {
 
       const result = await jettonDeployController.getJettonDetails(
         parsedJettonMaster,
-        Address.parse(walletAddress),
+        walletAddress,
       );
 
       // get jetton detail from db

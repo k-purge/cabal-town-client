@@ -284,7 +284,7 @@ class JettonDeployController {
     await waiter();
   }
 
-  async getJettonDetails(contractAddr: Address, walletAddress: Address) {
+  async getJettonDetails(contractAddr: Address, walletAddress: string) {
     const tc = await getClient();
     const minter = await makeGetCall(
       contractAddr,
@@ -298,31 +298,32 @@ class JettonDeployController {
       tc,
     );
 
-    const jWalletAddress = await makeGetCall(
-      contractAddr,
-      "get_wallet_address",
-      [beginCell().storeAddress(walletAddress).endCell()],
-      ([addressCell]) => cellToAddress(addressCell),
-      tc,
-    );
+    let jettonWallet = null;
 
-    const isDeployed = await tc.isContractDeployed(jWalletAddress);
-
-    let jettonWallet;
-    if (isDeployed) {
-      jettonWallet = await makeGetCall(
-        jWalletAddress,
-        "get_wallet_data",
-        [],
-        ([amount, _, jettonMasterAddressCell]) => ({
-          balance: amount as unknown as BN,
-          jWalletAddress,
-          jettonMasterAddress: cellToAddress(jettonMasterAddressCell),
-        }),
+    if (walletAddress) {
+      const jWalletAddress = await makeGetCall(
+        contractAddr,
+        "get_wallet_address",
+        [beginCell().storeAddress(Address.parse(walletAddress)).endCell()],
+        ([addressCell]) => cellToAddress(addressCell),
         tc,
       );
-    } else {
-      jettonWallet = null;
+
+      const isDeployed = await tc.isContractDeployed(jWalletAddress);
+
+      if (isDeployed) {
+        jettonWallet = await makeGetCall(
+          jWalletAddress,
+          "get_wallet_data",
+          [],
+          ([amount, _, jettonMasterAddressCell]) => ({
+            balance: amount as unknown as BN,
+            jWalletAddress,
+            jettonMasterAddress: cellToAddress(jettonMasterAddressCell),
+          }),
+          tc,
+        );
+      }
     }
 
     return {
