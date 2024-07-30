@@ -47,18 +47,6 @@ export interface JettonDeployParams {
 }
 
 class JettonDeployController {
-  async getWalletAddress(contractAddr: Address, owner: Address) {
-    const tc = await getClient();
-    const ownerJWalletAddr = await makeGetCall(
-      contractAddr,
-      "get_wallet_address",
-      [beginCell().storeAddress(owner).endCell()],
-      ([addr]) => (addr as Cell).beginParse().readAddress()!,
-      tc,
-    );
-    console.log("ownerJWalletAddr", ownerJWalletAddr.toString(), ownerJWalletAddr.toFriendly());
-  }
-
   async createJetton(
     params: JettonDeployParams,
     tonConnection: TonConnectUI,

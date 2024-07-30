@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Address } from "ton";
 import { Box, Fade } from "@mui/material";
 import { jettonDeployController, JettonDeployParams } from "lib/deploy-controller";
@@ -33,13 +33,6 @@ function DeployerPage() {
   const [tonconnect] = useTonConnectUI();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigatePreserveQuery();
-
-  useEffect(() => {
-    jettonDeployController.getWalletAddress(
-      Address.parse("EQDn9tTszTbjpUiuwgXLJyFQ3_z_M9NK7cF4B8Zt4Bo0S9Su"),
-      Address.parse(walletAddress),
-    );
-  }, [walletAddress]);
 
   async function deployContract(data: any) {
     if (!walletAddress || !tonconnect) {
