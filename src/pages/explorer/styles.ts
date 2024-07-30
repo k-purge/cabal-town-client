@@ -18,6 +18,7 @@ const ListContainer = styled(Box)(({ theme }) => ({
   gap: "12px",
   display: "grid",
   justifyItems: "center",
+  paddingBlock: "24px",
   [theme.breakpoints.down("sm")]: {
     gridTemplateColumns: "repeat(2, 1fr)", // 2 columns on small screens
   },
@@ -30,12 +31,12 @@ const ListContainer = styled(Box)(({ theme }) => ({
 }));
 
 const CardContainer = styled(Box)(({ theme }) => ({
+  marginBottom: "24px",
   width: "152.5px",
   height: "197.5px",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  marginTop: "24px",
   cursor: "pointer",
   textAlign: "left", // Ensure text alignment is left within the card
   "& > *": {

@@ -1,12 +1,21 @@
 import BN from "bn.js";
 import { PersistenceType } from "lib/jetton-minter";
 import { atom } from "recoil";
-import { IJetton } from "../jetton-list-store";
+import { IHolder, IJetton } from "../jetton-list-store";
 
 export interface IJettonPrice {
   timestamp: number;
   circulatingSupply: number;
   price: number;
+}
+
+export interface IJettonProfile {
+  masterAddress: string;
+  imageUri: string;
+  name: string;
+  holders?: IHolder[];
+  players?: any[];
+  id: string;
 }
 
 export interface JettonStoreState {
@@ -33,6 +42,7 @@ export interface JettonStoreState {
   selectedJetton?: IJetton;
   jettonPriceList?: IJettonPrice[];
   userBalance: number;
+  userProfileList?: IJettonProfile[];
 }
 
 const jettonStateAtom = atom<JettonStoreState>({
@@ -61,6 +71,7 @@ const jettonStateAtom = atom<JettonStoreState>({
     selectedJetton: undefined,
     jettonPriceList: undefined,
     userBalance: 0,
+    userProfileList: undefined,
   },
 });
 

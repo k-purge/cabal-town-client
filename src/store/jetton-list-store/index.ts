@@ -14,6 +14,7 @@ export interface IInsertJetton {
   masterAddress: string;
   ownerAddress?: string;
   lastSurvivors?: number;
+  chain: string;
 }
 
 export interface IJetton {

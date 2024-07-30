@@ -3,8 +3,10 @@ import useNotification from "hooks/useNotification";
 import { useCallback } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { IJetton, jettonListStateAtom } from "./index";
+import { useNetwork } from "lib/hooks/useNetwork";
 
 function useJettonListStore() {
+  const { network } = useNetwork();
   const [state, setState] = useRecoilState(jettonListStateAtom);
   const reset = useResetRecoilState(jettonListStateAtom);
   const { showNotification } = useNotification();
@@ -16,7 +18,7 @@ function useJettonListStore() {
         jettonLoading: true,
       }));
 
-      const { res: jettonList } = await axiosService.getJettonList();
+      const { res: jettonList } = await axiosService.getJettonList(network);
 
       if (!jettonList) {
         console.log("empty");
@@ -46,7 +48,7 @@ function useJettonListStore() {
         jettonLoading: false,
       }));
     }
-  }, [setState, showNotification]);
+  }, [network, setState, showNotification]);
 
   const setSelectedJetton = useCallback(
     (selectedJetton: IJetton) => {

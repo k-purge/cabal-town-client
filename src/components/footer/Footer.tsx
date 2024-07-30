@@ -12,7 +12,7 @@ const footerLogos = [
   },
   {
     title: "Profile",
-    route: ROUTES.explorer,
+    route: ROUTES.profile,
   },
   {
     title: "Create token",
@@ -20,7 +20,7 @@ const footerLogos = [
   },
   {
     title: "How it works",
-    route: ROUTES.explorer,
+    route: ROUTES.faq,
   },
 ];
 

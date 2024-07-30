@@ -11,6 +11,7 @@ import { Address } from "ton";
 import { getUrlParam, isValidAddress } from "utils";
 import { jettonStateAtom } from ".";
 import { IHolder } from "../jetton-list-store";
+import { useNetwork } from "lib/hooks/useNetwork";
 
 let i = 0;
 
@@ -19,6 +20,8 @@ function useJettonStore() {
   const reset = useResetRecoilState(jettonStateAtom);
   const connectedWalletAddress = useTonAddress();
   const rawAddress = useTonAddress(false);
+  const walletAddress = useTonAddress();
+  const { network } = useNetwork();
   const { showNotification } = useNotification();
   const { jettonAddress, jettonFriendlyAddress } = useJettonAddress();
 
@@ -63,7 +66,10 @@ function useJettonStore() {
         jettonLoading: true,
       }));
 
-      const result = await jettonDeployController.getJettonDetails(parsedJettonMaster);
+      const result = await jettonDeployController.getJettonDetails(
+        parsedJettonMaster,
+        Address.parse(walletAddress),
+      );
 
       // get jetton detail from db
       const { res: selectedJetton } = await axiosService.getJetton(jettonAddress);
@@ -169,6 +175,7 @@ function useJettonStore() {
     jettonFriendlyAddress,
     showNotification,
     setState,
+    walletAddress,
     _filterUserBalance,
   ]);
 
@@ -233,11 +240,25 @@ function useJettonStore() {
     [jettonAddress, _filterUserBalance, setState, showNotification],
   );
 
+  const getUserProfileList = useCallback(async () => {
+    if (rawAddress) {
+      const { res: userProfileList } = await axiosService.getJettonsByOwner(rawAddress, network);
+
+      setState((prevState) => {
+        return {
+          ...prevState,
+          userProfileList,
+        };
+      });
+    }
+  }, [network, rawAddress, setState]);
+
   return {
     ...state,
     getJettonDetails,
     getJettonUpdates,
     getJettonPrice,
+    getUserProfileList,
     reset,
   };
 }

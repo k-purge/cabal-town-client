@@ -47,6 +47,18 @@ export interface JettonDeployParams {
 }
 
 class JettonDeployController {
+  async getWalletAddress(contractAddr: Address, owner: Address) {
+    const tc = await getClient();
+    const ownerJWalletAddr = await makeGetCall(
+      contractAddr,
+      "get_wallet_address",
+      [beginCell().storeAddress(owner).endCell()],
+      ([addr]) => (addr as Cell).beginParse().readAddress()!,
+      tc,
+    );
+    console.log("ownerJWalletAddr", ownerJWalletAddr.toString(), ownerJWalletAddr.toFriendly());
+  }
+
   async createJetton(
     params: JettonDeployParams,
     tonConnection: TonConnectUI,
@@ -73,7 +85,7 @@ class JettonDeployController {
     const ownerJWalletAddr = await makeGetCall(
       contractAddr,
       "get_wallet_address",
-      [beginCell().storeAddress(params.deployer).endCell()],
+      [beginCell().storeAddress(params.owner).endCell()],
       ([addr]) => (addr as Cell).beginParse().readAddress()!,
       tc,
     );
@@ -284,7 +296,7 @@ class JettonDeployController {
     await waiter();
   }
 
-  async getJettonDetails(contractAddr: Address) {
+  async getJettonDetails(contractAddr: Address, walletAddress: Address) {
     const tc = await getClient();
     const minter = await makeGetCall(
       contractAddr,
@@ -301,7 +313,7 @@ class JettonDeployController {
     const jWalletAddress = await makeGetCall(
       contractAddr,
       "get_wallet_address",
-      [beginCell().storeAddress(minter.admin).endCell()],
+      [beginCell().storeAddress(walletAddress).endCell()],
       ([addressCell]) => cellToAddress(addressCell),
       tc,
     );

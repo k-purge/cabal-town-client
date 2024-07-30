@@ -6,12 +6,11 @@ import { Screen, ScreenContent } from "components/Screen";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { ROUTES } from "consts";
 import { Card } from "./card";
-import useJettonListStore from "store/jetton-list-store/useJettonListStore";
 import { IJetton } from "store/jetton-list-store";
+import useJettonListStore from "store/jetton-list-store/useJettonListStore";
 
 function ExplorerPage() {
   const { setSelectedJetton, jettonList, getJettonList } = useJettonListStore();
-  // const [isLoading, setIsLoading] = useState(false);
   const [example, setExample] = useState<string | undefined>(undefined);
   const navigate = useNavigatePreserveQuery();
 

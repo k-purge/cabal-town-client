@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Address } from "ton";
 import { Box, Fade } from "@mui/material";
 import { jettonDeployController, JettonDeployParams } from "lib/deploy-controller";
@@ -18,6 +18,7 @@ import { Form } from "components/form";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { IInsertJetton } from "store/jetton-list-store";
+import { useNetwork } from "lib/hooks/useNetwork";
 
 const DEFAULT_DECIMALS = 9;
 
@@ -27,10 +28,18 @@ const formSpec = isOffchainInternal ? offchainFormSpec : onchainFormSpec;
 
 function DeployerPage() {
   const { showNotification } = useNotification();
+  const { network } = useNetwork();
   const walletAddress = useTonAddress();
   const [tonconnect] = useTonConnectUI();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigatePreserveQuery();
+
+  useEffect(() => {
+    jettonDeployController.getWalletAddress(
+      Address.parse("EQDn9tTszTbjpUiuwgXLJyFQ3_z_M9NK7cF4B8Zt4Bo0S9Su"),
+      Address.parse(walletAddress),
+    );
+  }, [walletAddress]);
 
   async function deployContract(data: any) {
     if (!walletAddress || !tonconnect) {
@@ -83,6 +92,7 @@ function DeployerPage() {
         lastSurvivors: data.numOfSurvivors,
         masterAddress: Address.normalize(result),
         ownerAddress: process.env.REACT_APP_JETTON_OWNER!,
+        chain: network,
       };
       await axiosService.insertJetton(jettonData);
 

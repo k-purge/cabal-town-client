@@ -4,6 +4,8 @@ const ROUTES = {
   deployer: "/deployer",
   jetton: "/jetton",
   jettonId: "/jetton/:id",
+  profile: "/profile",
+  faq: "/faq",
 };
 
 const APP_GRID = 1156;

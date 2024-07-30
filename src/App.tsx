@@ -4,11 +4,13 @@ import { createContext, useEffect } from "react";
 import { APP_GRID, ROUTES } from "consts";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { ExplorerPage, DeployerPage, Jetton } from "pages";
-import analytics from "services/analytics";
 import { Footer } from "components/footer";
 import { Header } from "components/header";
 import { useJettonLogo } from "hooks/useJettonLogo";
+import { FaqPage } from "pages/faq";
+import analytics from "services/analytics";
 import useNotification from "hooks/useNotification";
+import { ProfilePage } from "pages/profile";
 
 analytics.init();
 
@@ -117,6 +119,8 @@ const App = () => {
                 <Route path={ROUTES.explorer} element={<ExplorerPage />} />
                 <Route path={ROUTES.deployer} element={<DeployerPage />} />
                 <Route path={ROUTES.jettonId} element={<Jetton />} />
+                <Route path={ROUTES.profile} element={<ProfilePage />} />
+                <Route path={ROUTES.faq} element={<FaqPage />} />
               </Route>
             </Route>
           </Routes>
