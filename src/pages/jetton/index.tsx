@@ -10,17 +10,17 @@ import { Txn } from "pages/jetton/dataRow/txn";
 import { StyledContainer, StyledBody } from "pages/jetton/styled";
 import { GroupDetail } from "./dataRow/trade/GroupDetail";
 import { GroupDescription } from "./dataRow/trade/GroupDescription";
+import { Chart } from "./dataRow/chart";
 import useNotification from "hooks/useNotification";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import FaultyDeploy from "./FaultyDeploy";
 import SelectType from "./SelectType";
-import { Chart } from "./dataRow/chart";
 
 export const Jetton = () => {
-  const { getJettonDetails } = useJettonStore();
+  const address = useTonAddress();
+  const { getJettonDetails, getJettonFromDb } = useJettonStore();
   const { isAddressEmpty, jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
-  const address = useTonAddress();
   const [type, setType] = useState("1");
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -29,9 +29,10 @@ export const Jetton = () => {
 
   useEffect(() => {
     if (jettonAddress) {
+      getJettonFromDb();
       getJettonDetails();
     }
-  }, [jettonAddress, address, getJettonDetails]);
+  }, [jettonAddress, address, getJettonDetails, getJettonFromDb]);
 
   useEffect(() => {
     !isAddressEmpty && !jettonAddress && showNotification("Invalid jetton address", "error");

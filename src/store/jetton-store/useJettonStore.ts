@@ -1,6 +1,6 @@
 import { useTonAddress } from "@tonconnect/ui-react";
-import QuestiomMarkImg from "assets/icons/question.png";
 import { useJettonAddress } from "hooks/useJettonAddress";
+import QuestiomMarkImg from "assets/icons/question.png";
 import useNotification from "hooks/useNotification";
 import axiosService from "services/axios";
 import { jettonDeployController } from "lib/deploy-controller";
@@ -34,6 +34,21 @@ function useJettonStore() {
     },
     [rawAddress],
   );
+
+  const getJettonFromDb = useCallback(async () => {
+    if (jettonAddress) {
+      // get jetton detail from db
+      const { res: selectedJetton } = await axiosService.getJetton(jettonAddress);
+      const userBalance = _filterUserBalance(selectedJetton.holders);
+      setState((prevState) => {
+        return {
+          ...prevState,
+          selectedJetton,
+          userBalance,
+        };
+      });
+    }
+  }, [_filterUserBalance, jettonAddress, setState]);
 
   const getJettonDetails = useCallback(async () => {
     i++;
@@ -70,10 +85,6 @@ function useJettonStore() {
         parsedJettonMaster,
         walletAddress,
       );
-
-      // get jetton detail from db
-      const { res: selectedJetton } = await axiosService.getJetton(jettonAddress);
-      const userBalance = _filterUserBalance(selectedJetton.holders);
 
       // get jetton price
       const price = await jettonDeployController.getJettonPrice(jettonMaster, 1);
@@ -148,8 +159,6 @@ function useJettonStore() {
           selectedWalletAddress: address,
           jettonPrice,
           tonPrice,
-          selectedJetton,
-          userBalance,
         };
       });
     } catch (error) {
@@ -176,7 +185,6 @@ function useJettonStore() {
     showNotification,
     setState,
     walletAddress,
-    _filterUserBalance,
   ]);
 
   const getJettonPrice = useCallback(
@@ -259,6 +267,7 @@ function useJettonStore() {
     getJettonUpdates,
     getJettonPrice,
     getUserProfileList,
+    getJettonFromDb,
     reset,
   };
 }
