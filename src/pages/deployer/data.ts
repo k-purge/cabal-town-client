@@ -83,12 +83,12 @@ const offchainFormSpec = [
 const gameDetailSpec = [
   {
     name: "numOfSurvivors",
-    label: "Number of Survivors",
-    description: "Number of survivors allowed at the last round.",
+    label: "Final cabal size",
+    description: "Number of cabal members allowed at the last round.",
     type: "gameDetail-number",
     default: 1,
     required: true,
-    errorMessage: "Number of Survivors required",
+    errorMessage: "Final cabal size required",
     disabled: undefined,
     showDefault: true,
   },

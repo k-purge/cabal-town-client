@@ -20,6 +20,7 @@ import { SendTransactionRequest, TonConnectUI } from "@tonconnect/ui-react";
 import { DECIMAL_SCALER } from "consts";
 
 export const JETTON_DEPLOY_GAS = toNano(0.01);
+export const JETTON_TXN_GAS = toNano(0.05);
 
 export enum JettonDeployState {
   NOT_STARTED,
@@ -136,7 +137,7 @@ class JettonDeployController {
       messages: [
         {
           address: jettonMaster.toString(),
-          amount: toNano(0.04).toString(),
+          amount: JETTON_TXN_GAS.toString(),
           stateInit: undefined,
           payload: mintBody(Address.parse(walletAddress), amount, toNano(0.02), 0)
             .toBoc()
@@ -172,7 +173,7 @@ class JettonDeployController {
       messages: [
         {
           address: ownerJettonWallet,
-          amount: toNano(0.05).toString(),
+          amount: JETTON_TXN_GAS.toString(),
           stateInit: undefined,
           payload: transfer(Address.parse(toAddress), Address.parse(fromAddress), amount)
             .toBoc()
@@ -202,7 +203,7 @@ class JettonDeployController {
     );
 
     const fee = (jettonPrice * 5) / 100;
-    const msgValue = toNano(0.02).toNumber() + jettonPrice + fee;
+    const msgValue = JETTON_TXN_GAS.toNumber() + jettonPrice + fee;
 
     const tx: SendTransactionRequest = {
       validUntil: Date.now() + 5 * 60 * 1000,

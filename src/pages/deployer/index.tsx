@@ -110,11 +110,11 @@ function DeployerPage() {
       <ScreenContent removeBackground>
         <Fade in>
           <Box>
-            <ScreenHeading>CREATE TOKEN</ScreenHeading>
+            <ScreenHeading>CREATE CABAL</ScreenHeading>
             <FormWrapper>
               <Form
                 isLoading={isLoading}
-                submitText="Create Token"
+                submitText="Create cabal"
                 onSubmit={deployContract}
                 inputs={formSpec}
                 gameDetailInputs={gameDetailSpec}

@@ -15,7 +15,7 @@ const footerLogos = [
     route: ROUTES.profile,
   },
   {
-    title: "Create token",
+    title: "Create cabal",
     route: ROUTES.deployer,
   },
   {

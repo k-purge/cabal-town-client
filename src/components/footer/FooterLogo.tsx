@@ -23,7 +23,7 @@ export const FooterLogo = ({
         return <ExplorerIcon isFocus={selectedRoute === title} />;
       case "Profile":
         return <ProfileIcon isFocus={selectedRoute === title} />;
-      case "Create token":
+      case "Create cabal":
         return <DeployerIcon isFocus={selectedRoute === title} />;
       default:
         return <HowItWorksIcon isFocus={selectedRoute === title} />;

@@ -26,9 +26,9 @@ export const Header = () => {
             <AppLogo />
             <HeaderRight>
               <HeaderMenu />
-              <IconButton onClick={() => setMobileMenu(true)}>
+              {/* <IconButton onClick={() => setMobileMenu(true)}>
                 <MenuRoundedIcon style={{ width: 38, height: 38, color: "#FFB800" }} />
-              </IconButton>
+              </IconButton> */}
             </HeaderRight>
           </HeaderOptionalContent>
           <MobileMenu showMenu={mobileMenu && !matches} closeMenu={() => setMobileMenu(false)} />

@@ -150,7 +150,7 @@ export function Form({
       </FormWrapper>
 
       <FormWrapper>
-        <JettonFormTitle>GAME DETAILS</JettonFormTitle>
+        <JettonFormTitle>CABAL DETAILS</JettonFormTitle>
 
         {gameDetailInputs
           .filter((i) => !i.disabled)

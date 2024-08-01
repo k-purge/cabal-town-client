@@ -59,6 +59,7 @@ export const Token = () => {
           (balance, holder) => balance + parseInt(holder.balance),
           0,
         ) ?? 0;
+
       return (
         ((balance * jettonPrice) /
           DECIMAL_SCALER /
@@ -125,7 +126,7 @@ export const Token = () => {
 
       <StyledBottomText>
         <Typography>Game Initiation Progress</Typography>
-        <Typography>{progress.toFixed(4)}%</Typography>
+        <Typography>{progress > 0.0001 ? progress.toFixed(4) : 0}%</Typography>
       </StyledBottomText>
 
       <BorderLinearProgress variant="determinate" value={progress} />
