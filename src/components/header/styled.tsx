@@ -20,6 +20,7 @@ const HeaderContent = styled(Box)(({ theme }) => ({
   width: "100%",
   margin: "0 auto",
   paddingLeft: "20px",
+  paddingRight: "10px",
   display: "flex",
   alignItems: "center",
 }));
