@@ -29,7 +29,7 @@ export const Card = ({
           <UserIcon color="#767676" />
           <CardBody>{item?.holders?.length} Players in game</CardBody>
         </Box>
-        <CardText>Amount: {balance}</CardText>
+        {balance ? <CardText>Amount: {balance}</CardText> : null}
       </CardContent>
     </CardContainer>
   );

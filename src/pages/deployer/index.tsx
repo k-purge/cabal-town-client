@@ -30,6 +30,7 @@ function DeployerPage() {
   const { showNotification } = useNotification();
   const { network } = useNetwork();
   const walletAddress = useTonAddress();
+  const rawAddress = useTonAddress(false);
   const [tonconnect] = useTonConnectUI();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigatePreserveQuery();
@@ -85,8 +86,10 @@ function DeployerPage() {
         lastSurvivors: data.numOfSurvivors,
         masterAddress: Address.normalize(result),
         ownerAddress: process.env.REACT_APP_JETTON_OWNER!,
+        creatorAddress: rawAddress,
         chain: network,
       };
+      console.log("jettonData", jettonData);
       await axiosService.insertJetton(jettonData);
 
       analytics.sendEvent(

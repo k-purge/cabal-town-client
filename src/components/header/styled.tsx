@@ -1,6 +1,5 @@
-import { AppBar, styled, Typography } from "@mui/material";
+import { AppBar, styled } from "@mui/material";
 import { Box } from "@mui/system";
-import { APP_GRID } from "consts";
 
 const HeaderWrapper = styled(AppBar)(({ theme }) => ({
   gap: "0px",
@@ -18,16 +17,11 @@ const HeaderWrapper = styled(AppBar)(({ theme }) => ({
 }));
 
 const HeaderContent = styled(Box)(({ theme }) => ({
-  maxWidth: APP_GRID,
   width: "100%",
   margin: "0 auto",
-  [theme.breakpoints.down("lg")]: {
-    width: "calc(100% - 50px)",
-  },
-  [theme.breakpoints.down("md")]: {
-    display: "flex",
-    alignItems: "center",
-  },
+  paddingLeft: "20px",
+  display: "flex",
+  alignItems: "center",
 }));
 
 const HeaderOptionalContent = styled(Box)(({ theme }) => ({

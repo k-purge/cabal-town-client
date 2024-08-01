@@ -11,6 +11,7 @@ export interface IHolder {
 export interface IInsertJetton {
   name: string;
   imageUri: string;
+  creatorAddress: string;
   masterAddress: string;
   ownerAddress?: string;
   lastSurvivors?: number;
