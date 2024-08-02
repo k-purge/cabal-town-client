@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import SearchImg from "assets/icons/search.svg";
-import { IndentlessIcon, SearchBarInput, SearchBarWrapper } from "./styled";
+import { SearchBarInput, SearchBarWrapper } from "./styled";
 import close from "assets/icons/close.svg";
 import { Backdrop, ClickAwayListener, IconButton } from "@mui/material";
 import { AppButton } from "components/appButton";
@@ -44,11 +43,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({ example, resetExample, clo
     return () => {
       document.removeEventListener("keydown", listener);
     };
-  }, [addressInput.value, onSubmit]);
+  }, [addressInput.value, closeMenu, onSubmit, resetExample]);
 
   useEffect(() => {
     example && setValue(example);
-  }, [example]);
+  }, [example, setValue]);
 
   return (
     <ClickAwayListener onClickAway={() => setActive(false)}>
@@ -59,7 +58,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ example, resetExample, clo
           onClick={() => setActive(false)}></Backdrop>
         <SearchBarWrapper>
           <SearchBarInput
-            placeholder="Jetton address"
+            placeholder="Search by jetton address"
             onPaste={(e: any) => setValue(e.target.value)}
             onChange={(e) => setValue(e.target.value)}
             value={addressInput.value}

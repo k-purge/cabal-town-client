@@ -11,7 +11,7 @@ export const GroupDescription = () => {
       <>
         <Box width="341px" textAlign="start" mb={1}>
           <Typography sx={{ color: "#fff", fontSize: "16px", fontFamily: "Bungee, sans-serif" }}>
-            Group Desription
+            GROUP DESCRIPTION
           </Typography>
         </Box>
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PopupTitle } from "components/editLogoPopup/styled";
 import { Box, Typography } from "@mui/material";
 import { SearchBarInput } from "components/header/headerSearchBar/styled";
@@ -29,11 +29,11 @@ export const CheckWalletBalancePopup = ({ showPopup, close }: CheckWalletBalance
     } else {
       showNotification("Wallet address in invalid", "error");
     }
-  }, [search]);
+  }, [close, params, search, setParams, showNotification]);
 
   useEffect(() => {
     getJettonDetails();
-  }, [params]);
+  }, [getJettonDetails, params]);
 
   return (
     <Popup
@@ -62,7 +62,7 @@ export const CheckWalletBalancePopup = ({ showPopup, close }: CheckWalletBalance
           borderRadius: 40,
         }}>
         <SearchBarInput
-          placeholder="Jetton address"
+          placeholder="Search by jetton address"
           onPaste={(e: any) => setSearch(e.target.value)}
           onChange={(e) => setSearch(e.target.value)}
           value={search}

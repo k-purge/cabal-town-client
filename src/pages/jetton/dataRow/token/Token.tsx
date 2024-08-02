@@ -99,7 +99,7 @@ export const Token = () => {
             disabled={!selectedJetton?.nextPurgeAt}
             background="#FFB800"
             onClick={onClickJoinGame}>
-            Join Game
+            JOIN CABAL
           </TradeButton>
         </>
       );
@@ -125,7 +125,7 @@ export const Token = () => {
       )}
 
       <StyledBottomText>
-        <Typography>Game Initiation Progress</Typography>
+        <Typography>Cabal Initiation Progress</Typography>
         <Typography>{progress > 0.0001 ? progress.toFixed(4) : 0}%</Typography>
       </StyledBottomText>
 
