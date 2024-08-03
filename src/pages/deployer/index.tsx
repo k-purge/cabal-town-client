@@ -89,7 +89,6 @@ function DeployerPage() {
         creatorAddress: rawAddress,
         chain: network,
       };
-      console.log("jettonData", jettonData);
       await axiosService.insertJetton(jettonData);
 
       analytics.sendEvent(

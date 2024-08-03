@@ -4,19 +4,20 @@ import { IJetton } from "store/jetton-list-store/";
 import { useMemo } from "react";
 import { DECIMAL_SCALER } from "consts";
 import UserIcon from "components/icons/User.icon";
+import { IJettonProfile } from "store/jetton-store";
 
 export const Card = ({
   item,
   onClickCard,
 }: {
-  item: IJetton | undefined;
+  item: IJettonProfile | undefined;
   onClickCard: (jetton: IJetton | undefined) => void;
 }) => {
   const balance = useMemo(() => {
-    if (item?.holders?.length) {
-      return (parseInt(item.holders[0]?.balance) / DECIMAL_SCALER).toLocaleString();
+    if (item?.balance) {
+      return parseInt(item.balance) / DECIMAL_SCALER;
     }
-  }, [item?.holders]);
+  }, [item]);
 
   return (
     <CardContainer onClick={() => onClickCard(item)}>
@@ -27,7 +28,7 @@ export const Card = ({
         <CardHeader>{item?.name}</CardHeader>
         <Box display="flex" flexDirection={"row"} gap={"5px"}>
           <UserIcon color="#767676" />
-          <CardBody>{item?.holders?.length} Players in game</CardBody>
+          <CardBody>{item?.players?.length} Players in game</CardBody>
         </Box>
         {balance ? <CardText>Amount: {balance}</CardText> : null}
       </CardContent>

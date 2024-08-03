@@ -34,8 +34,30 @@ async function getJettonPrice(masterAddress: string, limit: number) {
   };
 }
 
-async function getJettonUpdates(masterAddress: string, jettonId: string, lt: number) {
-  const endpoint = REACT_APP_TON_API_URL + `/v1/jettons/${masterAddress}/${jettonId}?lt=${lt}`;
+async function getJettonHolders(masterAddress: string, chain: string) {
+  const endpoint = REACT_APP_TON_API_URL + `/v1/jettons/${masterAddress}/holders?chain=${chain}`;
+
+  return {
+    res: (await axios.get(endpoint)).data,
+  };
+}
+
+async function getJettonTxns(masterAddress: string, chain: string) {
+  const endpoint = REACT_APP_TON_API_URL + `/v1/jettons/${masterAddress}/txns?chain=${chain}`;
+
+  return {
+    res: (await axios.get(endpoint)).data,
+  };
+}
+
+async function getJettonUpdates(
+  masterAddress: string,
+  jettonId: string,
+  lt: number,
+  chain: string,
+) {
+  const endpoint =
+    REACT_APP_TON_API_URL + `/v1/jettons/${masterAddress}/${jettonId}?lt=${lt}&chain=${chain}`;
 
   return {
     res: (await axios.get(endpoint)).data,
@@ -65,6 +87,8 @@ const axiosService = {
   getJetton,
   insertJetton,
   getJettonsByOwner,
+  getJettonHolders,
+  getJettonTxns,
 };
 
 export default axiosService;

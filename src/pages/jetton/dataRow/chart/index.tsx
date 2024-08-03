@@ -87,7 +87,16 @@ export const Chart = () => {
   useEffect(() => {
     if (chart && jettonPriceList && candlestickSeries) {
       if (jettonPriceList.length > 1) {
-        const priceList = [...jettonPriceList].reverse();
+        const priceList = [...jettonPriceList]
+          .filter((item, i) => {
+            const nextItem = jettonPriceList[i + 1];
+            if (nextItem) {
+              return Math.floor(nextItem.timestamp / 1000) < Math.floor(item.timestamp / 1000);
+            }
+            return item;
+          })
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .reverse();
 
         const candlestickData = priceList.map((data) => ({
           time: Math.floor(data.timestamp / 1000) as UTCTimestamp,

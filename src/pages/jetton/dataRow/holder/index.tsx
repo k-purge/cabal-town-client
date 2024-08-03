@@ -7,13 +7,13 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 
 export const Holder = () => {
   const rawAddress = useTonAddress(false);
-  const { selectedJetton, userBalance } = useJettonStore();
+  const { holders, userBalance } = useJettonStore();
 
   const userHolding = useMemo(() => {
-    if (selectedJetton?.holders) {
+    if (holders) {
       let place = 0;
-      for (let i = 0; i < selectedJetton?.holders?.length; i++) {
-        const ele = selectedJetton?.holders[i];
+      for (let i = 0; i < holders.length; i++) {
+        const ele = holders[i];
         if (ele.owner.address === rawAddress) {
           place = i + 1;
           continue;
@@ -27,23 +27,16 @@ export const Holder = () => {
         };
       }
     }
-  }, [rawAddress, selectedJetton?.holders, userBalance]);
+  }, [rawAddress, holders, userBalance]);
 
   const circulatingSupply = useMemo(() => {
-    return (
-      selectedJetton?.holders?.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ??
-      0
-    );
-  }, [selectedJetton]);
+    if (holders) {
+      return holders.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ?? 0;
+    }
+  }, [holders]);
 
-  const highestHolders = useMemo(
-    () => selectedJetton?.holders?.slice(0, 5),
-    [selectedJetton?.holders],
-  );
-  const lowestHolders = useMemo(
-    () => selectedJetton?.holders?.slice(-5),
-    [selectedJetton?.holders],
-  );
+  const highestHolders = useMemo(() => holders?.slice(0, 5), [holders]);
+  const lowestHolders = useMemo(() => holders?.slice(-5), [holders]);
 
   return (
     <StyledBlock height="100%">

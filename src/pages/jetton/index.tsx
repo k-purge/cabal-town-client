@@ -18,7 +18,7 @@ import SelectType from "./SelectType";
 
 export const Jetton = () => {
   const address = useTonAddress();
-  const { getJettonDetails, getJettonFromDb } = useJettonStore();
+  const { getJettonDetails, getJettonFromDb, getJettonHoldersTxns } = useJettonStore();
   const { isAddressEmpty, jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
   const [type, setType] = useState("1");
@@ -31,8 +31,9 @@ export const Jetton = () => {
     if (jettonAddress) {
       getJettonFromDb();
       getJettonDetails();
+      getJettonHoldersTxns();
     }
-  }, [jettonAddress, address, getJettonDetails, getJettonFromDb]);
+  }, [jettonAddress, address, getJettonDetails, getJettonFromDb, getJettonHoldersTxns]);
 
   useEffect(() => {
     !isAddressEmpty && !jettonAddress && showNotification("Invalid jetton address", "error");

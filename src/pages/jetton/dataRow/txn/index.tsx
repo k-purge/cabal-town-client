@@ -13,13 +13,13 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import { DECIMAL_SCALER } from "consts";
 
 export const Txn = () => {
-  const { symbol, selectedJetton } = useJettonStore();
+  const { symbol, txns: jettonTxns } = useJettonStore();
 
   const txns = useMemo(() => {
-    return selectedJetton?.txns
+    return jettonTxns
       ?.filter((txn) => txn.success && [31, 51].includes(parseInt(txn.in_msg.op_code, 16)))
       ?.sort((a, b) => b.in_msg?.created_at - a.in_msg?.created_at);
-  }, [selectedJetton]);
+  }, [jettonTxns]);
 
   const dateConverter = useCallback((timestamp: number) => {
     const date = new Date(timestamp * 1000); // convert seconds to milliseconds

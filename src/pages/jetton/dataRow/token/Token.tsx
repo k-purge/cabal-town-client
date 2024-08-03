@@ -24,6 +24,7 @@ export const Token = () => {
     isImageBroken,
     jettonPrice,
     selectedJetton,
+    holders,
   } = useJettonStore();
   const [timeString, setTimeString] = useState("--");
 
@@ -53,12 +54,9 @@ export const Token = () => {
   }, [selectedJetton?.nextPurgeAt]);
 
   const progress = useMemo(() => {
-    if (selectedJetton) {
+    if (selectedJetton && holders) {
       const balance =
-        selectedJetton.holders?.reduce(
-          (balance, holder) => balance + parseInt(holder.balance),
-          0,
-        ) ?? 0;
+        holders.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ?? 0;
 
       return (
         ((balance * jettonPrice) /
@@ -70,7 +68,7 @@ export const Token = () => {
     }
 
     return 0;
-  }, [selectedJetton, jettonPrice]);
+  }, [selectedJetton, holders, jettonPrice]);
 
   const onClickJoinGame = useCallback(() => {
     if (window) {
@@ -116,7 +114,7 @@ export const Token = () => {
       />
       <Box display="flex" flexDirection={"row"} gap={1}>
         <img src={UserImg} alt="user" width={"13px"} />
-        <StyledCardBody>{selectedJetton?.holders?.length} Players in lobby</StyledCardBody>
+        <StyledCardBody>{selectedJetton?.players?.length} Players in lobby</StyledCardBody>
       </Box>
       {userBalance > 0 && (
         <Typography fontSize={20} color="#FFB800" mt={1}>

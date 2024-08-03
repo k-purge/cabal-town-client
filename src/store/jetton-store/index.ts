@@ -13,7 +13,7 @@ export interface IJettonProfile {
   masterAddress: string;
   imageUri: string;
   name: string;
-  holders?: IHolder[];
+  balance?: string;
   players?: any[];
   id: string;
 }
@@ -43,6 +43,8 @@ export interface JettonStoreState {
   jettonPriceList?: IJettonPrice[];
   userBalance: number;
   userProfileList?: IJettonProfile[];
+  holders?: IHolder[];
+  txns?: any[];
 }
 
 const jettonStateAtom = atom<JettonStoreState>({
@@ -72,6 +74,8 @@ const jettonStateAtom = atom<JettonStoreState>({
     jettonPriceList: undefined,
     userBalance: 0,
     userProfileList: undefined,
+    holders: undefined,
+    txns: undefined,
   },
 });
 

@@ -39,16 +39,31 @@ function useJettonStore() {
     if (jettonAddress) {
       // get jetton detail from db
       const { res: selectedJetton } = await axiosService.getJetton(jettonAddress);
-      const userBalance = _filterUserBalance(selectedJetton.holders);
       setState((prevState) => {
         return {
           ...prevState,
           selectedJetton,
-          userBalance,
         };
       });
     }
-  }, [_filterUserBalance, jettonAddress, setState]);
+  }, [jettonAddress, setState]);
+
+  const getJettonHoldersTxns = useCallback(async () => {
+    if (jettonAddress) {
+      // get jetton detail from db
+      const { res: holders } = await axiosService.getJettonHolders(jettonAddress, network);
+      const { res: txns } = await axiosService.getJettonTxns(jettonAddress, network);
+      const userBalance = _filterUserBalance(holders);
+      setState((prevState) => {
+        return {
+          ...prevState,
+          userBalance,
+          holders,
+          txns,
+        };
+      });
+    }
+  }, [_filterUserBalance, jettonAddress, network, setState]);
 
   const getJettonDetails = useCallback(async () => {
     i++;
@@ -222,6 +237,7 @@ function useJettonStore() {
             jettonAddress,
             jettonId,
             lt,
+            network,
           );
           const userBalance = _filterUserBalance(selectedJetton.holders);
 
@@ -245,7 +261,7 @@ function useJettonStore() {
         }
       }
     },
-    [jettonAddress, _filterUserBalance, setState, showNotification],
+    [jettonAddress, network, _filterUserBalance, setState, showNotification],
   );
 
   const getUserProfileList = useCallback(async () => {
@@ -269,6 +285,7 @@ function useJettonStore() {
     getUserProfileList,
     getJettonFromDb,
     reset,
+    getJettonHoldersTxns,
   };
 }
 

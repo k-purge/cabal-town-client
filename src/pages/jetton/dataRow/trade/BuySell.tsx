@@ -24,6 +24,7 @@ import { jettonDeployController } from "lib/deploy-controller";
 import { DECIMAL_SCALER } from "consts";
 import { validateTradeParams } from "../../util";
 import { jettonActionsState } from "pages/jetton/actions/jettonActions";
+import { sleep } from "lib/utils";
 
 export const BuySell = () => {
   const senderAddress = useTonAddress();
@@ -35,8 +36,7 @@ export const BuySell = () => {
     jettonMaster,
     jettonPrice,
     decimals,
-    getJettonUpdates,
-    selectedJetton,
+    getJettonHoldersTxns,
   } = useJettonStore();
   const { jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
@@ -130,9 +130,11 @@ export const BuySell = () => {
     } finally {
       setAmt(0);
       setActionInProgress(false);
-      if (selectedJetton) {
-        const lt = selectedJetton.txns?.length ? selectedJetton.txns[0].lt : 1;
-        getJettonUpdates(selectedJetton.id, lt);
+      let i = 0;
+      while (i < 5) {
+        i++;
+        await sleep(5000);
+        getJettonHoldersTxns();
       }
     }
   }, [
@@ -145,8 +147,7 @@ export const BuySell = () => {
     buyTrade,
     price,
     sellTrade,
-    selectedJetton,
-    getJettonUpdates,
+    getJettonHoldersTxns,
   ]);
 
   const getPrice = useCallback(async () => {

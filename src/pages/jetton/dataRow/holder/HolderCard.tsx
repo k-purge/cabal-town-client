@@ -9,7 +9,7 @@ interface IProps {
   balance: number;
   bgcolor: string;
   isUser?: boolean;
-  circulatingSupply: number;
+  circulatingSupply?: number;
 }
 
 export default function HolderCard({
@@ -26,7 +26,9 @@ export default function HolderCard({
 
   const calJettonDistribution = useCallback(
     (balance: number) => {
-      return ((balance / circulatingSupply) * 100).toFixed(2);
+      if (circulatingSupply) {
+        return ((balance / circulatingSupply) * 100).toFixed(2);
+      }
     },
     [circulatingSupply],
   );

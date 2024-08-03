@@ -9,7 +9,7 @@ import { BoxConainer, EllipsisText, StyledImg } from "./styled";
 import { DECIMAL_SCALER } from "consts";
 
 export const GroupDetail = () => {
-  const { symbol, jettonMaster, jettonWalletAddress, jettonPrice, tonPrice, selectedJetton } =
+  const { holders, symbol, jettonMaster, jettonWalletAddress, jettonPrice, tonPrice } =
     useJettonStore();
   const { showNotification } = useNotification();
 
@@ -18,19 +18,16 @@ export const GroupDetail = () => {
   };
 
   const marketCap = useMemo(() => {
-    if (selectedJetton) {
+    if (holders) {
       const balance =
-        selectedJetton.holders?.reduce(
-          (balance, holder) => balance + parseInt(holder.balance),
-          0,
-        ) ?? 0;
+        holders?.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ?? 0;
       // assume the game start  balance is 1000 * DECIMAL_SCALER
       const cap = (balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) / DECIMAL_SCALER;
       return cap.toLocaleString();
     }
 
     return 0;
-  }, [jettonPrice, tonPrice, selectedJetton]);
+  }, [holders, jettonPrice, tonPrice]);
 
   return (
     <StyledBlock height="100%">

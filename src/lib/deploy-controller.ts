@@ -71,14 +71,14 @@ class JettonDeployController {
       await waitForContractDeploy(contractAddr, tc);
     }
 
-    const ownerJWalletAddr = await makeGetCall(
-      contractAddr,
-      "get_wallet_address",
-      [beginCell().storeAddress(params.owner).endCell()],
-      ([addr]) => (addr as Cell).beginParse().readAddress()!,
-      tc,
-    );
-    console.log("ownerJWalletAddr", ownerJWalletAddr.toFriendly());
+    // const ownerJWalletAddr = await makeGetCall(
+    //   contractAddr,
+    //   "get_wallet_address",
+    //   [beginCell().storeAddress(params.owner).endCell()],
+    //   ([addr]) => (addr as Cell).beginParse().readAddress()!,
+    //   tc,
+    // );
+    // console.log("ownerJWalletAddr", ownerJWalletAddr.toFriendly());
 
     // params.onProgress?.(JettonDeployState.AWAITING_JWALLET_DEPLOY);
     // await waitForContractDeploy(ownerJWalletAddr, tc);
