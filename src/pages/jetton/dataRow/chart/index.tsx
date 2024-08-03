@@ -28,7 +28,7 @@ export const Chart = () => {
   }
 
   const chart = useMemo(() => {
-    if (containerRef.current) {
+    if (containerRef.current && jettonPriceList && jettonPriceList.length > 1) {
       const chartOptions: any = {
         layout: { textColor: "white", background: { type: "solid", color: "#1E1E1E" } },
         timeScale: {
@@ -54,13 +54,13 @@ export const Chart = () => {
           },
         },
         leftPriceScale: {
-          visible: true,
+          visible: jettonPriceList?.some((price) => price.circulatingSupply > 0),
         },
       };
       return createChart(containerRef.current, chartOptions);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [containerRef.current]);
+  }, [jettonPriceList, containerRef.current]);
 
   let candlestickSeries = useMemo(() => {
     if (chart) {
@@ -70,6 +70,18 @@ export const Chart = () => {
         borderVisible: false,
         wickUpColor: "#26a69a",
         wickDownColor: "#ef5350",
+      });
+    }
+  }, [chart]);
+
+  let lineLeft = useMemo(() => {
+    if (chart) {
+      return chart.addLineSeries({
+        priceScaleId: "left",
+        color: "#71649C", // Red Transparent
+        lineStyle: LineStyle.Solid,
+        lineWidth: 1,
+        priceLineSource: PriceLineSource.LastVisible,
       });
     }
   }, [chart]);
@@ -85,7 +97,7 @@ export const Chart = () => {
   }, [getJettonPrice]);
 
   useEffect(() => {
-    if (chart && jettonPriceList && candlestickSeries) {
+    if (chart && jettonPriceList && candlestickSeries && lineLeft) {
       if (jettonPriceList.length > 1) {
         const priceList = [...jettonPriceList]
           .filter((item, i) => {
@@ -120,9 +132,7 @@ export const Chart = () => {
           time: data.time,
           value: (data.close + data.open) / 2,
         }));
-        // Add an area series to the chart,
-        // Adding this before we add the candlestick chart
-        // so that it will appear beneath the candlesticks
+
         const areaSeries = chart.addAreaSeries({
           lastValueVisible: false, // hide the last value marker for this series
           crosshairMarkerVisible: false, // hide the crosshair marker for this series
@@ -133,20 +143,16 @@ export const Chart = () => {
         // Set the data for the Area Series
         areaSeries.setData(lineData);
 
+        // TODO
         // volume
-        const lineLeft = chart.addLineSeries({
-          priceScaleId: "left",
-          color: "#71649C", // Red Transparent
-          lineStyle: LineStyle.Solid,
-          lineWidth: 1,
-          priceLineSource: PriceLineSource.LastVisible,
-        });
-        lineLeft.setData(
-          priceList.map((data) => ({
-            time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
-            value: data.circulatingSupply / DECIMAL_SCALER,
-          })),
-        );
+        if (priceList.some((price) => price.circulatingSupply > 0)) {
+          lineLeft.setData(
+            priceList.map((data) => ({
+              time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
+              value: data.circulatingSupply / DECIMAL_SCALER,
+            })),
+          );
+        }
 
         chart.applyOptions({
           crosshair: {
@@ -184,9 +190,18 @@ export const Chart = () => {
         }))[0];
 
         candlestickSeries.update(newCandle);
+
+        if (jettonPriceList[0].circulatingSupply > 0) {
+          const newVolume = jettonPriceList.map((data) => ({
+            time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
+            value: data.circulatingSupply / DECIMAL_SCALER,
+          }))[0];
+
+          lineLeft.update(newVolume);
+        }
       }
     }
-  }, [chart, candlestickSeries, jettonPriceList, decimals]);
+  }, [chart, candlestickSeries, jettonPriceList, decimals, lineLeft]);
 
   return (
     <StyledBlock height="320px" style={{ padding: "10px 0 0 10px" }}>
