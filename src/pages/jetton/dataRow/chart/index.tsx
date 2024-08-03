@@ -188,10 +188,6 @@ export const Chart = () => {
     }
   }, [chart, candlestickSeries, jettonPriceList, decimals]);
 
-  if (!jettonPriceList?.length) {
-    return <></>;
-  }
-
   return (
     <StyledBlock height="320px" style={{ padding: "10px 0 0 10px" }}>
       <Box width="100%" height="320px" ref={containerRef} />
