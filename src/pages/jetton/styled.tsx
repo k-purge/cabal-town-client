@@ -99,6 +99,7 @@ const StyledBodyBlock = styled(Box)(({ height }: { height: string | number }) =>
   alignItems: "center",
   textAlign: "center",
   marginBottom: "24px",
+  paddingBottom: "12px",
 }));
 
 const StyledSelectBox = styled(Box)(() => ({

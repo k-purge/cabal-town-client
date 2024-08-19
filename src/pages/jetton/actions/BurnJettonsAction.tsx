@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import BigNumberDisplay from "components/BigNumberDisplay";
 import { Popup } from "components/Popup";
 import useNotification from "hooks/useNotification";
-import { jettonDeployController } from "lib/deploy-controller";
+import { jettonDeployController } from "lib/jetton-controller";
 import { useState } from "react";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import { AppButton } from "components/appButton";

@@ -8,7 +8,7 @@ import {
   JettonDeployController,
   JettonDeployParams,
   JETTON_DEPLOY_GAS,
-} from "../lib/deploy-controller";
+} from "../lib/jetton-controller";
 import BN from "bn.js";
 import chaiAsPromised from "chai-as-promised";
 import { buildOnChainData } from "../contracts/jetton-minter";

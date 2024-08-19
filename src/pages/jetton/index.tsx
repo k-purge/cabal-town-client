@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { useTonAddress } from "@tonconnect/ui-react";
 import { Screen, ScreenContent } from "components/Screen";
 import { useJettonAddress } from "hooks/useJettonAddress";
 import { Token } from "pages/jetton/dataRow/token";
 import { Holder } from "pages/jetton/dataRow/holder";
 import { BuySell } from "pages/jetton/dataRow/trade";
+import { LockClaim } from "./dataRow/trade/LockClaim";
 import { Txn } from "pages/jetton/dataRow/txn";
 import { StyledContainer, StyledBody } from "pages/jetton/styled";
 import { GroupDetail } from "./dataRow/trade/GroupDetail";
@@ -17,7 +17,6 @@ import FaultyDeploy from "./FaultyDeploy";
 import SelectType from "./SelectType";
 
 export const Jetton = () => {
-  const address = useTonAddress();
   const { getJettonDetails, getJettonFromDb, getJettonHoldersTxns } = useJettonStore();
   const { isAddressEmpty, jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
@@ -33,7 +32,7 @@ export const Jetton = () => {
       getJettonDetails();
       getJettonHoldersTxns();
     }
-  }, [jettonAddress, address, getJettonDetails, getJettonFromDb, getJettonHoldersTxns]);
+  }, [jettonAddress, getJettonDetails, getJettonFromDb, getJettonHoldersTxns]);
 
   useEffect(() => {
     !isAddressEmpty && !jettonAddress && showNotification("Invalid jetton address", "error");
@@ -50,6 +49,14 @@ export const Jetton = () => {
           </>
         );
       case "2":
+        return (
+          <>
+            <LockClaim />
+            <GroupDescription />
+            <GroupDetail />
+          </>
+        );
+      case "3":
         return <Holder />;
       default:
         return <Txn />;

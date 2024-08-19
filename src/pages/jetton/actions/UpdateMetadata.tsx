@@ -2,7 +2,7 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import { onchainFormSpec, gameDetailSpec } from "pages/deployer/data";
 import { Form } from "components/form";
 import { JettonStoreState } from "store/jetton-store";
-import { jettonDeployController } from "lib/deploy-controller";
+import { jettonDeployController } from "lib/jetton-controller";
 import WalletConnection from "services/wallet-connection";
 import { Address } from "ton";
 import useNotification from "hooks/useNotification";

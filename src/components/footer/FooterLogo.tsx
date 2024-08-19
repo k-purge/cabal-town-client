@@ -20,13 +20,13 @@ export const FooterLogo = ({
   const renderIcon = useCallback(() => {
     switch (title) {
       case "Explorer":
-        return <ExplorerIcon isFocus={selectedRoute === title} />;
+        return <ExplorerIcon isfocus={Boolean(selectedRoute === title)} />;
       case "Profile":
-        return <ProfileIcon isFocus={selectedRoute === title} />;
+        return <ProfileIcon isfocus={Boolean(selectedRoute === title)} />;
       case "Create cabal":
-        return <DeployerIcon isFocus={selectedRoute === title} />;
+        return <DeployerIcon isfocus={Boolean(selectedRoute === title)} />;
       default:
-        return <HowItWorksIcon isFocus={selectedRoute === title} />;
+        return <HowItWorksIcon isfocus={Boolean(selectedRoute === title)} />;
     }
   }, [selectedRoute, title]);
 

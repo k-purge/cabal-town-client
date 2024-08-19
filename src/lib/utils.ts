@@ -1,6 +1,22 @@
 import { Address, beginCell, TonClient, Wallet } from "ton";
-import { JettonDeployParams, JETTON_DEPLOY_GAS } from "./deploy-controller";
-import { initData, JETTON_MINTER_CODE, bouncedBody } from "./jetton-minter";
+import { JettonDeployParams, JETTON_DEPLOY_GAS } from "./jetton-controller";
+import { initData, JETTON_MINTER_CODE } from "./jetton-minter";
+
+export enum OPS {
+  ChangeAdmin = 3,
+  ReplaceMetadata = 4,
+  Mint = 21,
+  InternalTransfer = 0x178d4519,
+  Transfer = 0xf8a7ea5,
+  Burn = 0x595f07bc,
+  BuyJetton = 31,
+  SellJetton = 51,
+  Bounced = 0xffffffff,
+  LockJetton = 61,
+  UnlockJetton = 71,
+  ClaimTon = 103,
+  PoolUnlockJetton = 102,
+}
 
 export async function sleep(time: number) {
   return new Promise((resolve) => {
@@ -51,6 +67,5 @@ export const createDeployParams = (params: JettonDeployParams, offchainUri?: str
     data: initData(params.owner, params.onchainMetaData, offchainUri),
     deployer: params.deployer,
     value: JETTON_DEPLOY_GAS,
-    message: bouncedBody(),
   };
 };

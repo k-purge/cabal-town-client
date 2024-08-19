@@ -3,13 +3,13 @@ import { useJettonAddress } from "hooks/useJettonAddress";
 import QuestiomMarkImg from "assets/icons/question.png";
 import useNotification from "hooks/useNotification";
 import axiosService from "services/axios";
-import { jettonDeployController } from "lib/deploy-controller";
+import { jettonDeployController } from "lib/jetton-controller";
 import { zeroAddress } from "lib/utils";
 import { useCallback } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { Address } from "ton";
 import { getUrlParam, isValidAddress } from "utils";
-import { jettonStateAtom } from ".";
+import { jettonStateAtom, IJettonStoreUpdateState } from ".";
 import { IHolder } from "../jetton-list-store";
 import { useNetwork } from "lib/hooks/useNetwork";
 
@@ -28,7 +28,7 @@ function useJettonStore() {
   const _filterUserBalance = useCallback(
     (holders: IHolder[]) => {
       const balance = holders
-        .filter((holder: IHolder) => holder.owner.address === rawAddress)
+        ?.filter((holder: IHolder) => holder.owner.address === rawAddress)
         .map((holding: IHolder) => parseInt(holding.balance));
       return balance[0];
     },
@@ -48,12 +48,25 @@ function useJettonStore() {
     }
   }, [jettonAddress, setState]);
 
+  const updateState = useCallback(
+    (newState: IJettonStoreUpdateState) => {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          ...newState,
+        };
+      });
+    },
+    [setState],
+  );
+
   const getJettonHoldersTxns = useCallback(async () => {
     if (jettonAddress) {
       // get jetton detail from db
       const { res: holders } = await axiosService.getJettonHolders(jettonAddress, network);
       const { res: txns } = await axiosService.getJettonTxns(jettonAddress, network);
       const userBalance = _filterUserBalance(holders);
+
       setState((prevState) => {
         return {
           ...prevState,
@@ -62,8 +75,24 @@ function useJettonStore() {
           txns,
         };
       });
+
+      return userBalance;
     }
   }, [_filterUserBalance, jettonAddress, network, setState]);
+
+  const getJettonWallet = useCallback(async () => {
+    const parsedJettonMaster = Address.parse(jettonFriendlyAddress!);
+    const jettonWallet = await jettonDeployController.getJettonWallet(
+      parsedJettonMaster,
+      walletAddress,
+    );
+    setState((prevState) => {
+      return {
+        ...prevState,
+        jettonWalletAddress: jettonWallet?.jWalletAddress?.toFriendly(),
+      };
+    });
+  }, [jettonFriendlyAddress, setState, walletAddress]);
 
   const getJettonDetails = useCallback(async () => {
     i++;
@@ -229,39 +258,63 @@ function useJettonStore() {
     [setState, showNotification, jettonAddress],
   );
 
-  const getJettonUpdates = useCallback(
-    async (jettonId: string, lt: number) => {
+  const getJettonStaking = useCallback(
+    async (address: string) => {
       try {
-        if (jettonAddress) {
-          const { res: selectedJetton } = await axiosService.getJettonUpdates(
-            jettonAddress,
-            jettonId,
-            lt,
-            network,
+        if (address) {
+          const stakingAddress = Address.parse(address);
+          const result = await jettonDeployController.getStakingDetails(
+            stakingAddress,
+            connectedWalletAddress,
           );
-          const userBalance = _filterUserBalance(selectedJetton.holders);
 
-          setState((prevState) => {
+          setState((prevState: any) => {
             return {
               ...prevState,
-              selectedJetton,
-              userBalance,
+              selectedJetton: {
+                ...prevState.selectedJetton,
+                totalDepositAmt: result.stakingData.totalDepositAmt,
+                totalRewardBalance: result.stakingData.totalRewardBalance,
+                lockedDepositAmt: result.userDeposit?.userDeposit,
+                unclaimedReward: result.userDeposit?.unclaimedReward,
+              },
             };
           });
         }
       } catch (error) {
         if (error instanceof Error) {
           console.error(error);
-          showNotification(
-            !!error.message.match(/exit_code: (11|32)/g)
-              ? `Unable to query. This is probably not a Jetton Contract (${error.message})`
-              : error.message,
-            "error",
-          );
         }
       }
     },
-    [jettonAddress, network, _filterUserBalance, setState, showNotification],
+    [connectedWalletAddress, setState],
+  );
+
+  const getUserReward = useCallback(
+    async (address: string) => {
+      try {
+        if (jettonAddress) {
+          const stakingAddress = Address.parse(address);
+          const userAddress = Address.parse(connectedWalletAddress);
+          const userReward = await jettonDeployController.getUserReward(
+            stakingAddress,
+            userAddress,
+          );
+
+          setState((prevState) => {
+            return {
+              ...prevState,
+              userReward,
+            };
+          });
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+        }
+      }
+    },
+    [jettonAddress, connectedWalletAddress, setState],
   );
 
   const getUserProfileList = useCallback(async () => {
@@ -280,12 +333,15 @@ function useJettonStore() {
   return {
     ...state,
     getJettonDetails,
-    getJettonUpdates,
+    getUserReward,
     getJettonPrice,
     getUserProfileList,
     getJettonFromDb,
     reset,
     getJettonHoldersTxns,
+    getJettonStaking,
+    getJettonWallet,
+    updateState,
   };
 }
 

@@ -1,30 +1,19 @@
 import BN from "bn.js";
+import axios from "axios";
 import { Cell, beginCell, Address, beginDict, Slice, toNano } from "ton";
 
 import walletHex from "./contracts/jetton-wallet.compiled.json";
-import minterHex from "./contracts/jetton-minter.compiled.json";
+import masterHex from "./contracts/jetton-master.compiled.json";
 // @ts-ignore
 import { Sha256 } from "@aws-crypto/sha256-js";
-import axios from "axios";
+import { OPS } from "./utils";
 
 const ONCHAIN_CONTENT_PREFIX = 0x00;
 const OFFCHAIN_CONTENT_PREFIX = 0x01;
 const SNAKE_PREFIX = 0x00;
 
 export const JETTON_WALLET_CODE = Cell.fromBoc(walletHex.hex)[0];
-export const JETTON_MINTER_CODE = Cell.fromBoc(minterHex.hex)[0]; // code cell from build output
-
-enum OPS {
-  ChangeAdmin = 3,
-  ReplaceMetadata = 4,
-  Mint = 21,
-  InternalTransfer = 0x178d4519,
-  Transfer = 0xf8a7ea5,
-  Burn = 0x595f07bc,
-  BuyJetton = 31,
-  SellJetton = 51,
-  Bounced = 0xffffffff,
-}
+export const JETTON_MINTER_CODE = Cell.fromBoc(masterHex.hex)[0]; // code cell from build output
 
 export type JettonMetaDataKeys =
   | "name"
@@ -211,16 +200,16 @@ export function initData(
     throw new Error("Must either specify onchain data or offchain uri");
   }
   return beginCell()
-    .storeCoins(new BN("10000000000000000"))
-    .storeCoins(0)
+    .storeUint(new BN("10000000000000000"), 64)
+    .storeUint(0, 64)
     .storeAddress(owner)
     .storeRef(
       offchainUri ? buildJettonOffChainMetadata(offchainUri) : buildJettonOnchainMetadata(data!),
     )
     .storeRef(JETTON_WALLET_CODE)
-    .storeCoins(new BN("5000000000000000")) //midpoint_supply
+    .storeUint(new BN("5000000000000000"), 64) //midpoint_supply
     .storeCoins(1000000000) //max_price
-    .storeCoins(10) //steepness
+    .storeUint(10, 8) //steepness
     .endCell();
 }
 

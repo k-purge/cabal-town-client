@@ -2,9 +2,11 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 export default function ColorToggleButton({
+  type = "buy/sell",
   tradeType,
   handleChangeType,
 }: {
+  type?: string;
   tradeType: string;
   handleChangeType: any;
 }) {
@@ -14,7 +16,7 @@ export default function ColorToggleButton({
       value={tradeType}
       exclusive
       onChange={handleChangeType}
-      aria-label="buy/sell"
+      aria-label={type}
       sx={{
         marginBlock: "24px",
         width: "341px",
@@ -34,8 +36,8 @@ export default function ColorToggleButton({
           margin: "5px 3px",
         },
       }}>
-      <ToggleButton value="buy">BUY</ToggleButton>
-      <ToggleButton value="sell">SELL</ToggleButton>
+      <ToggleButton value="0">{type === "buy/sell" ? "BUY" : "LOCK"}</ToggleButton>
+      <ToggleButton value="1">{type === "buy/sell" ? "SELL" : "WITHDRAW"}</ToggleButton>
     </ToggleButtonGroup>
   );
 }

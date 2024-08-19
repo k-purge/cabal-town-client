@@ -33,6 +33,11 @@ export interface IJetton {
   nextPurgeAt?: Date;
   tgLink?: string;
   id: string;
+  stakingAddress?: string;
+  totalDepositAmt?: number;
+  totalRewardBalance?: number;
+  lockedDepositAmt?: number;
+  unclaimedReward?: number;
 }
 
 export interface JettonListStoreState {

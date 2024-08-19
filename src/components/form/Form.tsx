@@ -123,7 +123,7 @@ export function Form({
             .filter((i) => !i.disabled)
             .map((spec: any, index: number) => {
               return (
-                <>
+                <div key={"form-" + index}>
                   <FormTitle>{spec.label}</FormTitle>
                   <Input
                     disableExample={disableExample}
@@ -143,7 +143,7 @@ export function Form({
                     validate={spec.validate}
                     showDefault={spec.showDefault}
                   />
-                </>
+                </div>
               );
             })}
         </StyledFormInputs>

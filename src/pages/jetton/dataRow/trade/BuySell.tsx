@@ -20,7 +20,7 @@ import {
   DividerLine,
   TradeButton,
 } from "./styled";
-import { jettonDeployController } from "lib/deploy-controller";
+import { jettonDeployController } from "lib/jetton-controller";
 import { DECIMAL_SCALER } from "consts";
 import { validateTradeParams } from "../../util";
 import { jettonActionsState } from "pages/jetton/actions/jettonActions";
@@ -37,12 +37,14 @@ export const BuySell = () => {
     jettonPrice,
     decimals,
     getJettonHoldersTxns,
+    getJettonWallet,
+    getJettonFromDb,
   } = useJettonStore();
   const { jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
   const [tonconnect] = useTonConnectUI();
   const [actionInProgress, setActionInProgress] = useRecoilState(jettonActionsState);
-  const [tradeType, setTradeType] = useState("buy");
+  const [tradeType, setTradeType] = useState("0");
   const [price, setPrice] = useState(jettonPrice);
   const [amt, setAmt] = useState<number>(1);
   const [blinked, setBlinked] = useState(false);
@@ -71,6 +73,22 @@ export const BuySell = () => {
       return;
     }
   };
+
+  const finallyHandler = useCallback(async () => {
+    setAmt(0);
+    let i = 0;
+    while (i < 10) {
+      i++;
+      await sleep(5000);
+      const newBalance = await getJettonHoldersTxns();
+      if (newBalance !== userBalance) {
+        i = 10;
+        setActionInProgress(false);
+      }
+    }
+    getJettonWallet();
+    getJettonFromDb();
+  }, [getJettonFromDb, getJettonHoldersTxns, getJettonWallet, setActionInProgress, userBalance]);
 
   const buyTrade = useCallback(
     async (jettonPrice: number) => {
@@ -121,21 +139,14 @@ export const BuySell = () => {
     setActionInProgress(true);
 
     try {
-      if (tradeType === "buy") await buyTrade(price);
+      if (tradeType === "0") await buyTrade(price);
       else await sellTrade(price);
     } catch (error) {
       if (error instanceof Error) {
         showNotification(error.message, "error");
       }
     } finally {
-      setAmt(0);
-      setActionInProgress(false);
-      let i = 0;
-      while (i < 5) {
-        i++;
-        await sleep(5000);
-        getJettonHoldersTxns();
-      }
+      finallyHandler();
     }
   }, [
     amt,
@@ -147,7 +158,7 @@ export const BuySell = () => {
     buyTrade,
     price,
     sellTrade,
-    getJettonHoldersTxns,
+    finallyHandler,
   ]);
 
   const getPrice = useCallback(async () => {
@@ -179,19 +190,7 @@ export const BuySell = () => {
           onChange={onChangeAmt}
           onBlur={getPrice}
         />
-        <SymbolField
-          disabled
-          value={symbol}
-          InputProps={{
-            startAdornment: (
-              <img
-                src={!isImageBroken ? jettonImage : brokenImage}
-                alt="jetton symbol"
-                style={{ objectFit: "contain", width: "32px", marginRight: "6px" }}
-              />
-            ),
-          }}
-        />
+        <SymbolField src={!isImageBroken ? jettonImage : brokenImage} alt="jetton symbol" />
       </AmtContainer>
 
       <BlinkingText blinked={blinked}>

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Address } from "ton";
 import { Box, Fade } from "@mui/material";
-import { jettonDeployController, JettonDeployParams } from "lib/deploy-controller";
+import { jettonDeployController, JettonDeployParams } from "lib/jetton-controller";
 import { createDeployParams } from "lib/utils";
 import { ContractDeployer } from "lib/contract-deployer";
 import { Link as ReactRouterLink } from "react-router-dom";
@@ -19,6 +19,7 @@ import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { IInsertJetton } from "store/jetton-list-store";
 import { useNetwork } from "lib/hooks/useNetwork";
+import useJettonStore from "store/jetton-store/useJettonStore";
 
 const DEFAULT_DECIMALS = 9;
 
@@ -34,6 +35,11 @@ function DeployerPage() {
   const [tonconnect] = useTonConnectUI();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigatePreserveQuery();
+  const { reset } = useJettonStore();
+
+  useEffect(() => {
+    reset();
+  }, [reset]);
 
   async function deployContract(data: any) {
     if (!walletAddress || !tonconnect) {
@@ -57,6 +63,7 @@ function DeployerPage() {
       },
       offchainUri: data.offchainUri,
     };
+
     setIsLoading(true);
     const deployParams = createDeployParams(params, data.offchainUri);
     const contractAddress = new ContractDeployer().addressForContract(deployParams);

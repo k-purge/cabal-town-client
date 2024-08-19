@@ -1,5 +1,5 @@
 import useNotification from "hooks/useNotification";
-import { jettonDeployController } from "lib/deploy-controller";
+import { jettonDeployController } from "lib/jetton-controller";
 import WalletConnection from "services/wallet-connection";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import { Address } from "ton";

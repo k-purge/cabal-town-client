@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { Address, beginCell, Cell, toNano } from "ton";
+import { Address, beginCell, Cell, toNano, TonClient } from "ton";
 import { ContractDeployer } from "./contract-deployer";
 
 import { createDeployParams, waitForContractDeploy, waitForSeqno } from "./utils";
@@ -13,14 +13,16 @@ import {
   transfer,
   updateMetadataBody,
 } from "./jetton-minter";
+import { claimReward, lockJetton, unlockJetton } from "./jetton-pool";
 import { readJettonMetadata, changeAdminBody, JettonMetaDataKeys } from "./jetton-minter";
 import { getClient } from "./get-ton-client";
 import { cellToAddress, makeGetCall } from "./make-get-call";
 import { SendTransactionRequest, TonConnectUI } from "@tonconnect/ui-react";
 import { DECIMAL_SCALER } from "consts";
+import { readStakingDetail } from "./jetton-pool";
 
 export const JETTON_DEPLOY_GAS = toNano(0.01);
-export const JETTON_TXN_GAS = toNano(0.05);
+export const JETTON_TXN_GAS = toNano(0.1);
 
 export enum JettonDeployState {
   NOT_STARTED,
@@ -285,6 +287,129 @@ class JettonDeployController {
     await waiter();
   }
 
+  async lockJettons(
+    tonConnection: TonConnectUI,
+    amount: BN,
+    fromAddress: string,
+    jettonWalletAddress: string,
+    stakingAddress: string,
+  ) {
+    const tc = await getClient();
+
+    const waiter = await waitForSeqno(
+      tc.openWalletFromAddress({
+        source: Address.parse(fromAddress),
+      }),
+    );
+
+    const tx: SendTransactionRequest = {
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address: jettonWalletAddress,
+          amount: toNano(0.1).toString(),
+          stateInit: undefined,
+          payload: lockJetton(amount, Address.parse(stakingAddress), Address.parse(fromAddress))
+            .toBoc()
+            .toString("base64"),
+        },
+      ],
+    };
+
+    await tonConnection.sendTransaction(tx);
+
+    await waiter();
+  }
+
+  async unlockJettons(
+    tonConnection: TonConnectUI,
+    amount: BN,
+    fromAddress: string,
+    stakingAddress: string,
+  ) {
+    const tc = await getClient();
+
+    const waiter = await waitForSeqno(
+      tc.openWalletFromAddress({
+        source: Address.parse(fromAddress),
+      }),
+    );
+
+    const tx: SendTransactionRequest = {
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address: stakingAddress,
+          amount: toNano(0.1).toString(),
+          stateInit: undefined,
+          payload: unlockJetton(amount).toBoc().toString("base64"),
+        },
+      ],
+    };
+
+    await tonConnection.sendTransaction(tx);
+
+    await waiter();
+  }
+
+  async claimRewards(tonConnection: TonConnectUI, fromAddress: string, stakingAddress: string) {
+    const tc = await getClient();
+
+    const waiter = await waitForSeqno(
+      tc.openWalletFromAddress({
+        source: Address.parse(fromAddress),
+      }),
+    );
+
+    const tx: SendTransactionRequest = {
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address: stakingAddress,
+          amount: toNano(0.01).toString(),
+          stateInit: undefined,
+          payload: claimReward().toBoc().toString("base64"),
+        },
+      ],
+    };
+
+    await tonConnection.sendTransaction(tx);
+
+    await waiter();
+  }
+
+  async getJettonWallet(contractAddr: Address, walletAddress: string, tc?: TonClient | undefined) {
+    let jettonWallet = null;
+    const tonClient = tc ?? (await getClient());
+
+    if (walletAddress) {
+      const jWalletAddress = await makeGetCall(
+        contractAddr,
+        "get_wallet_address",
+        [beginCell().storeAddress(Address.parse(walletAddress)).endCell()],
+        ([addressCell]) => cellToAddress(addressCell),
+        tonClient,
+      );
+
+      const isDeployed = await tonClient.isContractDeployed(jWalletAddress);
+
+      if (isDeployed) {
+        jettonWallet = await makeGetCall(
+          jWalletAddress,
+          "get_wallet_data",
+          [],
+          ([amount, _, jettonMasterAddressCell]) => ({
+            balance: amount as unknown as BN,
+            jWalletAddress,
+            jettonMasterAddress: cellToAddress(jettonMasterAddressCell),
+          }),
+          tonClient,
+        );
+      }
+    }
+    return jettonWallet;
+  }
+
   async getJettonDetails(contractAddr: Address, walletAddress: string) {
     const tc = await getClient();
     const minter = await makeGetCall(
@@ -299,38 +424,68 @@ class JettonDeployController {
       tc,
     );
 
-    let jettonWallet = null;
-
-    if (walletAddress) {
-      const jWalletAddress = await makeGetCall(
-        contractAddr,
-        "get_wallet_address",
-        [beginCell().storeAddress(Address.parse(walletAddress)).endCell()],
-        ([addressCell]) => cellToAddress(addressCell),
-        tc,
-      );
-
-      const isDeployed = await tc.isContractDeployed(jWalletAddress);
-
-      if (isDeployed) {
-        jettonWallet = await makeGetCall(
-          jWalletAddress,
-          "get_wallet_data",
-          [],
-          ([amount, _, jettonMasterAddressCell]) => ({
-            balance: amount as unknown as BN,
-            jWalletAddress,
-            jettonMasterAddress: cellToAddress(jettonMasterAddressCell),
-          }),
-          tc,
-        );
-      }
-    }
+    let jettonWallet = await this.getJettonWallet(contractAddr, walletAddress, tc);
 
     return {
       minter,
       jettonWallet,
     };
+  }
+
+  async getStakingDetails(contractAddr: Address, walletAddress: string) {
+    const tc = await getClient();
+    const stakingData = await makeGetCall(
+      contractAddr,
+      "get_staking_data",
+      [],
+      async ([
+        addmin_addr,
+        jetton_addr,
+        jetton_wallet_code,
+        epoch_started_at,
+        total_deposited_amt,
+        total_reward_balance,
+        deposits,
+      ]) => ({
+        epochStartedAt: (epoch_started_at as BN).toNumber(),
+        totalDepositAmt: (total_deposited_amt as BN).toNumber(),
+        totalRewardBalance: (total_reward_balance as BN).toNumber(),
+      }),
+      tc,
+    );
+
+    let userDeposit = null;
+
+    if (walletAddress) {
+      try {
+        userDeposit = await makeGetCall(
+          contractAddr,
+          "get_user_deposit",
+          [beginCell().storeAddress(Address.parse(walletAddress)).endCell()],
+          ([deposit_data]) => readStakingDetail(deposit_data as unknown as Cell),
+          tc,
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    return {
+      stakingData,
+      userDeposit,
+    };
+  }
+
+  async getUserReward(contractAddr: Address, userAddress: Address): Promise<number> {
+    const timestampNow = Math.floor(Date.now() / 1000);
+    const tc = await getClient();
+    return await makeGetCall(
+      contractAddr,
+      "get_user_reward",
+      [beginCell().storeAddress(userAddress).endCell(), new BN(timestampNow)],
+      async ([reward]) => (reward as BN).toNumber(),
+      tc,
+    );
   }
 
   async getJettonPrice(contractAddr: Address, amt: number) {

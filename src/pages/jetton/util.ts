@@ -12,6 +12,8 @@ const commonGithubUrl =
 const offChainGithubUrl =
   "https://github.com/ton-blockchain/minter-contract#jetton-metadata-field-best-practices";
 
+const balanceCheckList = ["sell", "lock", "unlock"];
+
 export const getFaultyMetadataWarning = (isAdminRevokedOwnership?: boolean) => {
   if (isAdminRevokedOwnership) {
     return "This token was created with a previous faulty version of the tool. The token is permanently unusable, please contact the admin to redeploy a new token";
@@ -112,11 +114,11 @@ export const validateTradeParams = (
     return "Transfer amount required";
   }
 
-  if (type === "sell" && !balance) {
+  if (balanceCheckList.includes(type) && !balance) {
     return "No balance";
   }
 
-  if (type === "sell" && amount > balance!) {
+  if (balanceCheckList.includes(type) && amount > balance!) {
     return "Not enough balance";
   }
 };

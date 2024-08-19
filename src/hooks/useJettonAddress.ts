@@ -6,7 +6,6 @@ export const useJettonAddress = () => {
   // const navigate = useNavigatePreserveQuery();
   const { id: jettonAddress } = useParams();
   let isAddressValid = isValidAddress(jettonAddress || "", "Invalid jetton address");
-
   let jettonFriendlyAddress = isAddressValid ? Address.parse(jettonAddress!).toFriendly() : null;
 
   // useEffect(() => {

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import {
   createChart,
   UTCTimestamp,
@@ -16,6 +16,7 @@ import { DECIMAL_SCALER } from "consts";
 
 export const Chart = () => {
   const { getJettonPrice, jettonPriceList, decimals } = useJettonStore();
+  const [visible, setVisible] = useState(false);
   const containerRef = useRef(null);
 
   function formatTime(utcTimestamp: UTCTimestamp): string {
@@ -203,8 +204,24 @@ export const Chart = () => {
     }
   }, [chart, candlestickSeries, jettonPriceList, decimals, lineLeft]);
 
+  useEffect(() => {
+    if (visible === false && jettonPriceList?.some((j) => j.price > 0)) {
+      setVisible(true);
+    } else if (visible === true && jettonPriceList?.every((j) => j.price <= 0)) {
+      setVisible(false);
+    }
+  }, [visible, jettonPriceList]);
+
+  if (!visible) {
+    return <></>;
+  }
+
   return (
-    <StyledBlock height="320px" style={{ padding: "10px 0 0 10px" }}>
+    <StyledBlock
+      height="320px"
+      style={{
+        padding: "10px 0 0 10px",
+      }}>
       <Box width="100%" height="320px" ref={containerRef} />
     </StyledBlock>
   );

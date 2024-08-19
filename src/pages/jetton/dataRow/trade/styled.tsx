@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import { Box, styled, TextField, Typography, Divider, Button } from "@mui/material";
+import { Box, styled, TextField, Typography, Divider } from "@mui/material";
 import { keyframes } from "@mui/system";
 
 const AmtContainer = styled(Box)({
@@ -7,7 +7,7 @@ const AmtContainer = styled(Box)({
   height: "48px",
   display: "flex",
   flexDirection: "row",
-  justifyContent: "space-around",
+  justifyContent: "space-between",
   boxShadow: "2px 2px 0px 0px #000000",
 });
 
@@ -15,16 +15,19 @@ const AmtTextField = styled(TextField)({
   border: "2px solid #000000",
   background: "#fff",
   fontWeight: 500,
-  width: "80%",
+  width: "85%",
   "& input": {
     height: "48px",
     paddingBlock: "0",
   },
 });
 
-const SymbolField = styled(TextField)({
+const SymbolField = styled("img")({
   border: "2px solid #000000",
   background: "#D8D8D8",
+  objectFit: "contain",
+  padding: "6px",
+  width: 48,
   "& input.Mui-disabled": {
     "-webkit-text-fill-color": "#000",
     height: "48px",
@@ -73,6 +76,13 @@ const EllipsisText = styled(Typography)({
   fontSize: "14px",
 });
 
+const BungeeText = styled(Typography)({
+  fontFamily: "Bungee, sans-serif",
+  fontSize: "16px",
+  color: "#ffffff",
+  marginBottom: 6,
+});
+
 const StyledImg = styled("img")({
   width: 15,
 });
@@ -103,4 +113,5 @@ export {
   DividerLine,
   TradeButton,
   BlinkingText,
+  BungeeText,
 };

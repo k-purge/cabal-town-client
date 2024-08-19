@@ -1,5 +1,5 @@
 import useNotification from "hooks/useNotification";
-import { jettonDeployController } from "lib/deploy-controller";
+import { jettonDeployController } from "lib/jetton-controller";
 import { useState } from "react";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import { AppButton } from "components/appButton";
@@ -8,7 +8,7 @@ import { ButtonWrapper, TransferContent, TransferWrapper } from "./styled";
 import { AppHeading } from "components/appHeading";
 import { AppNumberInput, AppTextInput } from "components/appInput";
 import { toDecimalsBN } from "utils";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 
