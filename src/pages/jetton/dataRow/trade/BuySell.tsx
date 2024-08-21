@@ -84,11 +84,19 @@ export const BuySell = () => {
       if (newBalance !== userBalance) {
         i = 10;
         setActionInProgress(false);
+        showNotification("Transaction completed", "success");
       }
     }
     getJettonWallet();
     getJettonFromDb();
-  }, [getJettonFromDb, getJettonHoldersTxns, getJettonWallet, setActionInProgress, userBalance]);
+  }, [
+    getJettonFromDb,
+    getJettonHoldersTxns,
+    getJettonWallet,
+    setActionInProgress,
+    showNotification,
+    userBalance,
+  ]);
 
   const buyTrade = useCallback(
     async (jettonPrice: number) => {

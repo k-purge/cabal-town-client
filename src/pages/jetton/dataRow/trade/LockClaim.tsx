@@ -85,6 +85,7 @@ export const LockClaim = () => {
         if (newBalance !== userBalance || type === "claim") {
           i = 10;
           setActionInProgress(false);
+          showNotification("Transaction completed", "success");
         }
         if (selectedJetton?.stakingAddress) getJettonStaking(selectedJetton?.stakingAddress);
       }
@@ -94,6 +95,7 @@ export const LockClaim = () => {
       getJettonStaking,
       selectedJetton?.stakingAddress,
       setActionInProgress,
+      showNotification,
       userBalance,
     ],
   );
@@ -278,7 +280,7 @@ export const LockClaim = () => {
             background="#FFB800"
             loading={actionInProgress}
             onClick={onClickClaim}
-            disabled={!selectedJetton?.unclaimedReward}
+            disabled={!(unClaimReward > 0)}
             loadingIndicator={
               <CircularProgress style={{ color: "white", width: 20, height: 20 }} />
             }>
