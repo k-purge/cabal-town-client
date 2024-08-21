@@ -461,7 +461,7 @@ class JettonDeployController {
         userDeposit = await makeGetCall(
           contractAddr,
           "get_user_deposit",
-          [beginCell().storeAddress(Address.parse(walletAddress)).endCell()],
+          [beginCell().storeAddress(Address.parse(walletAddress)).endCell()], //"0QBI9aqdRQD1uvHCaYUygIls_uoTvbmla7E5b2nfdlLrs1k1"
           ([deposit_data]) => readStakingDetail(deposit_data as unknown as Cell),
           tc,
         );

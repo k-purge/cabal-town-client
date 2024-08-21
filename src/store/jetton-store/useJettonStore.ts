@@ -268,7 +268,7 @@ function useJettonStore() {
             connectedWalletAddress,
           );
 
-          // console.log("result", result)
+          console.log("result", result);
 
           setState((prevState: any) => {
             return {
@@ -303,7 +303,7 @@ function useJettonStore() {
             userAddress,
           );
 
-          // console.log("userReward", userReward)
+          console.log("userReward", userReward);
 
           setState((prevState) => {
             return {
