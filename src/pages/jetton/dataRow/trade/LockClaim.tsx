@@ -19,6 +19,7 @@ import {
   TradeButton,
   EllipsisText,
   BungeeText,
+  TextContainer,
 } from "./styled";
 import { jettonDeployController } from "lib/jetton-controller";
 import { DECIMAL_SCALER } from "consts";
@@ -241,9 +242,11 @@ export const LockClaim = () => {
 
       {tradeType === "0" ? (
         <>
-          <BlinkingText>
-            {"Available " + (userBalance ?? 0) / DECIMAL_SCALER + " " + symbol}
-          </BlinkingText>
+          <TextContainer>
+            <BlinkingText>
+              {"Available " + (userBalance ?? 0) / DECIMAL_SCALER + " " + symbol}
+            </BlinkingText>
+          </TextContainer>
           <TradeButton
             background="#FFB800"
             loading={actionInProgress}
@@ -257,9 +260,11 @@ export const LockClaim = () => {
         </>
       ) : (
         <>
-          <BlinkingText>
-            {"Locked " + (selectedJetton?.lockedDepositAmt ?? 0) / DECIMAL_SCALER + " " + symbol}
-          </BlinkingText>
+          <TextContainer>
+            <BlinkingText>
+              {"Locked " + (selectedJetton?.lockedDepositAmt ?? 0) / DECIMAL_SCALER + " " + symbol}
+            </BlinkingText>
+          </TextContainer>
           <TradeButton
             background="#FFB800"
             loading={actionInProgress}
@@ -273,7 +278,7 @@ export const LockClaim = () => {
         </>
       )}
 
-      {selectedJetton?.lockedDepositAmt && (
+      {/* {selectedJetton?.lockedDepositAmt && (
         <>
           <DividerLine />
           <TradeButton
@@ -287,7 +292,7 @@ export const LockClaim = () => {
             CLAIM REWARDS
           </TradeButton>
         </>
-      )}
+      )} */}
     </StyledBodyBlock>
   );
 };

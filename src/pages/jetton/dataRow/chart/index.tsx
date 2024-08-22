@@ -113,10 +113,10 @@ export const Chart = () => {
 
         const candlestickData = priceList.map((data) => ({
           time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
-          open: (data.price + 1000000000 * Math.random()) / DECIMAL_SCALER,
-          high: (data.price + 1000000000 * Math.random()) / DECIMAL_SCALER,
-          low: (data.price + 1000000000 * Math.random()) / DECIMAL_SCALER,
-          close: (data.price + 1000000000 * Math.random()) / DECIMAL_SCALER,
+          open: data.price / DECIMAL_SCALER,
+          high: data.price / DECIMAL_SCALER,
+          low: data.price / DECIMAL_SCALER,
+          close: data.price / DECIMAL_SCALER,
         }));
         candlestickSeries.setData(candlestickData);
 
@@ -184,10 +184,10 @@ export const Chart = () => {
       } else if (jettonPriceList.length === 1) {
         const newCandle = jettonPriceList.map((data) => ({
           time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
-          open: (data.price + 1000000000 * Math.random()) / DECIMAL_SCALER,
-          high: (data.price + 1000000000 * Math.random()) / DECIMAL_SCALER,
-          low: (data.price + 1000000000 * Math.random()) / DECIMAL_SCALER,
-          close: (data.price + 1000000000 * Math.random()) / DECIMAL_SCALER,
+          open: data.price / DECIMAL_SCALER,
+          high: data.price / DECIMAL_SCALER,
+          low: data.price / DECIMAL_SCALER,
+          close: data.price / DECIMAL_SCALER,
         }))[0];
 
         candlestickSeries.update(newCandle);

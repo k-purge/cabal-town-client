@@ -19,6 +19,7 @@ import {
   SymbolField,
   DividerLine,
   TradeButton,
+  TextContainer,
 } from "./styled";
 import { jettonDeployController } from "lib/jetton-controller";
 import { DECIMAL_SCALER } from "consts";
@@ -201,9 +202,13 @@ export const BuySell = () => {
         <SymbolField src={!isImageBroken ? jettonImage : brokenImage} alt="jetton symbol" />
       </AmtContainer>
 
-      <BlinkingText blinked={blinked}>
-        {blinked ? "Previewing..." : price / DECIMAL_SCALER + " TON = " + (amt ?? 0) + " " + symbol}
-      </BlinkingText>
+      <TextContainer>
+        <BlinkingText blinked={blinked}>
+          {blinked
+            ? "Previewing..."
+            : price / DECIMAL_SCALER + " TON = " + (amt ?? 0) + " " + symbol}
+        </BlinkingText>
+      </TextContainer>
 
       <DividerLine />
 

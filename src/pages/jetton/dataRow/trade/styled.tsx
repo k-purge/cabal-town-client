@@ -11,6 +11,13 @@ const AmtContainer = styled(Box)({
   boxShadow: "2px 2px 0px 0px #000000",
 });
 
+const TextContainer = styled(Box)({
+  width: "341px",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+});
+
 const AmtTextField = styled(TextField)({
   border: "2px solid #000000",
   background: "#fff",
@@ -96,7 +103,6 @@ const blink = keyframes`
 const BlinkingText = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "blinked",
 })<{ blinked?: boolean }>(({ blinked }) => ({
-  marginLeft: "12px",
   fontSize: 12,
   color: "#939393",
   alignSelf: "self-start",
@@ -114,4 +120,5 @@ export {
   TradeButton,
   BlinkingText,
   BungeeText,
+  TextContainer,
 };
