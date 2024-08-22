@@ -23,7 +23,7 @@ export default function SelectType({ type, handleChange }: { type: string; handl
             },
           }}>
           <MenuItem value={"1"}>BUY/SELL</MenuItem>
-          <MenuItem value={"2"}>LOCK AND CLAIM</MenuItem>
+          {/* <MenuItem value={"2"}>LOCK AND CLAIM</MenuItem> */}
           <MenuItem value={"3"}>HOLDER DISTRIBUTION</MenuItem>
           <MenuItem value={"4"}>TRANSACTION HISTORY</MenuItem>
         </Select>

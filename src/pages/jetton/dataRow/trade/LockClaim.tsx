@@ -278,7 +278,7 @@ export const LockClaim = () => {
         </>
       )}
 
-      {/* {selectedJetton?.lockedDepositAmt && (
+      {selectedJetton?.lockedDepositAmt && (
         <>
           <DividerLine />
           <TradeButton
@@ -292,7 +292,7 @@ export const LockClaim = () => {
             CLAIM REWARDS
           </TradeButton>
         </>
-      )} */}
+      )}
     </StyledBodyBlock>
   );
 };
