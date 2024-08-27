@@ -25,6 +25,7 @@ export const Token = () => {
     jettonPrice,
     selectedJetton,
     holders,
+    tonPrice,
   } = useJettonStore();
   const [timeString, setTimeString] = useState("--");
 
@@ -59,8 +60,7 @@ export const Token = () => {
         holders.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ?? 0;
 
       return (
-        ((balance * jettonPrice) /
-          DECIMAL_SCALER /
+        ((balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) /
           DECIMAL_SCALER /
           (selectedJetton.minStartedAmt ?? 1)) *
         100
@@ -68,7 +68,7 @@ export const Token = () => {
     }
 
     return 0;
-  }, [selectedJetton, holders, jettonPrice]);
+  }, [selectedJetton, holders, jettonPrice, tonPrice]);
 
   const onClickJoinGame = useCallback(() => {
     if (window) {

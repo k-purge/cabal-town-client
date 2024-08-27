@@ -120,7 +120,7 @@ export const BuySell = () => {
   const sellTrade = useCallback(
     async (jettonPrice: number) => {
       const fee = (jettonPrice * 5) / 100;
-      const msgValue = toNano(0.1).toNumber() + fee;
+      const msgValue = toNano(0.3).toNumber() + fee;
       const nanoAmt = toNano(amt).toNumber();
 
       if (nanoAmt > 0) {
