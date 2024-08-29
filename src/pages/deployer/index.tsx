@@ -20,6 +20,7 @@ import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { IInsertJetton } from "store/jetton-list-store";
 import { useNetwork } from "lib/hooks/useNetwork";
 import useJettonStore from "store/jetton-store/useJettonStore";
+import useUserStore from "store/user-store/useUserStore";
 
 const DEFAULT_DECIMALS = 9;
 
@@ -36,6 +37,7 @@ function DeployerPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigatePreserveQuery();
   const { reset } = useJettonStore();
+  const { tgUserId } = useUserStore();
 
   useEffect(() => {
     reset();
@@ -95,6 +97,8 @@ function DeployerPage() {
         ownerAddress: process.env.REACT_APP_JETTON_OWNER!,
         creatorAddress: rawAddress,
         chain: network,
+        walletAddress,
+        tgUserId,
       };
       await axiosService.insertJetton(jettonData);
 

@@ -1,9 +1,10 @@
 import axios from "axios";
+import { ILoginUser, IInsertUser } from "store/user-store";
 import { IInsertJetton } from "store/jetton-list-store";
-const { REACT_APP_TON_API_URL, REACT_APP_TON_CLIENT_API_URL } = process.env;
+const { REACT_APP_API_URL, REACT_APP_TON_CLIENT_API_URL } = process.env;
 
 async function insertJetton(data: IInsertJetton) {
-  const endpoint = REACT_APP_TON_API_URL + "/v1/jettons/insert";
+  const endpoint = REACT_APP_API_URL + "/v1/jettons/insert";
 
   return {
     res: (await axios.post(endpoint, data)).data,
@@ -11,7 +12,7 @@ async function insertJetton(data: IInsertJetton) {
 }
 
 async function getJettonList(chain: string) {
-  const endpoint = `${REACT_APP_TON_API_URL}/v1/jettons?sortBy=createdAt:desc&chain=${chain}`;
+  const endpoint = `${REACT_APP_API_URL}/v1/jettons?sortBy=createdAt:desc&chain=${chain}`;
 
   return {
     res: (await axios.get(endpoint)).data,
@@ -19,7 +20,7 @@ async function getJettonList(chain: string) {
 }
 
 async function getJetton(masterAddress: string) {
-  const endpoint = REACT_APP_TON_API_URL + "/v1/jettons/" + masterAddress;
+  const endpoint = REACT_APP_API_URL + "/v1/jettons/" + masterAddress;
 
   return {
     res: (await axios.get(endpoint)).data,
@@ -27,7 +28,7 @@ async function getJetton(masterAddress: string) {
 }
 
 async function getJettonPrice(masterAddress: string, limit: number) {
-  const endpoint = REACT_APP_TON_API_URL + `/v1/jettons/${masterAddress}/price?limit=${limit}`;
+  const endpoint = REACT_APP_API_URL + `/v1/jettons/${masterAddress}/price?limit=${limit}`;
 
   return {
     res: (await axios.get(endpoint)).data,
@@ -35,7 +36,7 @@ async function getJettonPrice(masterAddress: string, limit: number) {
 }
 
 async function getJettonHolders(masterAddress: string, chain: string) {
-  const endpoint = REACT_APP_TON_API_URL + `/v1/jettons/${masterAddress}/holders?chain=${chain}`;
+  const endpoint = REACT_APP_API_URL + `/v1/jettons/${masterAddress}/holders?chain=${chain}`;
 
   return {
     res: (await axios.get(endpoint)).data,
@@ -43,7 +44,7 @@ async function getJettonHolders(masterAddress: string, chain: string) {
 }
 
 async function getJettonTxns(masterAddress: string, chain: string) {
-  const endpoint = REACT_APP_TON_API_URL + `/v1/jettons/${masterAddress}/txns?chain=${chain}`;
+  const endpoint = REACT_APP_API_URL + `/v1/jettons/${masterAddress}/txns?chain=${chain}`;
 
   return {
     res: (await axios.get(endpoint)).data,
@@ -57,7 +58,7 @@ async function getJettonUpdates(
   chain: string,
 ) {
   const endpoint =
-    REACT_APP_TON_API_URL + `/v1/jettons/${masterAddress}/${jettonId}?lt=${lt}&chain=${chain}`;
+    REACT_APP_API_URL + `/v1/jettons/${masterAddress}/${jettonId}?lt=${lt}&chain=${chain}`;
 
   return {
     res: (await axios.get(endpoint)).data,
@@ -65,8 +66,7 @@ async function getJettonUpdates(
 }
 
 async function getJettonsByOwner(ownerAddress: string, network: string) {
-  const endpoint =
-    REACT_APP_TON_API_URL + `/v1/jettons/${ownerAddress}/profile/list?chain=${network}`;
+  const endpoint = REACT_APP_API_URL + `/v1/jettons/${ownerAddress}/profile/list?chain=${network}`;
 
   return {
     res: (await axios.get(endpoint)).data,
@@ -79,6 +79,22 @@ async function getTonPrice() {
   return (await axios.get(endpoint)).data;
 }
 
+async function loginUser(data: ILoginUser) {
+  const endpoint = REACT_APP_API_URL + "/v1/auth/login";
+
+  return {
+    res: (await axios.post(endpoint, data)).data,
+  };
+}
+
+async function createUser(data: IInsertUser) {
+  const endpoint = REACT_APP_API_URL + "/v1/auth/register";
+
+  return {
+    res: (await axios.post(endpoint, data)).data,
+  };
+}
+
 const axiosService = {
   getJettonUpdates,
   getJettonPrice,
@@ -89,6 +105,8 @@ const axiosService = {
   getJettonsByOwner,
   getJettonHolders,
   getJettonTxns,
+  loginUser,
+  createUser,
 };
 
 export default axiosService;

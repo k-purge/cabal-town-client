@@ -16,6 +16,8 @@ export interface IInsertJetton {
   ownerAddress?: string;
   lastSurvivors?: number;
   chain: string;
+  tgUserId?: number;
+  walletAddress?: string;
 }
 
 export interface IJetton {

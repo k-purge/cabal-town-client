@@ -10,7 +10,9 @@ import { useJettonLogo } from "hooks/useJettonLogo";
 import { FaqPage } from "pages/faq";
 import analytics from "services/analytics";
 import useNotification from "hooks/useNotification";
+import useUserStore from "store/user-store/useUserStore";
 import { ProfilePage } from "pages/profile";
+import { useTonAddress } from "@tonconnect/ui-react";
 
 analytics.init();
 
@@ -36,6 +38,8 @@ const ScreensWrapper = styled(Box)({
   overflowY: "auto",
   overflowX: "hidden",
   width: "100vw",
+  "-ms-overflow-style": "none" /* Internet Explorer 10+ */,
+  "scrollbar-width": "none" /* Firefox */,
 
   "*::-webkit-scrollbar": {
     display: "none",
@@ -87,13 +91,34 @@ const ContentWrapper = ({ children }: ContentWrapperProps) => {
   );
 };
 
+declare global {
+  interface Window {
+    Telegram: any;
+  }
+}
+
 const App = () => {
+  const { tgUserId, getTgUserId, getUser } = useUserStore();
   const { resetJetton } = useJettonLogo();
   const location = useLocation();
+  const rawAddress = useTonAddress(false);
+  const walletAddress = useTonAddress();
 
   useEffect(() => {
     resetJetton();
   }, [location.pathname, resetJetton]);
+
+  useEffect(() => {
+    if (!tgUserId) {
+      getTgUserId();
+    }
+  }, [getTgUserId, tgUserId]);
+
+  useEffect(() => {
+    if (tgUserId && walletAddress) {
+      getUser(tgUserId, walletAddress);
+    }
+  }, [getUser, rawAddress, tgUserId, walletAddress]);
 
   return (
     <AppWrapper>
