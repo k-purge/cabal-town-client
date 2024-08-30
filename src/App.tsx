@@ -98,7 +98,7 @@ declare global {
 }
 
 const App = () => {
-  const { tgUserId, getTgUserId, getUser } = useUserStore();
+  const { tgUserId, getTgUserId, tgUserName, getUser } = useUserStore();
   const { resetJetton } = useJettonLogo();
   const location = useLocation();
   const rawAddress = useTonAddress(false);
@@ -109,10 +109,10 @@ const App = () => {
   }, [location.pathname, resetJetton]);
 
   useEffect(() => {
-    if (!tgUserId) {
+    if (!tgUserId || !tgUserName) {
       getTgUserId();
     }
-  }, [getTgUserId, tgUserId]);
+  }, [getTgUserId, tgUserId, tgUserName]);
 
   useEffect(() => {
     if (tgUserId && walletAddress) {
