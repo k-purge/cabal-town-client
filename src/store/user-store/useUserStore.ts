@@ -66,7 +66,9 @@ function useUserStore() {
 
       // Get user information
       const user = window.Telegram.WebApp.initDataUnsafe.user;
+      console.log("user: ", user);
       const tgUserId = user?.id;
+      const tgUserName = user?.username;
       // Use the tgUserId in your app
 
       if (tgUserId) {
@@ -74,6 +76,7 @@ function useUserStore() {
           return {
             ...prevState,
             tgUserId,
+            tgUserName,
           };
         });
       }

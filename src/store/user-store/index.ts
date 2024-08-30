@@ -9,6 +9,12 @@ export interface IInsertUser {
   tgUserId: number;
 }
 
+export interface IJoinGroup {
+  masterAddress: string;
+  walletAddress: string;
+  tgUserId: number;
+}
+
 export interface IUserStoreUpdateState {
   userId?: string;
   walletAddress?: string;
@@ -20,6 +26,7 @@ export interface UserStoreState {
   walletAddress?: string;
   tgUserId?: number;
   tokens?: string;
+  tgUserName?: string;
 }
 
 const userStateAtom = atom<UserStoreState>({
@@ -29,6 +36,7 @@ const userStateAtom = atom<UserStoreState>({
     walletAddress: undefined,
     tgUserId: 981419972,
     tokens: undefined,
+    tgUserName: undefined,
   },
 });
 

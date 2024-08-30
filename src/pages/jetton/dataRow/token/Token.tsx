@@ -14,6 +14,10 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import brokenImage from "assets/icons/question.png";
 import UserImg from "assets/icons/userGrey.svg";
 import { DividerLine, TradeButton } from "../trade/styled";
+import axiosService from "services/axios";
+import { useTonAddress } from "@tonconnect/ui-react";
+import useUserStore from "store/user-store/useUserStore";
+import useNotification from "hooks/useNotification";
 
 export const Token = () => {
   const {
@@ -26,7 +30,11 @@ export const Token = () => {
     selectedJetton,
     holders,
     tonPrice,
+    jettonMaster,
   } = useJettonStore();
+  const { showNotification } = useNotification();
+  const { tgUserId, tgUserName } = useUserStore();
+  const walletAddress = useTonAddress();
   const [timeString, setTimeString] = useState("--");
 
   useEffect(() => {
@@ -70,11 +78,21 @@ export const Token = () => {
     return 0;
   }, [selectedJetton, holders, jettonPrice, tonPrice]);
 
-  const onClickJoinGame = useCallback(() => {
-    if (window) {
-      window.open(selectedJetton?.tgLink, "_blank");
+  const onClickJoinGame = useCallback(async () => {
+    if (jettonMaster && tgUserId) {
+      const { res } = await axiosService.joinGroup({
+        masterAddress: jettonMaster,
+        walletAddress,
+        tgUserId,
+      });
+
+      if (tgUserName && res.status === "success") {
+        return window.open(`https://t.me/${tgUserName}`, "_blank");
+      }
+
+      showNotification(res.message, "error");
     }
-  }, [selectedJetton?.tgLink]);
+  }, [jettonMaster, showNotification, tgUserId, tgUserName, walletAddress]);
 
   const renderJoinGame = () => {
     if (userBalance > 0) {
@@ -84,7 +102,7 @@ export const Token = () => {
           <Box gap={1} mt={1} textAlign="start" width="100%">
             <Typography color="#fff">Round</Typography>
             <Typography fontSize={14} color="#939393">
-              Round {selectedJetton?.numOfRounds ?? 0} of 5
+              Round {selectedJetton?.numOfRounds ?? 0} of 10
             </Typography>
           </Box>
           <Box gap={1} mt={1} textAlign="start" width="100%">
