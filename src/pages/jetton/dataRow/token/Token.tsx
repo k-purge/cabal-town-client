@@ -67,15 +67,20 @@ export const Token = () => {
       const balance =
         holders.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ?? 0;
 
-      return (
-        ((balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) /
-          DECIMAL_SCALER /
-          (selectedJetton.minStartedAmt ?? 1)) *
-        100
-      );
+      const value =
+        (balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) /
+        DECIMAL_SCALER /
+        (selectedJetton.minStartedAmt ?? 1);
+      console.log("value", value);
+
+      if (value > 1) return "100";
+      else if (value < 0.000001) return (value * 100).toFixed(4);
+      else {
+        return (value * 100).toFixed(2);
+      }
     }
 
-    return 0;
+    return "0";
   }, [selectedJetton, holders, jettonPrice, tonPrice]);
 
   const onClickJoinGame = useCallback(async () => {
@@ -142,10 +147,10 @@ export const Token = () => {
 
       <StyledBottomText>
         <Typography>Cabal Initiation Progress</Typography>
-        <Typography>{progress > 0.0001 ? progress.toFixed(4) : 0}%</Typography>
+        <Typography>{progress}%</Typography>
       </StyledBottomText>
 
-      <BorderLinearProgress variant="determinate" value={progress} />
+      <BorderLinearProgress variant="determinate" value={parseFloat(progress)} />
 
       {renderJoinGame()}
     </StyledBlock>
