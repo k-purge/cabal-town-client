@@ -102,6 +102,8 @@ export const Token = () => {
       console.error("Error joining group:", error);
       return;
     }
+    showNotification(res, "info");
+    showNotification(JSON.stringify(res), "info");
     showNotification(res.status, "info");
     showNotification(tgLink, "info");
 
