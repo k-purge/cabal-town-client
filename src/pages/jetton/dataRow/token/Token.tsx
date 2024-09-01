@@ -90,26 +90,25 @@ export const Token = () => {
 
     const tgLink = selectedJetton?.tgLink;
 
-    let res: any;
     try {
-      res = await axiosService.joinGroup({
+      const { res } = await axiosService.joinGroup({
         masterAddress: jettonMaster,
         walletAddress,
         tgUserId,
       });
+      showNotification(JSON.stringify(res), "info");
+      showNotification(res.status, "info");
+      showNotification(tgLink, "info");
+
+      if (res.status === "success" && tgLink) {
+        window.open(tgLink, "_blank");
+      } else {
+        showNotification(res.message ?? "Telegram error", "error");
+      }
     } catch (error) {
       showNotification("Failed to join the group. Please try again.", "error");
       console.error("Error joining group:", error);
       return;
-    }
-    showNotification(JSON.stringify(res), "info");
-    showNotification(res.status, "info");
-    showNotification(tgLink, "info");
-
-    if (res.status === "success" && tgLink) {
-      window.open(tgLink, "_blank");
-    } else {
-      showNotification(res.message ?? "Telegram error", "error");
     }
   }, [jettonMaster, selectedJetton?.tgLink, showNotification, tgUserId, walletAddress]);
 
