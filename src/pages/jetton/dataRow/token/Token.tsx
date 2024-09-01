@@ -96,9 +96,6 @@ export const Token = () => {
         walletAddress,
         tgUserId,
       });
-      showNotification(JSON.stringify(res), "info");
-      showNotification(res.status, "info");
-      showNotification(tgLink, "info");
 
       if (res.status === "success" && tgLink) {
         window.open(tgLink, "_blank");
