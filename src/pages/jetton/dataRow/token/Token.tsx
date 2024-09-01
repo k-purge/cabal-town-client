@@ -33,7 +33,7 @@ export const Token = () => {
     jettonMaster,
   } = useJettonStore();
   const { showNotification } = useNotification();
-  const { tgUserId, tgUserName } = useUserStore();
+  const { tgUserId } = useUserStore();
   const walletAddress = useTonAddress();
   const [timeString, setTimeString] = useState("--");
 
@@ -91,13 +91,13 @@ export const Token = () => {
         tgUserId,
       });
 
-      if (tgUserName && res.status === "success") {
-        return window.open(`https://t.me/${tgUserName}`, "_blank");
+      if (res.status === "success") {
+        return window.open(selectedJetton?.tgLink, "_blank");
       }
 
       showNotification(res.message, "error");
     }
-  }, [jettonMaster, showNotification, tgUserId, tgUserName, walletAddress]);
+  }, [jettonMaster, selectedJetton?.tgLink, showNotification, tgUserId, walletAddress]);
 
   const renderJoinGame = () => {
     if (userBalance > 0) {
