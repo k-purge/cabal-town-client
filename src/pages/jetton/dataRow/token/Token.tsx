@@ -84,18 +84,29 @@ export const Token = () => {
   }, [selectedJetton, holders, jettonPrice, tonPrice]);
 
   const onClickJoinGame = useCallback(async () => {
-    if (jettonMaster && tgUserId) {
-      const { res } = await axiosService.joinGroup({
+    if (!jettonMaster || !tgUserId || !walletAddress) {
+      return showNotification("Required data is missing.", "error");
+    }
+
+    const tgLink = selectedJetton?.tgLink;
+
+    let res: any;
+    try {
+      res = await axiosService.joinGroup({
         masterAddress: jettonMaster,
         walletAddress,
         tgUserId,
       });
+    } catch (error) {
+      showNotification("Failed to join the group. Please try again.", "error");
+      console.error("Error joining group:", error);
+      return;
+    }
 
-      if (res.status === "success") {
-        return window.open(selectedJetton?.tgLink, "_blank");
-      }
-
-      showNotification(res.message, "error");
+    if (res.status === "success" && tgLink) {
+      window.open(tgLink, "_blank");
+    } else {
+      showNotification(res.message ?? "Telegram error", "error");
     }
   }, [jettonMaster, selectedJetton?.tgLink, showNotification, tgUserId, walletAddress]);
 
