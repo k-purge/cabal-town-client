@@ -5,6 +5,7 @@ export interface ILoginUser {
 }
 
 export interface IInsertUser {
+  jettonWalletAddress: string;
   walletAddress: string;
   tgUserId: number;
 }
@@ -13,6 +14,10 @@ export interface IJoinGroup {
   masterAddress: string;
   walletAddress: string;
   tgUserId: number;
+}
+
+export interface IUpdatePurge {
+  masterAddress: string;
 }
 
 export interface IUserStoreUpdateState {

@@ -6,13 +6,14 @@ import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { ExplorerPage, DeployerPage, Jetton } from "pages";
 import { Footer } from "components/footer";
 import { Header } from "components/header";
-import { useJettonLogo } from "hooks/useJettonLogo";
 import { FaqPage } from "pages/faq";
-import analytics from "services/analytics";
-import useNotification from "hooks/useNotification";
-import useUserStore from "store/user-store/useUserStore";
 import { ProfilePage } from "pages/profile";
 import { useTonAddress } from "@tonconnect/ui-react";
+import { useJettonLogo } from "hooks/useJettonLogo";
+import useNotification from "hooks/useNotification";
+import useJettonStore from "store/jetton-store/useJettonStore";
+import useUserStore from "store/user-store/useUserStore";
+import analytics from "services/analytics";
 
 analytics.init();
 
@@ -103,6 +104,7 @@ const App = () => {
   const location = useLocation();
   const rawAddress = useTonAddress(false);
   const walletAddress = useTonAddress();
+  const { jettonWalletAddress } = useJettonStore();
 
   useEffect(() => {
     resetJetton();
@@ -115,10 +117,10 @@ const App = () => {
   }, [getTgUserId, tgUserId, tgUserName]);
 
   useEffect(() => {
-    if (tgUserId && walletAddress) {
-      getUser(tgUserId, walletAddress);
+    if (tgUserId && walletAddress && jettonWalletAddress) {
+      getUser(tgUserId, walletAddress, jettonWalletAddress);
     }
-  }, [getUser, rawAddress, tgUserId, walletAddress]);
+  }, [getUser, rawAddress, tgUserId, walletAddress, jettonWalletAddress]);
 
   return (
     <AppWrapper>

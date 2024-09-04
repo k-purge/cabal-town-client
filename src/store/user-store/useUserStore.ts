@@ -9,11 +9,12 @@ function useUserStore() {
   const walletAddress = useTonAddress();
 
   const createUser = useCallback(
-    async (tgUserId: number) => {
+    async (tgUserId: number, jettonWalletAddress: string) => {
       if (walletAddress) {
         const body = {
           tgUserId,
           walletAddress,
+          jettonWalletAddress,
         };
         const {
           res: { user, tokens },
@@ -34,7 +35,7 @@ function useUserStore() {
   );
 
   const getUser = useCallback(
-    async (tgUserId: number, walletAddress: string) => {
+    async (tgUserId: number, walletAddress: string, jettonWalletAddress: string) => {
       let tokens: string;
 
       try {
@@ -42,7 +43,11 @@ function useUserStore() {
         tokens = res.tokens;
       } catch (error) {
         console.log("error", error);
-        const { res } = await axiosService.createUser({ tgUserId, walletAddress });
+        const { res } = await axiosService.createUser({
+          tgUserId,
+          walletAddress,
+          jettonWalletAddress,
+        });
         tokens = res.tokens;
       }
 
@@ -62,11 +67,10 @@ function useUserStore() {
     if (window.Telegram.WebApp) {
       // Initialize the Web App
       window.Telegram.WebApp.ready();
-      console.log("window.Telegram.WebApp.initDataUnsafe: ", window.Telegram.WebApp.initDataUnsafe);
+      // console.log("window.Telegram.WebApp.initDataUnsafe: ", window.Telegram.WebApp.initDataUnsafe);
 
       // Get user information
       const user = window.Telegram.WebApp.initDataUnsafe.user;
-      console.log("user: ", user);
       const tgUserId = user?.id;
       const tgUserName = user?.username;
       // Use the tgUserId in your app

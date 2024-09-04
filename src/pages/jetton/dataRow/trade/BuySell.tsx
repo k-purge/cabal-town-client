@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Address, toNano } from "ton";
 import { useRecoilState } from "recoil";
 import { CircularProgress } from "@mui/material";
@@ -40,6 +40,7 @@ export const BuySell = () => {
     getJettonHoldersTxns,
     getJettonWallet,
     getJettonFromDb,
+    updateJettonPurge,
   } = useJettonStore();
   const { jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
@@ -75,6 +76,24 @@ export const BuySell = () => {
     }
   };
 
+  const getPrice = useCallback(async () => {
+    if (!jettonAddress || !isValidAddress(jettonAddress)) {
+      showNotification("Invalid jetton address", "error");
+      return 0;
+    }
+
+    if (amt > 0) {
+      const parsedJettonMaster = Address.parse(jettonAddress);
+      const price = await jettonDeployController.getJettonPrice(parsedJettonMaster, amt);
+      const jettonPrice = parseInt(price ?? "0");
+      setBlinked(false);
+      setPrice(jettonPrice);
+      return jettonPrice;
+    }
+
+    return 0;
+  }, [amt, jettonAddress, showNotification]);
+
   const finallyHandler = useCallback(async () => {
     setAmt(0);
     let i = 0;
@@ -88,7 +107,8 @@ export const BuySell = () => {
         showNotification("Transaction completed", "success");
       }
     }
-    getJettonWallet();
+    await getJettonWallet();
+    await updateJettonPurge();
     getJettonFromDb();
   }, [
     getJettonFromDb,
@@ -96,6 +116,7 @@ export const BuySell = () => {
     getJettonWallet,
     setActionInProgress,
     showNotification,
+    updateJettonPurge,
     userBalance,
   ]);
 
@@ -140,8 +161,9 @@ export const BuySell = () => {
     const nanoAmt = toNano(amt).toNumber();
 
     const error = validateTradeParams(tradeType, senderAddress, nanoAmt, userBalance);
-    if (error) {
-      showNotification(error, "warning", undefined, 3000);
+    const price = await getPrice();
+    if (error || price === 0) {
+      showNotification(error ?? "Server error, please try again.", "warning", undefined, 3000);
       return;
     }
 
@@ -162,28 +184,17 @@ export const BuySell = () => {
     tradeType,
     senderAddress,
     userBalance,
+    getPrice,
     setActionInProgress,
     showNotification,
     buyTrade,
-    price,
     sellTrade,
     finallyHandler,
   ]);
 
-  const getPrice = useCallback(async () => {
-    if (!jettonAddress || !isValidAddress(jettonAddress)) {
-      showNotification("Invalid jetton address", "error");
-      return;
-    }
-
-    if (amt > 0) {
-      const parsedJettonMaster = Address.parse(jettonAddress);
-      const price = await jettonDeployController.getJettonPrice(parsedJettonMaster, amt);
-      const jettonPrice = parseInt(price ?? "0");
-      setBlinked(false);
-      setPrice(jettonPrice);
-    }
-  }, [amt, jettonAddress, showNotification]);
+  useEffect(() => {
+    return () => setActionInProgress(false);
+  }, [setActionInProgress]);
 
   return (
     <StyledBodyBlock height="313px">

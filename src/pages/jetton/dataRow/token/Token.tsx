@@ -71,7 +71,6 @@ export const Token = () => {
         (balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) /
         DECIMAL_SCALER /
         (selectedJetton.minStartedAmt ?? 1);
-      console.log("value", value);
 
       if (value > 1) return "100";
       else if (value < 0.000001) return (value * 100).toFixed(4);
@@ -85,10 +84,8 @@ export const Token = () => {
 
   const onClickJoinGame = useCallback(async () => {
     if (!jettonMaster || !tgUserId || !walletAddress) {
-      return showNotification("Required data is missing.", "error");
+      return;
     }
-
-    const tgLink = selectedJetton?.tgLink;
 
     try {
       const { res } = await axiosService.joinGroup({
@@ -97,8 +94,10 @@ export const Token = () => {
         tgUserId,
       });
 
-      if (res.status === "success" && tgLink) {
-        window.open(tgLink, "_blank");
+      if (res.invite_link) {
+        window.open(res.invite_link, "_blank");
+      } else if (res.status === "success") {
+        window.location.href = "tg://";
       } else {
         showNotification(res.message ?? "Telegram error", "error");
       }
@@ -107,7 +106,7 @@ export const Token = () => {
       console.error("Error joining group:", error);
       return;
     }
-  }, [jettonMaster, selectedJetton?.tgLink, showNotification, tgUserId, walletAddress]);
+  }, [jettonMaster, showNotification, tgUserId, walletAddress]);
 
   const renderJoinGame = () => {
     if (userBalance > 0) {
@@ -127,7 +126,7 @@ export const Token = () => {
             </Typography>
           </Box>
           <TradeButton
-            disabled={!selectedJetton?.nextPurgeAt}
+            disabled={!(selectedJetton?.nextPurgeAt && jettonMaster && tgUserId && walletAddress)}
             background="#FFB800"
             onClick={onClickJoinGame}>
             JOIN CABAL

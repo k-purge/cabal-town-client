@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ILoginUser, IInsertUser, IJoinGroup } from "store/user-store";
+import { ILoginUser, IInsertUser, IJoinGroup, IUpdatePurge } from "store/user-store";
 import { IInsertJetton } from "store/jetton-list-store";
 const { REACT_APP_API_URL, REACT_APP_TON_CLIENT_API_URL } = process.env;
 
@@ -103,6 +103,14 @@ async function joinGroup(data: IJoinGroup) {
   };
 }
 
+async function updateJettonPurge(data: IUpdatePurge) {
+  const endpoint = REACT_APP_API_URL + "/v1/jettons/updatePurge";
+
+  return {
+    res: (await axios.post(endpoint, data)).data,
+  };
+}
+
 const axiosService = {
   getJettonUpdates,
   getJettonPrice,
@@ -116,6 +124,7 @@ const axiosService = {
   loginUser,
   createUser,
   joinGroup,
+  updateJettonPurge,
 };
 
 export default axiosService;

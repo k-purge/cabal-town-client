@@ -29,7 +29,7 @@ function useJettonStore() {
     (holders: IHolder[]) => {
       const balance = holders
         ?.filter((holder: IHolder) => holder.owner.address === rawAddress)
-        .map((holding: IHolder) => parseInt(holding.balance));
+        ?.map((holding: IHolder) => parseInt(holding.balance));
       return balance[0];
     },
     [rawAddress],
@@ -47,6 +47,13 @@ function useJettonStore() {
       });
     }
   }, [jettonAddress, setState]);
+
+  const updateJettonPurge = useCallback(async () => {
+    if (jettonAddress) {
+      // get jetton detail from db
+      await axiosService.updateJettonPurge({ masterAddress: jettonAddress });
+    }
+  }, [jettonAddress]);
 
   const updateState = useCallback(
     (newState: IJettonStoreUpdateState) => {
@@ -342,6 +349,7 @@ function useJettonStore() {
     getJettonStaking,
     getJettonWallet,
     updateState,
+    updateJettonPurge,
   };
 }
 
