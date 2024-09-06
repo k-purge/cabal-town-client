@@ -1,7 +1,14 @@
 import axios from "axios";
 import { ILoginUser, IInsertUser, IJoinGroup, IUpdatePurge } from "store/user-store";
 import { IInsertJetton } from "store/jetton-list-store";
+import axiosInstance from "./axiosInstance";
 const { REACT_APP_API_URL, REACT_APP_TON_CLIENT_API_URL } = process.env;
+
+async function redeemCode(code: string) {
+  return {
+    res: (await axios.post(REACT_APP_API_URL + "/v1/utils/code_redeem", { code })).data,
+  };
+}
 
 async function insertJetton(data: IInsertJetton) {
   const endpoint = REACT_APP_API_URL + "/v1/jettons/insert";
@@ -13,9 +20,8 @@ async function insertJetton(data: IInsertJetton) {
 
 async function getJettonList(chain: string) {
   const endpoint = `${REACT_APP_API_URL}/v1/jettons?sortBy=createdAt:desc&chain=${chain}`;
-
   return {
-    res: (await axios.get(endpoint)).data,
+    res: (await axiosInstance.get(endpoint)).data,
   };
 }
 
@@ -125,6 +131,7 @@ const axiosService = {
   createUser,
   joinGroup,
   updateJettonPurge,
+  redeemCode,
 };
 
 export default axiosService;

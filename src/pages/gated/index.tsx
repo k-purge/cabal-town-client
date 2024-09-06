@@ -5,10 +5,14 @@ import { Screen } from "components/Screen";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import logo from "assets/icons/logo.svg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import axiosService from "services/axios";
+import { setTokens } from "services/auth";
+import useNotification from "hooks/useNotification";
 
 export function GatedPage() {
   const navigate = useNavigatePreserveQuery();
   const [inputValue, setInputValue] = useState("");
+  const { showNotification } = useNotification();
 
   const handleFollowUs = () => {
     window.open("https://x.com/purgedotfun", "_blank", "noopener,noreferrer");
@@ -19,6 +23,26 @@ export function GatedPage() {
       "_blank",
       "noopener,noreferrer",
     );
+  };
+  const [isLoading, setIsLoading] = useState(false);
+  const handleCodeSubmit = async () => {
+    if (!inputValue) return;
+
+    setIsLoading(true);
+    try {
+      const { res } = await axiosService.redeemCode(inputValue);
+      if (res.status === "success") {
+        setTokens(res.tokens.access.token, res.tokens.refresh.token);
+        navigate("/explorer");
+      } else if (res.status === "failed") {
+        showNotification("Invalid code", "error");
+      }
+    } catch (error) {
+      console.error("Error redeeming code:", error);
+      showNotification("Something went wrong, please try again later", "error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -56,8 +80,9 @@ export function GatedPage() {
             />
             <Button
               variant="contained"
+              onClick={handleCodeSubmit}
               color="primary"
-              disabled={inputValue === ""}
+              disabled={inputValue === "" || isLoading}
               sx={{
                 minWidth: "unset",
                 borderRadius: 0,
