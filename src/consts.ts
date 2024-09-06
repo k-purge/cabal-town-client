@@ -1,6 +1,7 @@
 import { getNetwork } from "./lib/hooks/useNetwork";
 const ROUTES = {
-  explorer: "/",
+  gated: "/",
+  explorer: "/explorer",
   deployer: "/deployer",
   jetton: "/jetton",
   jettonId: "/jetton/:id",

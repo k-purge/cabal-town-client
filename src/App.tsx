@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import { createContext, useEffect } from "react";
 import { APP_GRID, ROUTES } from "consts";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
-import { ExplorerPage, DeployerPage, Jetton } from "pages";
+import { GatedPage, DeployerPage, Jetton, ExplorerPage } from "pages";
 import { Footer } from "components/footer";
 import { Header } from "components/header";
 import { FaqPage } from "pages/faq";
@@ -141,6 +141,7 @@ const App = () => {
                 </>
               }
             />
+            <Route path={ROUTES.gated} element={<GatedPage />} />
             <Route path="/" element={<Header />}>
               <Route path="/" element={<ContentWrapper />}>
                 <Route path={ROUTES.explorer} element={<ExplorerPage />} />
@@ -152,10 +153,12 @@ const App = () => {
             </Route>
           </Routes>
         </ScreensWrapper>
+        {location.pathname !== ROUTES.gated && (
+          <FooterBox mt={5}>
+            <Footer />
+          </FooterBox>
+        )}
       </EnvContext.Provider>
-      <FooterBox mt={5}>
-        <Footer />
-      </FooterBox>
     </AppWrapper>
   );
 };
