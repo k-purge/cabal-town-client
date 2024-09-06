@@ -34,12 +34,12 @@ export function GatedPage() {
       if (res.status === "success") {
         setTokens(res.tokens.access.token, res.tokens.refresh.token);
         navigate("/explorer");
+      } else if (res.status === "failed") {
+        showNotification("Invalid code", "error");
       }
     } catch (error) {
       console.error("Error redeeming code:", error);
-      showNotification("Invalid code", "error");
-
-      // Handle error
+      showNotification("Something went wrong, please try again later", "error");
     } finally {
       setIsLoading(false);
     }
