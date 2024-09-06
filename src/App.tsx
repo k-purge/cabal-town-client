@@ -38,7 +38,7 @@ const ScreensWrapper = styled(Box)({
   flex: "1 1 auto",
   overflowY: "auto",
   overflowX: "hidden",
-  width: "100vw",
+  width: "100%",
   "-ms-overflow-style": "none" /* Internet Explorer 10+ */,
   "scrollbar-width": "none" /* Firefox */,
 
