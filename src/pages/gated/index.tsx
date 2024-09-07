@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Fade } from "@mui/material";
 import { CodeInput, Instructions, OutlinedButton, ScreenHeading } from "./styles";
 import { Screen } from "components/Screen";
@@ -6,13 +6,14 @@ import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import logo from "assets/icons/logo.svg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axiosService from "services/axios";
-import { setTokens } from "services/auth";
 import useNotification from "hooks/useNotification";
+import { useAuthToken } from "hooks/useAuthToken";
 
 export function GatedPage() {
   const navigate = useNavigatePreserveQuery();
   const [inputValue, setInputValue] = useState("");
   const { showNotification } = useNotification();
+  const { accessToken, refreshToken, setTokens } = useAuthToken();
 
   const handleFollowUs = () => {
     window.open("https://x.com/purgedotfun", "_blank", "noopener,noreferrer");
@@ -33,7 +34,10 @@ export function GatedPage() {
       const { res } = await axiosService.redeemCode(inputValue);
       if (res.status === "success") {
         setTokens(res.tokens.access.token, res.tokens.refresh.token);
-        navigate("/explorer");
+        navigate({
+          pathname: "/explorer",
+          search: "?testnet",
+        });
       } else if (res.status === "failed") {
         showNotification("Invalid code", "error");
       }
@@ -44,6 +48,22 @@ export function GatedPage() {
       setIsLoading(false);
     }
   };
+
+  // if the user has a valid token, redirect to the explorer page
+  useEffect(() => {
+    async function verifyToken() {
+      if (accessToken && refreshToken) {
+        const { res } = await axiosService.verifyToken(refreshToken);
+        if (res.status === "success") {
+          navigate({
+            pathname: "/explorer",
+            search: "?testnet",
+          });
+        }
+      }
+    }
+    verifyToken();
+  }, [accessToken, refreshToken, navigate]);
 
   return (
     <Screen>
