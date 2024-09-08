@@ -10,6 +10,12 @@ async function redeemCode(code: string) {
   };
 }
 
+async function verifyToken(refreshToken: string) {
+  return {
+    res: (await axios.post(REACT_APP_API_URL + "/v1/auth/verify-tokens", { refreshToken })).data,
+  };
+}
+
 async function insertJetton(data: IInsertJetton) {
   const endpoint = REACT_APP_API_URL + "/v1/jettons/insert";
 
@@ -132,6 +138,7 @@ const axiosService = {
   joinGroup,
   updateJettonPurge,
   redeemCode,
+  verifyToken,
 };
 
 export default axiosService;
