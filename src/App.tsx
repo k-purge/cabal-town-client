@@ -21,7 +21,6 @@ const AppWrapper = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   height: "100vh",
-  overflowY: "scroll",
   backgroundImage: "url(/bg.jpeg)", // Add this line
   backgroundSize: "cover", // Optional: Adjust how the background image is sized
   backgroundPosition: "center", // Optional: Center the background image
