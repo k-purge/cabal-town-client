@@ -99,8 +99,13 @@ const ProtectedRoute = () => {
     async function verifyToken() {
       if (isInitialized) {
         if (accessToken && refreshToken) {
-          const { res } = await axiosService.verifyToken(refreshToken);
-          setIsAuthenticated(res.status === "success");
+          try {
+            const { res } = await axiosService.verifyToken(refreshToken);
+            setIsAuthenticated(res.status === "success");
+          } catch (error) {
+            console.error("Error verifying token:", error);
+            setIsAuthenticated(false);
+          }
         } else {
           setIsAuthenticated(false);
         }
