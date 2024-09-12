@@ -1,7 +1,13 @@
-import { Box } from "@mui/material";
-import { CardBody, CardHeader, CardContainer, CardImage } from "../styles";
+import { Box, Typography } from "@mui/material";
+import {
+  CardBody,
+  CardHeader,
+  CardContainer,
+  CardImage,
+  CardOverlay,
+  CardBodyNumber,
+} from "../styles";
 import { IJetton } from "store/jetton-list-store/";
-import UserImg from "assets/icons/user.svg";
 
 export const Card = ({
   item,
@@ -11,15 +17,30 @@ export const Card = ({
   onClickCard: (jetton: IJetton | undefined) => void;
 }) => {
   return (
-    <CardContainer onClick={() => onClickCard(item)}>
-      <CardImage>
-        <img src={item?.imageUri} alt="Logo" />
-      </CardImage>
-      <CardHeader>{item?.name}</CardHeader>
-      <Box display="flex" flexDirection={"row"} gap={"5px"}>
-        <img src={UserImg} alt="user" style={{ marginTop: "3px" }} />
-        <CardBody>{item?.numOfPlayers} Players in game</CardBody>
-      </Box>
-    </CardContainer>
+    <CardOverlay>
+      <CardContainer onClick={() => onClickCard(item)}>
+        <CardImage>
+          <img src={item?.imageUri} alt="Logo" />
+        </CardImage>
+        <CardHeader>{item?.name}</CardHeader>
+        <Box
+          display="flex"
+          flexDirection={"row"}
+          gap={"5px"}
+          padding={"8px 12px"}
+          justifyContent={"space-between"}>
+          {/* <img src={UserImg} alt="user" style={{ marginTop: "3px" }} /> */}
+          {/* <CardBody>{item?.numOfPlayers} Players in game</CardBody> */}
+          <Box display="flex" flexDirection={"column"}>
+            <CardBody>Members</CardBody>
+            <CardBodyNumber>{item?.numOfPlayers}</CardBodyNumber>
+          </Box>
+          <Box display="flex" flexDirection={"column"}>
+            <CardBody>Buy-in Price</CardBody>
+            <CardBodyNumber>${item?.numOfPlayers ?? 0}00</CardBodyNumber>
+          </Box>
+        </Box>
+      </CardContainer>
+    </CardOverlay>
   );
 };
