@@ -8,6 +8,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axiosService from "services/axios";
 import useNotification from "hooks/useNotification";
 import { useAuthToken } from "hooks/useAuthToken";
+import { Navigate } from "react-router-dom";
 
 export function GatedPage() {
   const navigate = useNavigatePreserveQuery();
@@ -34,10 +35,6 @@ export function GatedPage() {
       const { res } = await axiosService.redeemCode(inputValue);
       if (res.status === "success") {
         setTokens(res.tokens.access.token, res.tokens.refresh.token);
-        navigate({
-          pathname: "/explorer",
-          search: "?testnet",
-        });
       } else if (res.status === "failed") {
         showNotification("Invalid code", "error");
       }
@@ -50,20 +47,9 @@ export function GatedPage() {
   };
 
   // if the user has a valid token, redirect to the explorer page
-  useEffect(() => {
-    async function verifyToken() {
-      if (accessToken && refreshToken) {
-        const { res } = await axiosService.verifyToken(refreshToken);
-        if (res.status === "success") {
-          navigate({
-            pathname: "/explorer",
-            search: "?testnet",
-          });
-        }
-      }
-    }
-    verifyToken();
-  }, [accessToken, refreshToken, navigate]);
+  if (accessToken && refreshToken) {
+    return <Navigate to={{ pathname: "/explorer", search: "?testnet" }} />;
+  }
 
   return (
     <Screen>

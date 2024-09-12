@@ -4,11 +4,13 @@ import axios from "axios";
 export function useAuthToken() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     // Initialize tokens from localStorage
     setAccessToken(localStorage.getItem("accessToken"));
     setRefreshToken(localStorage.getItem("refreshToken"));
+    setIsInitialized(true);
   }, []);
 
   const setTokens = useCallback((access: string, refresh: string) => {
@@ -36,5 +38,6 @@ export function useAuthToken() {
     refreshToken,
     setTokens,
     refreshAccessToken,
+    isInitialized,
   };
 }

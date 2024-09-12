@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 import { Box } from "@mui/system";
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import { APP_GRID, ROUTES } from "consts";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { GatedPage, DeployerPage, Jetton, ExplorerPage } from "pages";
@@ -14,6 +14,8 @@ import useNotification from "hooks/useNotification";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import useUserStore from "store/user-store/useUserStore";
 import analytics from "services/analytics";
+import { useAuthToken } from "hooks/useAuthToken";
+import axiosService from "services/axios";
 
 analytics.init();
 
@@ -90,6 +92,30 @@ const ContentWrapper = ({ children }: ContentWrapperProps) => {
     </FlexibleBox>
   );
 };
+const ProtectedRoute = () => {
+  const { accessToken, refreshToken, isInitialized } = useAuthToken();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  useEffect(() => {
+    async function verifyToken() {
+      if (isInitialized) {
+        if (accessToken && refreshToken) {
+          try {
+            const { res } = await axiosService.verifyToken(refreshToken);
+            setIsAuthenticated(res.status === "success");
+          } catch (error) {
+            console.error("Error verifying token:", error);
+            setIsAuthenticated(false);
+          }
+        } else {
+          setIsAuthenticated(false);
+        }
+      }
+    }
+    verifyToken();
+  }, [accessToken, refreshToken, isInitialized]);
+
+  return isAuthenticated ? <Outlet /> : <Navigate to={ROUTES.gated} />;
+};
 
 declare global {
   interface Window {
@@ -143,11 +169,13 @@ const App = () => {
             <Route path={ROUTES.gated} element={<GatedPage />} />
             <Route path="/" element={<Header />}>
               <Route path="/" element={<ContentWrapper />}>
-                <Route path={ROUTES.explorer} element={<ExplorerPage />} />
-                <Route path={ROUTES.deployer} element={<DeployerPage />} />
-                <Route path={ROUTES.jettonId} element={<Jetton />} />
-                <Route path={ROUTES.profile} element={<ProfilePage />} />
-                <Route path={ROUTES.faq} element={<FaqPage />} />
+                <Route path={"/"} element={<ProtectedRoute />}>
+                  <Route path={ROUTES.explorer} element={<ExplorerPage />} />
+                  <Route path={ROUTES.deployer} element={<DeployerPage />} />
+                  <Route path={ROUTES.jettonId} element={<Jetton />} />
+                  <Route path={ROUTES.profile} element={<ProfilePage />} />
+                  <Route path={ROUTES.faq} element={<FaqPage />} />
+                </Route>
               </Route>
             </Route>
           </Routes>
