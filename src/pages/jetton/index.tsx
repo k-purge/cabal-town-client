@@ -51,8 +51,8 @@ export const Jetton = () => {
         return (
           <>
             <BuySell />
-            <GroupDescription />
-            <GroupDetail />
+            {/* <GroupDescription />
+            <GroupDetail /> */}
           </>
         );
       case "2":

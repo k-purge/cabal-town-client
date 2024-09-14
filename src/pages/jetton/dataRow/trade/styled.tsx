@@ -58,6 +58,7 @@ const TradeButton = styled(LoadingButton, {
   marginTop: "24px",
   color: "#000",
   fontFamily: "Bungee, sans-serif",
+  borderRadius: 0,
 
   "&:hover": {
     background,
