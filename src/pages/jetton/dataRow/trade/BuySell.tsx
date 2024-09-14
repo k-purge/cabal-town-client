@@ -130,8 +130,6 @@ export const BuySell = () => {
   const buyTrade = useCallback(
     async (jettonPrice: number) => {
       // const nanoAmt = toNano(amt).toNumber();
-      console.debug("amt", amt);
-
       if (amt > 0) {
         await jettonDeployController.buyJettons(
           tonconnect,

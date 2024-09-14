@@ -68,9 +68,7 @@ export const Token = () => {
         holders.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ?? 0;
 
       const value =
-        (balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) /
-        DECIMAL_SCALER /
-        (selectedJetton.minStartedAmt ?? 1);
+        (balance * jettonPrice * tonPrice) / DECIMAL_SCALER / (selectedJetton.minStartedAmt ?? 1);
 
       if (value > 1) return "100";
       else if (value < 0.000001) return (value * 100).toFixed(4);
