@@ -12,6 +12,7 @@ const ONCHAIN_CONTENT_PREFIX = 0x00;
 const OFFCHAIN_CONTENT_PREFIX = 0x01;
 const SNAKE_PREFIX = 0x00;
 
+export const RATE_SCALER = 1000000;
 export const JETTON_WALLET_CODE = Cell.fromBoc(walletHex.hex)[0];
 export const JETTON_MINTER_CODE = Cell.fromBoc(masterHex.hex)[0]; // code cell from build output
 
@@ -200,16 +201,15 @@ export function initData(
     throw new Error("Must either specify onchain data or offchain uri");
   }
   return beginCell()
-    .storeUint(new BN("10000000000000000"), 64)
-    .storeUint(0, 64)
+    .storeUint(new BN("1000000000000000000"), 64)
+    .storeUint(new BN("1000000000000000"), 64)
+    .storeUint(new BN("500000"), 32)
+    .storeUint(new BN("1000000000"), 64)
     .storeAddress(owner)
     .storeRef(
       offchainUri ? buildJettonOffChainMetadata(offchainUri) : buildJettonOnchainMetadata(data!),
     )
     .storeRef(JETTON_WALLET_CODE)
-    .storeUint(new BN("5000000000000000"), 64) //midpoint_supply
-    .storeCoins(1000000000) //max_price
-    .storeUint(10, 8) //steepness
     .endCell();
 }
 

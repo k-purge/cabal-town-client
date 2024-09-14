@@ -12,6 +12,7 @@ import { getUrlParam, isValidAddress } from "utils";
 import { jettonStateAtom, IJettonStoreUpdateState } from ".";
 import { IHolder } from "../jetton-list-store";
 import { useNetwork } from "lib/hooks/useNetwork";
+import { RATE_SCALER } from "lib/jetton-minter";
 
 let i = 0;
 
@@ -123,7 +124,7 @@ function useJettonStore() {
       return;
     }
 
-    const jettonMaster = Address.parse(jettonAddress);
+    // const jettonMaster = Address.parse(jettonAddress);
     const parsedJettonMaster = Address.parse(jettonFriendlyAddress!);
 
     try {
@@ -138,8 +139,10 @@ function useJettonStore() {
       );
 
       // get jetton price
-      const price = await jettonDeployController.getJettonPrice(jettonMaster, 1);
-      const jettonPrice = parseInt(price ?? "0");
+      const jettonPrice =
+        result.minter.reserveBalance.toNumber() /
+          ((result.minter.circulatingSupply.toNumber() * result.minter.reserveRate.toNumber()) /
+            RATE_SCALER) ?? 0;
 
       // get ton price
       const {

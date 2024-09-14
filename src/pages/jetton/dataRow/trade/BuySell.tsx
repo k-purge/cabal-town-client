@@ -6,12 +6,11 @@ import { useJettonAddress } from "hooks/useJettonAddress";
 import { StyledBodyBlock } from "pages/jetton/styled";
 import { Box, Typography } from "@mui/material";
 import useJettonStore from "store/jetton-store/useJettonStore";
-import brokenImage from "assets/icons/question.png";
+import tonLogo from "assets/icons/ton-logo.png";
 import ToggleButton from "./ToggleButton";
 import useNotification from "hooks/useNotification";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { isValidAddress } from "utils";
-import { toDecimalsBN } from "utils";
 import {
   BlinkingText,
   AmtContainer,
@@ -22,7 +21,6 @@ import {
   TextContainer,
 } from "./styled";
 import { jettonDeployController } from "lib/jetton-controller";
-import { DECIMAL_SCALER } from "consts";
 import { validateTradeParams } from "../../util";
 import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { sleep } from "lib/utils";
@@ -33,7 +31,6 @@ export const BuySell = () => {
     userBalance,
     jettonImage,
     symbol,
-    isImageBroken,
     jettonMaster,
     jettonPrice,
     decimals,
@@ -53,16 +50,19 @@ export const BuySell = () => {
 
   const handleChangeType = (event: any, newTradeType: string) => {
     setTradeType(newTradeType);
+    setPrice(0);
     setAmt(0);
   };
 
   const onChangeAmt = (e: any) => {
     const val = e.target.value;
-    if (val.slice(-1) === ".") {
-      return setAmt(val);
-    } else if (!val) {
-      setBlinked(false);
+
+    if (!val) {
       return setAmt(0);
+    } else if (val.slice(1) === ".") {
+      return setAmt(val);
+    } else if (/^\d+(\.\d+)?$/.test(val)) {
+      return setAmt(val);
     }
 
     try {
@@ -77,22 +77,29 @@ export const BuySell = () => {
   };
 
   const getPrice = useCallback(async () => {
+    console.log("amt", amt);
     if (!jettonAddress || !isValidAddress(jettonAddress)) {
       showNotification("Invalid jetton address", "error");
       return 0;
     }
 
     if (amt > 0) {
+      let jettonPrice = 0;
       const parsedJettonMaster = Address.parse(jettonAddress);
-      const price = await jettonDeployController.getJettonPrice(parsedJettonMaster, amt);
-      const jettonPrice = parseInt(price ?? "0");
+
+      if (tradeType === "0") {
+        jettonPrice = await jettonDeployController.getPurchaseReturn(parsedJettonMaster, amt);
+      } else {
+        jettonPrice = await jettonDeployController.getSaleReturn(parsedJettonMaster, amt);
+      }
+
       setBlinked(false);
       setPrice(jettonPrice);
       return jettonPrice;
     }
 
     return 0;
-  }, [amt, jettonAddress, showNotification]);
+  }, [amt, jettonAddress, showNotification, tradeType]);
 
   const finallyHandler = useCallback(async () => {
     setAmt(0);
@@ -123,15 +130,15 @@ export const BuySell = () => {
   const buyTrade = useCallback(
     async (jettonPrice: number) => {
       // const nanoAmt = toNano(amt).toNumber();
-      const valueDecimals = toDecimalsBN(amt, decimals!);
+      console.debug("amt", amt);
 
       if (amt > 0) {
         await jettonDeployController.buyJettons(
           tonconnect,
-          valueDecimals,
+          amt,
           senderAddress!,
           jettonMaster!,
-          jettonPrice,
+          decimals!,
         );
       }
     },
@@ -210,14 +217,16 @@ export const BuySell = () => {
           onChange={onChangeAmt}
           onBlur={getPrice}
         />
-        <SymbolField src={!isImageBroken ? jettonImage : brokenImage} alt="jetton symbol" />
+        <SymbolField src={tradeType === "0" ? tonLogo : jettonImage} alt="ton symbol" />
       </AmtContainer>
 
       <TextContainer>
         <BlinkingText blinked={blinked}>
           {blinked
             ? "Previewing..."
-            : price / DECIMAL_SCALER + " TON = " + (amt ?? 0) + " " + symbol}
+            : tradeType === "0" && symbol
+            ? `${Math.floor(price)} ${symbol}`
+            : `${price.toFixed(2)} TON`}
         </BlinkingText>
       </TextContainer>
 

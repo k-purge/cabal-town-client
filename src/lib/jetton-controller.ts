@@ -4,6 +4,7 @@ import { ContractDeployer } from "./contract-deployer";
 
 import { createDeployParams, waitForContractDeploy, waitForSeqno } from "./utils";
 import { zeroAddress } from "./utils";
+import { toDecimalsBN } from "utils";
 import {
   buildJettonOnchainMetadata,
   burn,
@@ -191,10 +192,10 @@ class JettonDeployController {
 
   async buyJettons(
     tonConnection: TonConnectUI,
-    amount: BN,
+    amount: number,
     fromAddress: string,
     jettonMaster: string,
-    jettonPrice: number,
+    decimals: string,
   ) {
     const tc = await getClient();
 
@@ -203,9 +204,10 @@ class JettonDeployController {
         source: Address.parse(fromAddress),
       }),
     );
+    const valueDecimals = toDecimalsBN(amount, decimals!);
 
-    const fee = (jettonPrice * 5) / 100;
-    const msgValue = JETTON_TXN_GAS.toNumber() + jettonPrice + fee;
+    const fee = (valueDecimals.toNumber() * 5) / 100;
+    const msgValue = JETTON_TXN_GAS.toNumber() + valueDecimals.toNumber() + fee;
 
     const tx: SendTransactionRequest = {
       validUntil: Date.now() + 5 * 60 * 1000,
@@ -214,7 +216,7 @@ class JettonDeployController {
           address: jettonMaster,
           amount: msgValue.toFixed(0),
           stateInit: undefined,
-          payload: buyJetton(amount).toBoc().toString("base64"),
+          payload: buyJetton(valueDecimals).toBoc().toString("base64"),
         },
       ],
     };
@@ -416,10 +418,20 @@ class JettonDeployController {
       contractAddr,
       "get_jetton_data",
       [],
-      async ([totalSupply, _, adminCell, contentCell]) => ({
+      async ([
+        totalSupply,
+        circulatingSupply,
+        reserveRate,
+        reserveBalance,
+        adminCell,
+        contentCell,
+      ]) => ({
         ...(await readJettonMetadata(contentCell as unknown as Cell)),
         admin: cellToAddress(adminCell),
         totalSupply: totalSupply as BN,
+        circulatingSupply: circulatingSupply as BN,
+        reserveRate: reserveRate as BN,
+        reserveBalance: reserveBalance as BN,
       }),
       tc,
     );
@@ -488,16 +500,44 @@ class JettonDeployController {
     );
   }
 
-  async getJettonPrice(contractAddr: Address, amt: number) {
-    const tc = await getClient();
-    const jettonPrice = await makeGetCall(
-      contractAddr,
-      "get_token_price",
-      [new BN(amt * DECIMAL_SCALER)],
-      async ([price]) => price,
-      tc,
-    );
-    return jettonPrice?.toString();
+  async getPurchaseReturn(contractAddr: Address, tonAmt: number) {
+    try {
+      const tc = await getClient();
+      const jettonPrice = await makeGetCall(
+        contractAddr,
+        "get_purchase_return",
+        [new BN(tonAmt * DECIMAL_SCALER)],
+        async ([price]) => price,
+        tc,
+      );
+      if (jettonPrice) {
+        return parseInt(jettonPrice?.toString()) / DECIMAL_SCALER;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return 0;
+  }
+
+  async getSaleReturn(contractAddr: Address, sellAmt: number) {
+    try {
+      const tc = await getClient();
+      const jettonPrice = await makeGetCall(
+        contractAddr,
+        "get_sale_return",
+        [new BN(sellAmt * DECIMAL_SCALER)],
+        async ([price]) => price,
+        tc,
+      );
+      if (jettonPrice) {
+        return parseInt(jettonPrice?.toString()) / DECIMAL_SCALER;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return 0;
   }
 
   async fixFaultyJetton(
