@@ -140,15 +140,28 @@ export const Token = () => {
 
   return (
     <StyledBlock height="100%">
-      <StyledTopText>{name}</StyledTopText>
-      <LoadingImage
-        src={!isImageBroken ? jettonImage : brokenImage}
-        alt="jetton image"
-        loading={jettonLoading}
-      />
-      <Box display="flex" flexDirection={"row"} gap={1}>
-        <img src={UserImg} alt="user" width={"13px"} />
-        <StyledCardBody>{selectedJetton?.players?.length} Players in lobby</StyledCardBody>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}>
+        <Box sx={{ border: "2px, solid, white", height: "56px", width: "56px" }}>
+          <LoadingImage
+            src={!isImageBroken ? jettonImage : brokenImage}
+            alt="jetton image"
+            loading={jettonLoading}
+          />
+        </Box>
+        <Box display="flex" flexDirection={"column"} flexGrow={1} sx={{ paddingLeft: "16px" }}>
+          <StyledTopText>{name}</StyledTopText>
+          <Box display="flex" flexDirection={"row"} gap={1}>
+            <img src={UserImg} alt="user" width={"13px"} />
+            <StyledCardBody>{selectedJetton?.players?.length} players in lobby</StyledCardBody>
+          </Box>
+        </Box>
       </Box>
       {userBalance > 0 && (
         <Typography fontSize={20} color="#FFB800" mt={1}>
@@ -157,7 +170,7 @@ export const Token = () => {
       )}
 
       <StyledBottomText>
-        <Typography>Cabal Initiation Progress</Typography>
+        <Typography>Game Initiation Progress</Typography>
         <Typography>{progress}%</Typography>
       </StyledBottomText>
 
