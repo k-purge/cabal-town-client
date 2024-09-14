@@ -223,7 +223,9 @@ export const Chart = () => {
       style={{
         padding: "10px 0 0 10px",
       }}>
-      <HeaderTitle>Chart</HeaderTitle>
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <HeaderTitle>Chart</HeaderTitle>
+      </Box>
       <Box width="100%" height="320px" ref={containerRef} />
     </StyledBlock>
   );

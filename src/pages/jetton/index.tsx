@@ -16,15 +16,23 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import FaultyDeploy from "./FaultyDeploy";
 import SelectType from "./SelectType";
 import { useHeader } from "hooks/useHeader";
+import { Stat } from "./dataRow/statistics";
+
+type SelctionType =
+  | "BUY_AND_SELL"
+  | "LOCK_AND_CLAIM"
+  | "HOLDER_DISTRIBUTION"
+  | "TRANSACTION_HISTORY"
+  | "STATISTIC";
 
 export const Jetton = () => {
   const { getJettonDetails, getJettonFromDb, getJettonHoldersTxns } = useJettonStore();
   const { isAddressEmpty, jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
-  const [type, setType] = useState("1");
+  const [type, setType] = useState<SelctionType>("BUY_AND_SELL");
 
   const handleChange = (event: SelectChangeEvent) => {
-    setType(event.target.value as string);
+    setType(event.target.value as SelctionType);
   };
 
   const { setHeader } = useHeader();
@@ -47,7 +55,7 @@ export const Jetton = () => {
 
   const renderSwitch = () => {
     switch (type) {
-      case "1":
+      case "BUY_AND_SELL":
         return (
           <>
             <BuySell />
@@ -55,7 +63,7 @@ export const Jetton = () => {
             <GroupDetail /> */}
           </>
         );
-      case "2":
+      case "LOCK_AND_CLAIM":
         return (
           <>
             <LockClaim />
@@ -63,8 +71,12 @@ export const Jetton = () => {
             <GroupDetail />
           </>
         );
-      case "3":
+      case "HOLDER_DISTRIBUTION":
         return <Holder />;
+      case "TRANSACTION_HISTORY":
+        return <Txn />;
+      case "STATISTIC":
+        return <Stat />;
       default:
         return <Txn />;
     }

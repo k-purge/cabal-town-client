@@ -37,10 +37,21 @@ export default function SelectType({ type, handleChange }: { type: string; handl
               border: "none",
             },
           }}>
-          <StyledMenuItem value={"1"}>BUY AND SELL</StyledMenuItem>
-          {/* <MenuItem value={"2"}>LOCK AND CLAIM</MenuItem> */}
-          <StyledMenuItem value={"3"}>HOLDER DISTRIBUTION</StyledMenuItem>
-          <StyledMenuItem value={"4"}>TRANSACTION HISTORY</StyledMenuItem>
+          <StyledMenuItem divider value={"BUY_AND_SELL"}>
+            BUY AND SELL
+          </StyledMenuItem>
+          {/* <StyledMenuItem divider value={"LOCK_AND_CLAIM"}>
+            LOCK AND CLAIM
+          </StyledMenuItem> */}
+          <StyledMenuItem divider value={"HOLDER_DISTRIBUTION"}>
+            HOLDER DISTRIBUTION
+          </StyledMenuItem>
+          <StyledMenuItem divider value={"TRANSACTION_HISTORY"}>
+            TRANSACTION HISTORY
+          </StyledMenuItem>
+          <StyledMenuItem divider value={"STATISTIC"}>
+            STATISTIC (7 DAYS)
+          </StyledMenuItem>
         </Select>
       </FormControl>
     </StyledSelectBox>
