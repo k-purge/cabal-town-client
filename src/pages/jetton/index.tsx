@@ -15,6 +15,7 @@ import useNotification from "hooks/useNotification";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import FaultyDeploy from "./FaultyDeploy";
 import SelectType from "./SelectType";
+import { useHeader } from "hooks/useHeader";
 
 export const Jetton = () => {
   const { getJettonDetails, getJettonFromDb, getJettonHoldersTxns } = useJettonStore();
@@ -25,6 +26,12 @@ export const Jetton = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
   };
+
+  const { setHeader } = useHeader();
+
+  useEffect(() => {
+    setHeader("Cabal Details", { showBackButton: true });
+  }, [setHeader]);
 
   useEffect(() => {
     if (jettonAddress) {

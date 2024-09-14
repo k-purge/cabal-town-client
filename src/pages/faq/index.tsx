@@ -1,6 +1,8 @@
 import { Box, Fade } from "@mui/material";
 import { Screen, ScreenContent } from "components/Screen";
 import { StyledWrapper, StyledHeading, StyledTitle, StyledParagraph } from "./styles";
+import { useHeader } from "hooks/useHeader";
+import { useEffect } from "react";
 
 const faq = [
   {
@@ -36,12 +38,15 @@ const faq = [
 ];
 
 function FaqPage() {
+  const { setHeader } = useHeader();
+  useEffect(() => {
+    setHeader("HOW IT WORKS", { showBackButton: false });
+  }, [setHeader]);
   return (
     <Screen>
       <ScreenContent removeBackground>
         <Fade in>
           <Box>
-            <StyledHeading>HOW IT WORKS</StyledHeading>
             <StyledWrapper>
               {faq.map(({ question, answer }) => (
                 <>

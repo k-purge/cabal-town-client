@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { SearchBarInput, SearchBarWrapper } from "./styled";
 import close from "assets/icons/close.svg";
+import search from "assets/icons/search.svg"; // Add this import
 import { Backdrop, ClickAwayListener, IconButton } from "@mui/material";
-import { AppButton } from "components/appButton";
+// Remove AppButton import
 import { HeaderSearchResults } from "components/header/headerSearchResults";
 import { useAddressHistory } from "hooks/useAddressHistory";
 
@@ -58,7 +59,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ example, resetExample, clo
           onClick={() => setActive(false)}></Backdrop>
         <SearchBarWrapper>
           <SearchBarInput
-            placeholder="Search by jetton address"
+            placeholder="Search Cabal"
             onPaste={(e: any) => setValue(e.target.value)}
             onChange={(e) => setValue(e.target.value)}
             value={addressInput.value}
@@ -70,15 +71,17 @@ export const SearchBar: React.FC<SearchBarProps> = ({ example, resetExample, clo
               <IconButton onClick={() => setValue("")}>
                 <img src={close} alt="Close Icon" width={18} height={18} />
               </IconButton>
-              <AppButton
-                height={34}
-                width={40}
+              <IconButton
                 onClick={() => {
                   onSubmit(addressInput.value);
                   closeMenu?.();
                 }}>
-                Go
-              </AppButton>
+                <img
+                  src={search}
+                  alt="Search Icon"
+                  style={{ width: 18, height: 18, color: "#000" }}
+                />
+              </IconButton>
             </>
           )}
           {addressInput.active && !!addresses?.length && (
