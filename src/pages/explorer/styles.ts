@@ -35,11 +35,10 @@ const clipPathSmall = "6px";
 
 const CardOverlay = styled(Box)(({ theme }) => ({
   background: "#FFB800",
-  border: `${clipPathSmall} solid #FFB800`,
+  border: `5px solid #FFB800`,
   alignItems: "center",
   justifyContent: "center",
   clipPath: `polygon(0 ${clipPathLarge}, ${clipPathSmall} ${clipPathLarge}, ${clipPathSmall} ${clipPathSmall}, ${clipPathLarge} ${clipPathSmall}, ${clipPathLarge} 0, calc(100% - ${clipPathLarge}) 0, calc(100% - ${clipPathLarge}) ${clipPathSmall}, calc(100% - ${clipPathSmall}) ${clipPathSmall}, calc(100% - ${clipPathSmall}) ${clipPathLarge}, calc(100% - ${clipPathLarge}) ${clipPathLarge}, 100% ${clipPathLarge}, 100% calc(100% - ${clipPathLarge}), calc(100% - ${clipPathSmall}) calc(100% - ${clipPathLarge}), calc(100% - ${clipPathSmall}) calc(100% - ${clipPathSmall}), calc(100% - ${clipPathLarge}) calc(100% - ${clipPathSmall}), calc(100% - ${clipPathLarge}) 100%, ${clipPathLarge} 100%, ${clipPathLarge} calc(100% - ${clipPathSmall}), ${clipPathSmall} calc(100% - ${clipPathSmall}), ${clipPathSmall} calc(100% - ${clipPathLarge}), 0 calc(100% - ${clipPathLarge}))`,
-  zIndex: 0,
 }));
 
 const clipPath = "10.5px";
@@ -70,7 +69,7 @@ const CardImage = styled(Box)(() => ({
   alignItems: "center",
   marginBottom: "8px",
   background: "#000",
-  border: "3px solid #000",
+  border: "4px solid #000",
   clipPath: `polygon(0 ${clipPath},${clipPath} ${clipPath},${clipPath} 0,calc(100% - ${clipPath}) 0,calc(100% - ${clipPath}) ${clipPath},100% ${clipPath},100% calc(100% - ${clipPath}),calc(100% - ${clipPath}) calc(100% - ${clipPath}),calc(100% - ${clipPath}) 100%,${clipPath} 100%,${clipPath} calc(100% - ${clipPath}),0 calc(100% - ${clipPath}))`,
 
   "& img": {

@@ -16,6 +16,11 @@ export const Card = ({
   item: IJetton | undefined;
   onClickCard: (jetton: IJetton | undefined) => void;
 }) => {
+  const basePrice = 0.0016;
+  const variation = 0.22; // 22% variation
+  const randomFactor = Math.random() * 2 - 1; // Random number between -1 and 1
+  const buyInPrice = basePrice * (1 + variation * randomFactor);
+  const isIncreasing = randomFactor > 0;
   return (
     <CardOverlay>
       <CardContainer onClick={() => onClickCard(item)}>
@@ -37,7 +42,16 @@ export const Card = ({
           </Box>
           <Box display="flex" flexDirection={"column"}>
             <CardBody>Buy-in Price</CardBody>
-            <CardBodyNumber>${item?.numOfPlayers ?? 0}00</CardBodyNumber>
+            <CardBodyNumber>
+              ${buyInPrice.toFixed(5)}
+              <span
+                style={{
+                  marginLeft: "4px",
+                  color: isIncreasing ? "#3FF400" : "#FF0000",
+                }}>
+                ({isIncreasing ? "+" : "-"}20%)
+              </span>
+            </CardBodyNumber>
           </Box>
         </Box>
       </CardContainer>
