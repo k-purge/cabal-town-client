@@ -67,7 +67,10 @@ function useUserStore() {
     if (window.Telegram.WebApp) {
       // Initialize the Web App
       window.Telegram.WebApp.ready();
-      // console.log("window.Telegram.WebApp.initDataUnsafe: ", window.Telegram.WebApp.initDataUnsafe);
+      console.debug(
+        "window.Telegram.WebApp.initDataUnsafe: ",
+        window.Telegram.WebApp.initDataUnsafe,
+      );
 
       // Get user information
       const user = window.Telegram.WebApp.initDataUnsafe.user;

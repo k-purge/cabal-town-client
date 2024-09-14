@@ -55,9 +55,6 @@ export const Chart = () => {
             }
           },
         },
-        leftPriceScale: {
-          visible: jettonPriceList?.some((price) => price.circulatingSupply > 0),
-        },
       };
       return createChart(containerRef.current, chartOptions);
     }
@@ -99,7 +96,7 @@ export const Chart = () => {
   }, [getJettonPrice]);
 
   useEffect(() => {
-    if (chart && jettonPriceList && candlestickSeries && lineLeft) {
+    if (chart && jettonPriceList && candlestickSeries) {
       if (jettonPriceList.length > 1) {
         const priceList = [...jettonPriceList]
           .filter((item, i) => {
@@ -114,10 +111,10 @@ export const Chart = () => {
 
         const candlestickData = priceList.map((data) => ({
           time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
-          open: data.price / DECIMAL_SCALER,
-          high: data.price / DECIMAL_SCALER,
-          low: data.price / DECIMAL_SCALER,
-          close: data.price / DECIMAL_SCALER,
+          open: Number(data.price),
+          high: Number(data.price),
+          low: Number(data.price),
+          close: Number(data.price),
         }));
         candlestickSeries.setData(candlestickData);
 
@@ -144,17 +141,6 @@ export const Chart = () => {
         });
         // Set the data for the Area Series
         areaSeries.setData(lineData);
-
-        // TODO
-        // volume
-        if (priceList.some((price) => price.circulatingSupply > 0)) {
-          lineLeft.setData(
-            priceList.map((data) => ({
-              time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
-              value: data.circulatingSupply / DECIMAL_SCALER,
-            })),
-          );
-        }
 
         chart.applyOptions({
           crosshair: {
@@ -192,15 +178,6 @@ export const Chart = () => {
         }))[0];
 
         candlestickSeries.update(newCandle);
-
-        if (jettonPriceList[0].circulatingSupply > 0) {
-          const newVolume = jettonPriceList.map((data) => ({
-            time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
-            value: data.circulatingSupply / DECIMAL_SCALER,
-          }))[0];
-
-          lineLeft.update(newVolume);
-        }
       }
     }
   }, [chart, candlestickSeries, jettonPriceList, decimals, lineLeft]);
