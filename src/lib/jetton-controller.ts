@@ -420,11 +420,13 @@ class JettonDeployController {
       [],
       async ([
         totalSupply,
+        mintable,
+        adminCell,
+        contentCell,
+        jettonWalletCode,
         circulatingSupply,
         reserveRate,
         reserveBalance,
-        adminCell,
-        contentCell,
       ]) => ({
         ...(await readJettonMetadata(contentCell as unknown as Cell)),
         admin: cellToAddress(adminCell),

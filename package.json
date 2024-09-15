@@ -43,7 +43,8 @@
     "recoil-persist": "^4.2.0",
     "ton": "^12.1.5",
     "typescript": "^4.7.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^1.4.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

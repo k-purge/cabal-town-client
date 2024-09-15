@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { Address, toNano } from "ton";
 import { useRecoilState } from "recoil";
+import { Address, toNano } from "ton";
+import { object, number } from "yup";
 import { CircularProgress } from "@mui/material";
 import { useJettonAddress } from "hooks/useJettonAddress";
 import { StyledBodyBlock } from "pages/jetton/styled";
@@ -24,6 +25,10 @@ import { jettonDeployController } from "lib/jetton-controller";
 import { validateTradeParams } from "../../util";
 import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { sleep } from "lib/utils";
+
+const schema = object().shape({
+  amount: number().required().min(0),
+});
 
 export const BuySell = () => {
   const senderAddress = useTonAddress();
@@ -54,33 +59,21 @@ export const BuySell = () => {
     setAmt(0);
   };
 
-  const onChangeAmt = (e: any) => {
+  const onChangeAmt = async (e: any) => {
     const val = e.target.value;
-    console.log("val", val);
-    console.log("!val", !val);
-    console.log("val.slice(1)", val.slice(1) === ".");
-    console.log("parseFloat(val)", parseFloat(val));
-
-    if (!val) {
-      return setAmt(0);
-    } else if (val.slice(1) === ".") {
-      return setAmt(val);
-    } else if (/^\d+(\.\d+)?$/.test(val)) {
-      try {
-        const float = parseFloat(val);
-        if (float >= 0) {
-          setBlinked(true);
-          return setAmt(float);
-        }
-      } catch (e) {
-        return;
+    try {
+      const result = await schema.validate({ amount: val });
+      const amt = val.split(".").length === 2 ? val : result.amount;
+      return setAmt(amt);
+    } catch (error) {
+      console.error(error);
+      if (!val) {
+        return setAmt(0);
       }
     }
-    return setAmt(val);
   };
 
   const getPrice = useCallback(async () => {
-    console.log("amt", amt);
     if (!jettonAddress || !isValidAddress(jettonAddress)) {
       showNotification("Invalid jetton address", "error");
       return 0;
