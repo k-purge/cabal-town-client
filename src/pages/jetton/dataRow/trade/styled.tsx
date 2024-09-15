@@ -71,9 +71,9 @@ const TradeButton = styled(LoadingButton, {
 }));
 
 const BoxConainer = styled(Box)({
-  width: "341px",
+  width: "100%",
   display: "flex",
-  flexDirection: "row",
+  flexDirection: "column",
   justifyContent: "space-between",
   textAlign: "start",
   marginTop: 12,
@@ -109,6 +109,13 @@ const BlinkingText = styled(Typography, {
   alignSelf: "self-start",
   animation: blinked ? `${blink} 1s linear infinite` : "none",
 }));
+
+export const StyledDetailRow = styled(Box)({
+  display: "flex",
+  justifyContent: "space-between",
+  width: "100%",
+  height: "24px",
+});
 
 export {
   StyledImg,
