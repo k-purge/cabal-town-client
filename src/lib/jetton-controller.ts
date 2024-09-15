@@ -414,6 +414,7 @@ class JettonDeployController {
 
   async getJettonDetails(contractAddr: Address, walletAddress: string) {
     const tc = await getClient();
+    console.debug("tc", tc);
     const minter = await makeGetCall(
       contractAddr,
       "get_jetton_data",
