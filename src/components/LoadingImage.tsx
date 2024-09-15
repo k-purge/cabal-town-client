@@ -13,13 +13,13 @@ const StyledContainer = styled(Box)({
 });
 
 function LoadingImage({ loading, src, alt = "Image" }: Props) {
-  const objectFit = src?.includes("coin-logo") ? "none" : "contain";
+  const objectFit = src?.includes("coin-logo") ? "none" : "cover";
   return (
     <StyledContainer>
       {loading ? (
-        <Skeleton variant="circular" width="100%" height="100%" />
+        <Skeleton variant="circular" width="56px" height="56px" />
       ) : src ? (
-        <img alt={alt} src={src} style={{ objectFit, width: "100%" }} />
+        <img alt={alt} src={src} style={{ objectFit, width: "100%", aspectRatio: "1/1" }} />
       ) : null}
     </StyledContainer>
   );

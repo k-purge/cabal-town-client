@@ -7,6 +7,7 @@ import { ROUTES } from "consts";
 import { IJetton } from "store/jetton-list-store";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import useJettonStore from "store/jetton-store/useJettonStore";
+import { useHeader } from "hooks/useHeader";
 
 function ProfilePage() {
   const navigate = useNavigatePreserveQuery();
@@ -21,13 +22,16 @@ function ProfilePage() {
       navigate(`${ROUTES.jetton}/${item.masterAddress}`);
     }
   };
+  const { setHeader } = useHeader();
+  useEffect(() => {
+    setHeader("Portfolio", { showBackButton: false });
+  }, [setHeader]);
 
   return (
     <Screen>
       <ScreenContent removeBackground>
         <Fade in>
           <Box>
-            <StyledHeading>PORTFOLIO</StyledHeading>
             {userProfileList?.map((item) => (
               <Card item={item} onClickCard={onClickCard} />
             ))}

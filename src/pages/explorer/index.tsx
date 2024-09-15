@@ -8,6 +8,7 @@ import { ROUTES } from "consts";
 import { Card } from "./card";
 import { IJetton } from "store/jetton-list-store";
 import useJettonListStore from "store/jetton-list-store/useJettonListStore";
+import { useHeader } from "hooks/useHeader";
 
 function ExplorerPage() {
   const { setSelectedJetton, jettonList, getJettonList } = useJettonListStore();
@@ -27,6 +28,11 @@ function ExplorerPage() {
     },
     [navigate, setSelectedJetton],
   );
+  const { setHeader } = useHeader();
+
+  useEffect(() => {
+    setHeader("Explore", { showBackButton: false });
+  }, [setHeader]);
 
   useEffect(() => {
     getJettonList();
@@ -37,10 +43,6 @@ function ExplorerPage() {
       <ScreenContent removeBackground>
         <Fade in>
           <Box>
-            <Box mb={3}>
-              <ScreenHeading>Explorer</ScreenHeading>
-            </Box>
-
             <Box sx={{ width: "100%" }}>
               <SearchBar
                 example={example}

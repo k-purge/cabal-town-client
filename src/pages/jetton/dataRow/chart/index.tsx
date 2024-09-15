@@ -13,6 +13,7 @@ import {
 import { StyledBlock } from "pages/jetton/styled";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import { DECIMAL_SCALER } from "consts";
+import { HeaderTitle } from "components/header/styled";
 
 export const Chart = () => {
   const { getJettonPrice, jettonPriceList, decimals } = useJettonStore();
@@ -199,6 +200,9 @@ export const Chart = () => {
       style={{
         padding: "10px 0 0 10px",
       }}>
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <HeaderTitle>Chart</HeaderTitle>
+      </Box>
       <Box width="100%" height="320px" ref={containerRef} />
     </StyledBlock>
   );

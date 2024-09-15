@@ -41,7 +41,7 @@ export const Txn = () => {
   return (
     <StyledBlock height="100%">
       <BoxConainer>
-        <BoxText>HOLDER</BoxText>
+        <BoxText>TRANSACTION</BoxText>
       </BoxConainer>
 
       <HolderContainer>

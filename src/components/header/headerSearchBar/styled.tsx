@@ -32,6 +32,7 @@ const SearchBarInput = styled("input")(({ theme }) => ({
   border: "none",
   background: "#F7F9FB",
   caretColor: "#728A96",
+  letterSpacing: "0.08em",
   "&::placeholder": {
     color: "#728A96",
   },

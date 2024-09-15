@@ -1,4 +1,4 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, MenuItem, styled, Typography } from "@mui/material";
 import LinearProgress, { linearProgressClasses } from "@mui/material/LinearProgress";
 
 const StyledContainer = styled(Box)(({ theme }) => ({
@@ -39,11 +39,14 @@ const StyledTop = styled(Box)({
 });
 
 const StyledTopText = styled(Box)({
-  fontSize: 32,
+  fontSize: 20,
+  lineHeight: "24px",
   fontWeight: 400,
   color: "#fff",
   textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 3px 3px 1px #000",
   fontFamily: "Bungee, sans-serif",
+  textAlign: "left",
+  letterSpacing: "0.08em",
 });
 
 const StyledTopImg = styled(Box)(({ theme }) => ({
@@ -103,9 +106,21 @@ const StyledBodyBlock = styled(Box)(({ height }: { height: string | number }) =>
 }));
 
 const StyledSelectBox = styled(Box)(() => ({
-  paddingInline: "30px",
-  paddingBlock: "18px",
+  marginBottom: "16px",
+}));
+const StyledMenuItem = styled(MenuItem)(() => ({
   background: "#000",
+  fontFamily: "'Bungee', sans-serif",
+  fontSize: "14px",
+  fontWeight: "400",
+  lineHeight: "16.8px",
+  letterSpacing: "0.04em",
+  color: "#FFF",
+  borderRadius: "0px",
+  "&.MuiMenuItem-root.Mui-selected": {
+    background: "#FFB800",
+    color: "#000",
+  },
 }));
 
 export {
@@ -121,4 +136,5 @@ export {
   StyledCardBody,
   StyledBottomText,
   BorderLinearProgress,
+  StyledMenuItem,
 };
