@@ -59,8 +59,8 @@ export const Jetton = () => {
         return (
           <>
             <BuySell />
-            {/* <GroupDescription />
-            <GroupDetail /> */}
+            {/* <GroupDescription /> */}
+            <GroupDetail />
           </>
         );
       case "LOCK_AND_CLAIM":
