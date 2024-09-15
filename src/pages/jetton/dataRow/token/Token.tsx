@@ -92,8 +92,6 @@ export const Token = () => {
         tgUserId,
       });
 
-      console.log(res);
-
       if (res.invite_link) {
         window.open(res.invite_link, "_blank");
       } else if (res.status === "success") {

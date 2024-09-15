@@ -12,7 +12,6 @@ import {
 } from "lightweight-charts";
 import { StyledBlock } from "pages/jetton/styled";
 import useJettonStore from "store/jetton-store/useJettonStore";
-import { DECIMAL_SCALER } from "consts";
 import { HeaderTitle } from "components/header/styled";
 
 export const Chart = () => {
@@ -46,6 +45,9 @@ export const Chart = () => {
             }
           },
         },
+        priceSale: {
+          autoScale: true,
+        },
         localization: {
           timeFormatter: (time: BusinessDay | UTCTimestamp) => {
             if (isBusinessDay(time)) {
@@ -54,6 +56,7 @@ export const Chart = () => {
               return formatTime(time);
             }
           },
+          priceFormatter: (p: number) => p.toFixed(6),
         },
       };
       return createChart(containerRef.current, chartOptions);
@@ -171,10 +174,10 @@ export const Chart = () => {
       } else if (jettonPriceList.length === 1) {
         const newCandle = jettonPriceList.map((data) => ({
           time: Math.floor(data.timestamp / 1000) as UTCTimestamp,
-          open: data.price / DECIMAL_SCALER,
-          high: data.price / DECIMAL_SCALER,
-          low: data.price / DECIMAL_SCALER,
-          close: data.price / DECIMAL_SCALER,
+          open: data.price,
+          high: data.price,
+          low: data.price,
+          close: data.price,
         }))[0];
 
         candlestickSeries.update(newCandle);

@@ -9,8 +9,7 @@ import { BoxConainer, EllipsisText, StyledImg, StyledDetailRow } from "./styled"
 import { DECIMAL_SCALER } from "consts";
 
 export const GroupDetail = () => {
-  const { holders, symbol, jettonMaster, jettonWalletAddress, jettonPrice, tonPrice } =
-    useJettonStore();
+  const { holders, jettonMaster, jettonWalletAddress, jettonPrice, tonPrice } = useJettonStore();
   const { showNotification } = useNotification();
 
   const onCopy = () => {
@@ -22,7 +21,7 @@ export const GroupDetail = () => {
       const balance =
         holders?.reduce((balance, holder) => balance + parseInt(holder.balance), 0) ?? 0;
       // assume the game start  balance is 1000 * DECIMAL_SCALER
-      const cap = (balance * (jettonPrice / DECIMAL_SCALER) * tonPrice) / DECIMAL_SCALER;
+      const cap = (balance * jettonPrice * tonPrice) / DECIMAL_SCALER;
       return cap.toLocaleString();
     }
 
@@ -43,7 +42,7 @@ export const GroupDetail = () => {
             sx={{ color: "#fff", fontSize: "16px", fontWeight: 500, letterSpacing: "0.08em" }}>
             Buy-in Price
           </Typography>
-          <EllipsisText>${jettonPrice}</EllipsisText>
+          <EllipsisText>${jettonPrice.toExponential(4)}</EllipsisText>
         </StyledDetailRow>
         <StyledDetailRow>
           <Typography
