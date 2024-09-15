@@ -56,24 +56,27 @@ export const BuySell = () => {
 
   const onChangeAmt = (e: any) => {
     const val = e.target.value;
+    console.log("val", val);
+    console.log("!val", !val);
+    console.log("val.slice(1)", val.slice(1) === ".");
+    console.log("parseFloat(val)", parseFloat(val));
 
     if (!val) {
       return setAmt(0);
     } else if (val.slice(1) === ".") {
       return setAmt(val);
     } else if (/^\d+(\.\d+)?$/.test(val)) {
-      return setAmt(val);
-    }
-
-    try {
-      const float = parseFloat(val);
-      if (float >= 0) {
-        setBlinked(true);
-        return setAmt(float);
+      try {
+        const float = parseFloat(val);
+        if (float >= 0) {
+          setBlinked(true);
+          return setAmt(float);
+        }
+      } catch (e) {
+        return;
       }
-    } catch (e) {
-      return;
     }
+    return setAmt(val);
   };
 
   const getPrice = useCallback(async () => {

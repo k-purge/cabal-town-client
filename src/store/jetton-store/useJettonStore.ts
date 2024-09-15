@@ -330,6 +330,7 @@ function useJettonStore() {
   const getUserProfileList = useCallback(async () => {
     if (rawAddress) {
       const { res: userProfileList } = await axiosService.getJettonsByOwner(rawAddress, network);
+      console.debug("userProfileList", userProfileList);
 
       setState((prevState) => {
         return {
