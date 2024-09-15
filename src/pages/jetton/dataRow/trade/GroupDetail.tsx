@@ -5,7 +5,7 @@ import useNotification from "hooks/useNotification";
 import CopyToClipboard from "react-copy-to-clipboard";
 import CopyImg from "assets/icons/copy.svg";
 import useJettonStore from "store/jetton-store/useJettonStore";
-import { BoxConainer, EllipsisText, StyledImg } from "./styled";
+import { BoxConainer, EllipsisText, StyledImg, StyledDetailRow } from "./styled";
 import { DECIMAL_SCALER } from "consts";
 
 export const GroupDetail = () => {
@@ -30,62 +30,61 @@ export const GroupDetail = () => {
   }, [holders, jettonPrice, tonPrice]);
 
   return (
-    <StyledBlock height="100%">
-      <>
-        <Box width="341px" textAlign="start" mb={1}>
-          <Typography sx={{ color: "#fff", fontSize: "16px", fontFamily: "Bungee, sans-serif" }}>
-            Group Details
+    <StyledBlock height="100%" sx={{ padding: "24px 16px" }}>
+      <Box width="100%" textAlign="start" mb={1}>
+        <Typography sx={{ color: "#fff", fontSize: "16px", fontFamily: "Bungee, sans-serif" }}>
+          Details
+        </Typography>
+      </Box>
+
+      <BoxConainer>
+        <StyledDetailRow>
+          <Typography
+            sx={{ color: "#fff", fontSize: "16px", fontWeight: 500, letterSpacing: "0.08em" }}>
+            Buy-in Price
           </Typography>
-        </Box>
-
-        <BoxConainer>
-          <Box>
-            <Typography sx={{ color: "#fff", fontSize: "16px", fontWeight: 500 }}>
-              Ticker
-            </Typography>
-            <EllipsisText sx={{ float: "left" }}>{symbol}</EllipsisText>
+          <EllipsisText>${jettonPrice}</EllipsisText>
+        </StyledDetailRow>
+        <StyledDetailRow>
+          <Typography
+            sx={{ color: "#fff", fontSize: "16px", fontWeight: 500, letterSpacing: "0.08em" }}>
+            Market Cap
+          </Typography>
+          <EllipsisText>${marketCap}</EllipsisText>
+        </StyledDetailRow>
+        <StyledDetailRow>
+          <Typography
+            sx={{ color: "#fff", fontSize: "16px", fontWeight: 500, letterSpacing: "0.08em" }}>
+            Token Address
+          </Typography>
+          <Box display="flex" alignItems="center" gap={1}>
+            <EllipsisText>
+              {jettonWalletAddress?.slice(0, 4)}...{jettonWalletAddress?.slice(-4)}
+            </EllipsisText>
+            <CopyToClipboard text={jettonWalletAddress ?? ""} onCopy={onCopy}>
+              <IconButton sx={{ padding: 0 }}>
+                <StyledImg src={CopyImg} />
+              </IconButton>
+            </CopyToClipboard>
           </Box>
-          <Box>
-            <Typography sx={{ color: "#fff", fontSize: "16px", fontWeight: 500 }}>
-              Market Cap
-            </Typography>
-            <EllipsisText sx={{ float: "inline-end" }}>${marketCap}</EllipsisText>
+        </StyledDetailRow>
+        <StyledDetailRow>
+          <Typography
+            sx={{ color: "#fff", fontSize: "16px", fontWeight: 500, letterSpacing: "0.08em" }}>
+            Contract Address
+          </Typography>
+          <Box display="flex" alignItems="center" gap={1}>
+            <EllipsisText>
+              {jettonMaster?.slice(0, 4)}...{jettonMaster?.slice(-4)}
+            </EllipsisText>
+            <CopyToClipboard text={jettonMaster ?? ""} onCopy={onCopy}>
+              <IconButton sx={{ padding: 0 }}>
+                <StyledImg src={CopyImg} />
+              </IconButton>
+            </CopyToClipboard>
           </Box>
-        </BoxConainer>
-
-        <BoxConainer>
-          <Box>
-            <Typography sx={{ color: "#fff", fontSize: "16px", fontWeight: 500 }}>
-              Token Address
-            </Typography>
-            <Box display="flex" flexDirection="row" alignItems="center">
-              <EllipsisText sx={{ float: "left" }}>
-                {jettonWalletAddress?.slice(0, 4)}...{jettonWalletAddress?.slice(-4)}
-              </EllipsisText>
-              <CopyToClipboard text={jettonWalletAddress ?? ""} onCopy={onCopy}>
-                <IconButton>
-                  <StyledImg src={CopyImg} />
-                </IconButton>
-              </CopyToClipboard>
-            </Box>
-          </Box>
-          <Box>
-            <Typography sx={{ color: "#fff", fontSize: "16px", fontWeight: 500 }}>
-              Contract Address
-            </Typography>
-            <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-end">
-              <EllipsisText>
-                {jettonMaster?.slice(0, 4)}...{jettonMaster?.slice(-4)}
-              </EllipsisText>
-              <CopyToClipboard text={jettonMaster ?? ""} onCopy={onCopy}>
-                <IconButton>
-                  <StyledImg src={CopyImg} />
-                </IconButton>
-              </CopyToClipboard>
-            </Box>
-          </Box>
-        </BoxConainer>
-      </>
+        </StyledDetailRow>
+      </BoxConainer>
     </StyledBlock>
   );
 };
