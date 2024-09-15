@@ -13,7 +13,7 @@ export const AppLogo = () => {
       <ImageWrapper>
         <img src={logo} alt="Logo" />
       </ImageWrapper>
-      {network === "testnet" && <Chip sx={{ color: "#fff" }} label="TESTNET" />}
+      {/* {network === "testnet" && <Chip sx={{ color: "#fff" }} label="TESTNET" />} */}
     </LogoWrapper>
   );
 };

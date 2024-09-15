@@ -1,4 +1,4 @@
-import { AppBar, styled } from "@mui/material";
+import { AppBar, styled, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
 const HeaderWrapper = styled(AppBar)(({ theme }) => ({
@@ -20,13 +20,13 @@ const HeaderContent = styled(Box)(({ theme }) => ({
   width: "100%",
   margin: "0 auto",
   paddingLeft: "20px",
-  paddingRight: "10px",
+  paddingRight: "20px",
   display: "flex",
   alignItems: "center",
 }));
 
 const HeaderOptionalContent = styled(Box)(({ theme }) => ({
-  flex: 0,
+  flex: 1,
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
@@ -34,12 +34,39 @@ const HeaderOptionalContent = styled(Box)(({ theme }) => ({
   height: "100%",
 }));
 
+const HeaderLeft = styled(Box)(({ theme }) => ({
+  flex: 1,
+  display: "flex",
+  justifyContent: "flex-start",
+  alignItems: "center",
+}));
+
 const HeaderRight = styled(Box)(({ theme }) => ({
   flex: 0,
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "flex-end",
   alignItems: "center",
   maxWidth: "50%",
 }));
 
-export { HeaderRight, HeaderWrapper, HeaderContent, HeaderOptionalContent };
+const HeaderTitle = styled(Typography)(({ theme }) => ({
+  color: "#fff",
+  fontSize: 20,
+  lineHeight: "24px",
+  fontWeight: 800,
+  fontFamily: "Bungee, sans-serif",
+  textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 3px 3px 1px #000",
+  "&:hover": {
+    cursor: "pointer",
+  },
+  letterSpacing: "0.08em",
+}));
+
+export {
+  HeaderRight,
+  HeaderLeft,
+  HeaderWrapper,
+  HeaderContent,
+  HeaderOptionalContent,
+  HeaderTitle,
+};

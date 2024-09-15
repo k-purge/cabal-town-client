@@ -21,10 +21,11 @@ export default function ColorToggleButton({
         marginBlock: "24px",
         width: "341px",
         height: "56px",
-        backgroundColor: "#5E5C55",
-        borderRadius: "8px",
+        backgroundColor: "#000",
+        borderRadius: "0px",
+        border: "2px, solid, #FFB800",
         fontSize: "16px",
-        color: "#fff",
+        color: "#939393",
         button: {
           fontFamily: "Bungee, Sans-serif",
           width: "50%",
@@ -32,8 +33,8 @@ export default function ColorToggleButton({
         ".Mui-selected": {
           backgroundColor: "#FFB800 !important",
           color: "#000 !important",
-          borderRadius: "8px",
-          margin: "5px 3px",
+          borderRadius: "0px",
+          margin: "5px 5px",
         },
       }}>
       <ToggleButton value="0">{type === "buy/sell" ? "BUY" : "LOCK"}</ToggleButton>

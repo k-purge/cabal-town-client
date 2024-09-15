@@ -1,16 +1,27 @@
-import { IconButton, useMediaQuery } from "@mui/material";
+import { Button, IconButton, styled, Typography, useMediaQuery } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { HeaderMenu, MobileMenu } from "components/header/headerMenu/HeaderMenu";
 import { AppLogo } from "components/appLogo";
-import { HeaderRight, HeaderContent, HeaderOptionalContent, HeaderWrapper } from "./styled";
-import { Outlet, useLocation } from "react-router-dom";
+import {
+  HeaderRight,
+  HeaderContent,
+  HeaderOptionalContent,
+  HeaderWrapper,
+  HeaderLeft,
+  HeaderTitle,
+} from "./styled";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useTonConnectModal, useTonWallet } from "@tonconnect/ui-react";
+import { useHeader } from "hooks/useHeader";
 
 export const Header = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const matches = useMediaQuery("(min-width:900px)");
-
+  const { title, options } = useHeader();
+  const navigate = useNavigate();
   const location = useLocation();
   const topRef = useRef<null | HTMLDivElement>(null);
 
@@ -18,12 +29,25 @@ export const Header = () => {
     topRef.current?.scrollIntoView();
   }, [location]);
 
+  const handleBackClick = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       <HeaderWrapper position="static" ref={topRef}>
         <HeaderContent>
           <HeaderOptionalContent>
-            <AppLogo />
+            {/* <AppLogo /> */}
+            <HeaderLeft>
+              {options.showBackButton && (
+                <IconButton onClick={handleBackClick}>
+                  <ArrowBackIcon />
+                </IconButton>
+              )}
+              <HeaderTitle>{title}</HeaderTitle>
+            </HeaderLeft>
+
             <HeaderRight>
               <HeaderMenu />
               {/* <IconButton onClick={() => setMobileMenu(true)}>

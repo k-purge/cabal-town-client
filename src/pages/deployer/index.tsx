@@ -21,6 +21,7 @@ import { IInsertJetton } from "store/jetton-list-store";
 import { useNetwork } from "lib/hooks/useNetwork";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import useUserStore from "store/user-store/useUserStore";
+import { useHeader } from "hooks/useHeader";
 
 const DEFAULT_DECIMALS = 9;
 
@@ -117,13 +118,16 @@ function DeployerPage() {
       setIsLoading(false);
     }
   }
+  const { setHeader } = useHeader();
+  useEffect(() => {
+    setHeader("CREATE CABAL", { showBackButton: false });
+  }, [setHeader]);
 
   return (
     <Screen>
       <ScreenContent removeBackground>
         <Fade in>
           <Box>
-            <ScreenHeading>CREATE CABAL</ScreenHeading>
             <FormWrapper>
               <Form
                 isLoading={isLoading}
