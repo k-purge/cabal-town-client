@@ -64,6 +64,7 @@ export const BuySell = () => {
     try {
       const result = await schema.validate({ amount: val });
       const amt = val.split(".").length === 2 ? val : result.amount;
+      setBlinked(true);
       return setAmt(amt);
     } catch (error) {
       console.error(error);
