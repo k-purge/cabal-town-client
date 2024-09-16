@@ -1,4 +1,4 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, Button, styled, Typography } from "@mui/material";
 
 const ScreenHeading = styled(Typography)(({ theme }) => ({
   color: "#fff",
@@ -107,7 +107,52 @@ const CardBodyNumber = styled(Typography)(() => ({
   textAlign: "left",
   lineHeight: "15px",
 }));
+const ButtonContainer = styled(Box)({
+  display: "flex",
+  overflowX: "auto",
+  overflowY: "auto",
 
+  marginBottom: "16px",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+  scrollbarWidth: "none",
+});
+
+const BaseButton = styled(Button)(({ theme }) => ({
+  height: "40px",
+  minWidth: "auto",
+  whiteSpace: "nowrap",
+  marginRight: "8px",
+  borderRadius: "0px",
+  padding: "13px 20px",
+  letterSpacing: "0.04em",
+  fontFamily: "Bungee, sans-serif",
+  boxShadow: "3px 3px 0px  #000000",
+  fontSize: "12px",
+  fontWeight: 400,
+  lineHeight: "14.4px",
+  border: `2px solid ${theme.palette.primary.main}`,
+  "&:last-child": {
+    marginRight: 0,
+  },
+}));
+
+const SelectedButton = styled(BaseButton)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.dark,
+  },
+}));
+
+const UnselectedButton = styled(BaseButton)(({ theme }) => ({
+  backgroundColor: "#000",
+  color: theme.palette.primary.main,
+  "&:hover": {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
 export {
   CardBodyNumber,
   CardBody,
@@ -116,5 +161,8 @@ export {
   CardContainer,
   ScreenHeading,
   CardImage,
-  CardOverlay, // Add this to the exports
+  CardOverlay,
+  SelectedButton,
+  UnselectedButton,
+  ButtonContainer,
 };
