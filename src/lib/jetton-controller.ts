@@ -413,35 +413,41 @@ class JettonDeployController {
   }
 
   async getJettonDetails(contractAddr: Address, walletAddress: string) {
-    const tc = await getClient();
-    const minter = await makeGetCall(
-      contractAddr,
-      "get_jetton_data",
-      [],
-      async ([
-        totalSupply,
-        circulatingSupply,
-        reserveRate,
-        reserveBalance,
-        adminCell,
-        contentCell,
-      ]) => ({
-        ...(await readJettonMetadata(contentCell as unknown as Cell)),
-        admin: cellToAddress(adminCell),
-        totalSupply: totalSupply as BN,
-        circulatingSupply: circulatingSupply as BN,
-        reserveRate: reserveRate as BN,
-        reserveBalance: reserveBalance as BN,
-      }),
-      tc,
-    );
+    try {
+      const tc = await getClient();
+      const minter = await makeGetCall(
+        contractAddr,
+        "get_jetton_data",
+        [],
+        async ([
+          totalSupply,
+          mintable,
+          adminCell,
+          contentCell,
+          jettonWalletCode,
+          circulatingSupply,
+          reserveRate,
+          reserveBalance,
+        ]) => ({
+          ...(await readJettonMetadata(contentCell as unknown as Cell)),
+          admin: cellToAddress(adminCell),
+          totalSupply: totalSupply as BN,
+          circulatingSupply: circulatingSupply as BN,
+          reserveRate: reserveRate as BN,
+          reserveBalance: reserveBalance as BN,
+        }),
+        tc,
+      );
 
-    let jettonWallet = await this.getJettonWallet(contractAddr, walletAddress, tc);
+      let jettonWallet = await this.getJettonWallet(contractAddr, walletAddress, tc);
 
-    return {
-      minter,
-      jettonWallet,
-    };
+      return {
+        minter,
+        jettonWallet,
+      };
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async getStakingDetails(contractAddr: Address, walletAddress: string) {

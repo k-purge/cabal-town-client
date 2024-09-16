@@ -10,7 +10,7 @@ import axiosService from "services/axios";
 import WalletConnection from "services/wallet-connection";
 import useNotification from "hooks/useNotification";
 import analytics, { AnalyticsAction, AnalyticsCategory } from "services/analytics";
-import { FormWrapper, ScreenHeading } from "./styles";
+import { FormWrapper } from "./styles";
 import { Screen, ScreenContent } from "components/Screen";
 import { getUrlParam } from "utils";
 import { offchainFormSpec, onchainFormSpec, gameDetailSpec } from "./data";
@@ -112,7 +112,7 @@ function DeployerPage() {
       navigate(`${ROUTES.jetton}/${Address.normalize(result)}`);
     } catch (err) {
       if (err instanceof Error) {
-        showNotification(<>{err.message}</>, "error");
+        showNotification(`Ton Testnet Timeout, Please try again.`, "error");
       }
     } finally {
       setIsLoading(false);

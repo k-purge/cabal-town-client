@@ -93,7 +93,7 @@ const ContentWrapper = ({ children }: ContentWrapperProps) => {
   );
 };
 const ProtectedRoute = () => {
-  const { accessToken, refreshToken, isInitialized } = useAuthToken();
+  const { accessToken, refreshToken, setTokens, isInitialized } = useAuthToken();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   useEffect(() => {
     async function verifyToken() {
@@ -105,14 +105,13 @@ const ProtectedRoute = () => {
           } catch (error) {
             console.error("Error verifying token:", error);
             setIsAuthenticated(false);
+            setTokens();
           }
-        } else {
-          setIsAuthenticated(false);
         }
       }
     }
     verifyToken();
-  }, [accessToken, refreshToken, isInitialized]);
+  }, [accessToken, refreshToken, isInitialized, setTokens]);
 
   return isAuthenticated ? <Outlet /> : <Navigate to={ROUTES.gated} />;
 };

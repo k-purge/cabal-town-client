@@ -133,10 +133,11 @@ function useJettonStore() {
         jettonLoading: true,
       }));
 
-      const result = await jettonDeployController.getJettonDetails(
-        parsedJettonMaster,
-        walletAddress,
-      );
+      let result: { minter: any; jettonWallet: any } | undefined = undefined;
+
+      while (!result) {
+        result = await jettonDeployController.getJettonDetails(parsedJettonMaster, walletAddress);
+      }
 
       // get jetton price
       const jettonPrice =
@@ -152,7 +153,6 @@ function useJettonStore() {
 
       if (!result) {
         console.log("empty");
-
         return;
       }
       const _adminAddress = result.minter.admin?.toFriendly() ?? zeroAddress().toFriendly();
@@ -195,19 +195,19 @@ function useJettonStore() {
       setState((prevState) => {
         return {
           ...prevState,
-          isJettonDeployerFaultyOnChainData: result.minter.isJettonDeployerFaultyOnChainData,
-          persistenceType: result.minter.persistenceType,
-          description: result.minter.metadata.description,
+          isJettonDeployerFaultyOnChainData: result?.minter.isJettonDeployerFaultyOnChainData,
+          persistenceType: result?.minter.persistenceType,
+          description: result?.minter.metadata.description,
           jettonImage: image ?? QuestiomMarkImg,
-          totalSupply: result.minter.totalSupply,
-          name: result.minter.metadata.name,
-          symbol: result.minter.metadata.symbol,
+          totalSupply: result?.minter.totalSupply,
+          name: result?.minter.metadata.name,
+          symbol: result?.minter.metadata.symbol,
           adminRevokedOwnership: _adminAddress === zeroAddress().toFriendly(),
           isAdmin: admin,
-          decimals: result.minter.metadata.decimals || "9",
+          decimals: result?.minter.metadata.decimals || "9",
           adminAddress: _adminAddress,
-          balance: result.jettonWallet ? result.jettonWallet.balance : undefined,
-          jettonWalletAddress: result.jettonWallet?.jWalletAddress?.toFriendly(),
+          balance: result?.jettonWallet ? result?.jettonWallet.balance : undefined,
+          jettonWalletAddress: result?.jettonWallet?.jWalletAddress?.toFriendly(),
           jettonMaster: jettonAddress,
           isMyWallet,
           selectedWalletAddress: address,

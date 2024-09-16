@@ -13,7 +13,12 @@ export function useAuthToken() {
     setIsInitialized(true);
   }, []);
 
-  const setTokens = useCallback((access: string, refresh: string) => {
+  const setTokens = useCallback((access?: string, refresh?: string) => {
+    if (!access || !refresh) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      return;
+    }
     setAccessToken(access);
     setRefreshToken(refresh);
     localStorage.setItem("accessToken", access);
