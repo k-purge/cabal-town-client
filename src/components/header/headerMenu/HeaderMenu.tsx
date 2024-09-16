@@ -127,7 +127,7 @@ const StyledMenuItem = styled(MenuItem)(() => ({
   color: "#FFF",
   borderRadius: "0px",
   "&.MuiMenuItem-root": {
-    background: "#FFB800",
+    background: "#FFF",
     color: "#000",
   },
 }));
