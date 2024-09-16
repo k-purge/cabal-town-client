@@ -111,6 +111,7 @@ const ButtonContainer = styled(Box)({
   display: "flex",
   overflowX: "auto",
   overflowY: "auto",
+  height: "50px",
 
   marginBottom: "16px",
   "&::-webkit-scrollbar": {
