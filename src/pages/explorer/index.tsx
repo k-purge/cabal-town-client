@@ -1,13 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Box, Fade } from "@mui/material";
 import { SearchBar } from "components/header/headerSearchBar";
-import {
-  ListContainer,
-  ScreenHeading,
-  ButtonContainer,
-  SelectedButton,
-  UnselectedButton,
-} from "./styles";
+import { ListContainer, ButtonContainer, SelectedButton, UnselectedButton } from "./styles";
 import { Screen, ScreenContent } from "components/Screen";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { ROUTES } from "consts";
@@ -75,7 +69,7 @@ function ExplorerPage() {
 
             <ListContainer>
               {jettonList.map((item, index) => (
-                <Card key={index} item={item} onClickCard={onClickCard} />
+                <Card key={index} index={index} item={item} onClickCard={onClickCard} />
               ))}
             </ListContainer>
           </Box>

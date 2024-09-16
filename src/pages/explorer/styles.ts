@@ -12,7 +12,7 @@ const ScreenHeading = styled(Typography)(({ theme }) => ({
 }));
 
 const ListContainer = styled(Box)(({ theme }) => ({
-  marginTop: "24px",
+  // marginTop: "24px",
   // background: "#1E1E1E",
   // border: "2px solid #000000",
   gap: "12px",
