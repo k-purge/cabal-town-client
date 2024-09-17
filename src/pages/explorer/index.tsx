@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Box, Fade } from "@mui/material";
 import { SearchBar } from "components/header/headerSearchBar";
-import { ListContainer, ScreenHeading } from "./styles";
+import { ListContainer, ButtonContainer, SelectedButton, UnselectedButton } from "./styles";
 import { Screen, ScreenContent } from "components/Screen";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { ROUTES } from "consts";
@@ -14,6 +14,8 @@ function ExplorerPage() {
   const { setSelectedJetton, jettonList, getJettonList } = useJettonListStore();
   const [example, setExample] = useState<string | undefined>(undefined);
   const navigate = useNavigatePreserveQuery();
+  const categories = ["All", "Popular", "Blue Chips", "Trending"];
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const resetExample = useCallback(() => {
     setExample(undefined);
@@ -43,6 +45,20 @@ function ExplorerPage() {
       <ScreenContent removeBackground>
         <Fade in>
           <Box>
+            <ButtonContainer>
+              {categories.map((category) =>
+                selectedCategory === category ? (
+                  <SelectedButton key={category} onClick={() => setSelectedCategory(category)}>
+                    {category}
+                  </SelectedButton>
+                ) : (
+                  <UnselectedButton key={category} onClick={() => setSelectedCategory(category)}>
+                    {category}
+                  </UnselectedButton>
+                ),
+              )}
+            </ButtonContainer>
+
             <Box sx={{ width: "100%" }}>
               <SearchBar
                 example={example}
@@ -53,7 +69,7 @@ function ExplorerPage() {
 
             <ListContainer>
               {jettonList.map((item, index) => (
-                <Card key={index} item={item} onClickCard={onClickCard} />
+                <Card key={index} index={index} item={item} onClickCard={onClickCard} />
               ))}
             </ListContainer>
           </Box>

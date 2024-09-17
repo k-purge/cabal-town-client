@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   CardBody,
   CardHeader,
@@ -11,16 +11,17 @@ import { IJetton } from "store/jetton-list-store/";
 
 export const Card = ({
   item,
+  index,
   onClickCard,
 }: {
   item: IJetton | undefined;
+  index: number;
   onClickCard: (jetton: IJetton | undefined) => void;
 }) => {
   const basePrice = 0.0016;
   const variation = 0.22; // 22% variation
-  const randomFactor = Math.random() * 2 - 1; // Random number between -1 and 1
-  const buyInPrice = basePrice * (1 + variation * randomFactor);
-  const isIncreasing = randomFactor > 0;
+  const buyInPrice = basePrice * (1 + variation) * (index + 1);
+  const isIncreasing = index > 1;
   return (
     <CardOverlay>
       <CardContainer onClick={() => onClickCard(item)}>

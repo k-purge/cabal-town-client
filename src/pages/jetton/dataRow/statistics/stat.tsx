@@ -92,7 +92,14 @@ export const Stat = () => {
           ))}
           {/* blur the cards */}
 
-          <Box sx={{ position: "relative", display: "flex", flexDirection: "column" }}>
+          <Box
+            sx={{
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              border: "1px solid #000",
+            }}>
             {/* ask user to join group */}
             <Box
               sx={{

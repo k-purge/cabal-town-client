@@ -155,18 +155,18 @@ export const Token = () => {
           <StyledTopText>{name}</StyledTopText>
           <Box display="flex" flexDirection={"row"} gap={1}>
             <img src={UserImg} alt="user" width={"13px"} />
-            <StyledCardBody>{selectedJetton?.players?.length} players in lobby</StyledCardBody>
+            <StyledCardBody>{selectedJetton?.players?.length} members in cabal</StyledCardBody>
           </Box>
         </Box>
       </Box>
       {userBalance > 0 && (
         <Typography fontSize={20} color="#FFB800" mt={1}>
-          Your Amount: {userBalance / DECIMAL_SCALER}
+          Your Amount: {(userBalance / DECIMAL_SCALER).toFixed(2)}
         </Typography>
       )}
 
       <StyledBottomText>
-        <Typography>Game Initiation Progress</Typography>
+        <Typography>Cabal Initiation Progress</Typography>
         <Typography>{progress}%</Typography>
       </StyledBottomText>
 

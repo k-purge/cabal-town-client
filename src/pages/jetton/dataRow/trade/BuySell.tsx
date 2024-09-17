@@ -1,26 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { CircularProgress, InputAdornment } from "@mui/material";
 import { Address, toNano } from "ton";
 import { object, number } from "yup";
-import { CircularProgress } from "@mui/material";
 import { useJettonAddress } from "hooks/useJettonAddress";
 import { StyledBodyBlock } from "pages/jetton/styled";
 import { Box, Typography } from "@mui/material";
 import useJettonStore from "store/jetton-store/useJettonStore";
-import tonLogo from "assets/icons/ton-logo.png";
+import socialCreditIcon from "assets/icons/social-credits.png";
 import ToggleButton from "./ToggleButton";
 import useNotification from "hooks/useNotification";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { isValidAddress } from "utils";
-import {
-  BlinkingText,
-  AmtContainer,
-  AmtTextField,
-  SymbolField,
-  DividerLine,
-  TradeButton,
-  TextContainer,
-} from "./styled";
+import { BlinkingText, AmtContainer, AmtTextField, TradeButton, TextContainer } from "./styled";
 import { jettonDeployController } from "lib/jetton-controller";
 import { validateTradeParams } from "../../util";
 import { jettonActionsState } from "pages/jetton/actions/jettonActions";
@@ -34,7 +26,6 @@ export const BuySell = () => {
   const senderAddress = useTonAddress();
   const {
     userBalance,
-    jettonImage,
     symbol,
     jettonMaster,
     jettonPrice,
@@ -54,6 +45,9 @@ export const BuySell = () => {
   const [blinked, setBlinked] = useState(false);
 
   const handleChangeType = (event: any, newTradeType: string) => {
+    if (!newTradeType) {
+      return;
+    }
     setTradeType(newTradeType);
     setPrice(0);
     setAmt(0);
@@ -82,12 +76,15 @@ export const BuySell = () => {
 
     if (amt > 0) {
       let jettonPrice = 0;
+
       const parsedJettonMaster = Address.parse(jettonAddress);
 
-      if (tradeType === "0") {
-        jettonPrice = await jettonDeployController.getPurchaseReturn(parsedJettonMaster, amt);
-      } else {
-        jettonPrice = await jettonDeployController.getSaleReturn(parsedJettonMaster, amt);
+      while (!jettonPrice) {
+        if (tradeType === "0") {
+          jettonPrice = await jettonDeployController.getPurchaseReturn(parsedJettonMaster, amt);
+        } else {
+          jettonPrice = await jettonDeployController.getSaleReturn(parsedJettonMaster, amt);
+        }
       }
 
       setBlinked(false);
@@ -201,8 +198,16 @@ export const BuySell = () => {
   return (
     <StyledBodyBlock height="313px">
       <ToggleButton tradeType={tradeType} handleChangeType={handleChangeType} />
-      <Box width="341px" textAlign="start" mb={1}>
-        <Typography sx={{ color: "#fff", fontSize: "16px" }}>Amount</Typography>
+      <Box width="341px" textAlign="start" mb={1} display="flex" alignItems="center">
+        <Typography
+          sx={{
+            color: "#fff",
+            fontSize: "16px",
+            fontFamily: "Cabin Condensed",
+            letterSpacing: "0.08em",
+          }}>
+          Amount
+        </Typography>
       </Box>
       <AmtContainer>
         <AmtTextField
@@ -211,8 +216,20 @@ export const BuySell = () => {
           value={amt}
           onChange={onChangeAmt}
           onBlur={getPrice}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <img
+                  src={socialCreditIcon}
+                  alt="social credit"
+                  style={{ width: "24px", height: "24px" }}
+                />
+              </InputAdornment>
+            ),
+          }}
         />
-        <SymbolField src={tradeType === "0" ? tonLogo : jettonImage} alt="ton symbol" />
+        {/* <SymbolField src={tradeType === "0" ? tonLogo : jettonImage} alt="ton symbol" /> */}
+        {/* <img src={socialCreditIcon} alt="social credit" /> */}
       </AmtContainer>
 
       <TextContainer>
@@ -225,7 +242,7 @@ export const BuySell = () => {
         </BlinkingText>
       </TextContainer>
 
-      <DividerLine />
+      {/* <DividerLine /> */}
 
       <TradeButton
         background="#00B2FF"

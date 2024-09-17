@@ -12,6 +12,7 @@ const AmtContainer = styled(Box)({
 });
 
 const TextContainer = styled(Box)({
+  marginTop: 8,
   width: "341px",
   display: "flex",
   flexDirection: "row",
@@ -20,12 +21,24 @@ const TextContainer = styled(Box)({
 
 const AmtTextField = styled(TextField)({
   border: "2px solid #000000",
+  borderRadius: 0,
   background: "#fff",
   fontWeight: 500,
-  width: "85%",
+  fontFamily: "Cabin condensed",
+  fontSize: "16px",
+  letterSpacing: "0.08em",
+  width: "100%",
   "& input": {
     height: "48px",
     paddingBlock: "0",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      border: "none",
+    },
+    "&.Mui-focused fieldset": {
+      border: "none",
+    },
   },
 });
 
