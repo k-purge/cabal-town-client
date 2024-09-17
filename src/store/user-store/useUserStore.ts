@@ -1,8 +1,10 @@
-import { useTonAddress } from "@tonconnect/ui-react";
-import axiosService from "services/axios";
+import { Address } from "ton";
 import { useCallback } from "react";
+import { useTonAddress } from "@tonconnect/ui-react";
 import { useRecoilState } from "recoil";
 import { userStateAtom } from ".";
+import { jettonDeployController } from "lib/jetton-controller";
+import axiosService from "services/axios";
 
 function useUserStore() {
   const [state, setState] = useRecoilState(userStateAtom);
@@ -90,11 +92,29 @@ function useUserStore() {
     }
   }, [setState]);
 
+  const getUserBalance = useCallback(async () => {
+    if (walletAddress) {
+      const address = Address.parse(walletAddress);
+      const balance = await jettonDeployController.getAccBalance(address);
+      const tonBalance = balance.toNumber();
+
+      if (tonBalance) {
+        setState((prevState) => {
+          return {
+            ...prevState,
+            tonBalance,
+          };
+        });
+      }
+    }
+  }, [setState, walletAddress]);
+
   return {
     ...state,
     createUser,
     getTgUserId,
     getUser,
+    getUserBalance,
   };
 }
 

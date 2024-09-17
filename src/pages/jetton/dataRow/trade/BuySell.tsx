@@ -8,6 +8,7 @@ import { StyledBodyBlock } from "pages/jetton/styled";
 import { Box, Typography } from "@mui/material";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import socialCreditIcon from "assets/icons/social-credits.png";
+import tonLogo from "assets/icons/ton-logo.png";
 import ToggleButton from "./ToggleButton";
 import useNotification from "hooks/useNotification";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
@@ -17,6 +18,8 @@ import { jettonDeployController } from "lib/jetton-controller";
 import { validateTradeParams } from "../../util";
 import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { sleep } from "lib/utils";
+import { DECIMAL_SCALER } from "consts";
+import useUserStore from "store/user-store/useUserStore";
 
 const schema = object().shape({
   amount: number().required().min(0),
@@ -35,13 +38,14 @@ export const BuySell = () => {
     getJettonFromDb,
     updateJettonPurge,
   } = useJettonStore();
+  const { tonBalance, getUserBalance } = useUserStore();
   const { jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
   const [tonconnect] = useTonConnectUI();
   const [actionInProgress, setActionInProgress] = useRecoilState(jettonActionsState);
   const [tradeType, setTradeType] = useState("0");
   const [price, setPrice] = useState(jettonPrice);
-  const [amt, setAmt] = useState<number>(1);
+  const [amt, setAmt] = useState<number>(0);
   const [blinked, setBlinked] = useState(false);
 
   const handleChangeType = (event: any, newTradeType: string) => {
@@ -68,34 +72,41 @@ export const BuySell = () => {
     }
   };
 
-  const getPrice = useCallback(async () => {
-    if (!jettonAddress || !isValidAddress(jettonAddress)) {
-      showNotification("Invalid jetton address", "error");
-      return 0;
-    }
-
-    if (amt > 0) {
-      let jettonPrice = 0;
-
-      const parsedJettonMaster = Address.parse(jettonAddress);
-
-      while (!jettonPrice) {
-        if (tradeType === "0") {
-          jettonPrice = await jettonDeployController.getPurchaseReturn(parsedJettonMaster, amt);
-        } else {
-          jettonPrice = await jettonDeployController.getSaleReturn(parsedJettonMaster, amt);
-        }
+  const getPrice = useCallback(
+    async (amount: number = amt) => {
+      if (!jettonAddress || !isValidAddress(jettonAddress)) {
+        showNotification("Invalid jetton address", "error");
+        return 0;
       }
 
-      setBlinked(false);
-      setPrice(jettonPrice);
-      return jettonPrice;
-    }
+      if (amount > 0) {
+        let jettonPrice = 0;
 
-    return 0;
-  }, [amt, jettonAddress, showNotification, tradeType]);
+        const parsedJettonMaster = Address.parse(jettonAddress);
+
+        while (!jettonPrice) {
+          if (tradeType === "0") {
+            jettonPrice = await jettonDeployController.getPurchaseReturn(
+              parsedJettonMaster,
+              amount,
+            );
+          } else {
+            jettonPrice = await jettonDeployController.getSaleReturn(parsedJettonMaster, amount);
+          }
+        }
+
+        setBlinked(false);
+        setPrice(jettonPrice);
+        return jettonPrice;
+      }
+
+      return 0;
+    },
+    [amt, jettonAddress, showNotification, tradeType],
+  );
 
   const finallyHandler = useCallback(async () => {
+    setPrice(0);
     setAmt(0);
     let i = 0;
     while (i < 10) {
@@ -121,21 +132,18 @@ export const BuySell = () => {
     userBalance,
   ]);
 
-  const buyTrade = useCallback(
-    async (jettonPrice: number) => {
-      // const nanoAmt = toNano(amt).toNumber();
-      if (amt > 0) {
-        await jettonDeployController.buyJettons(
-          tonconnect,
-          amt,
-          senderAddress!,
-          jettonMaster!,
-          decimals!,
-        );
-      }
-    },
-    [amt, decimals, jettonMaster, senderAddress, tonconnect],
-  );
+  const buyTrade = useCallback(async () => {
+    // const nanoAmt = toNano(amt).toNumber();
+    if (amt > 0) {
+      await jettonDeployController.buyJettons(
+        tonconnect,
+        amt,
+        senderAddress!,
+        jettonMaster!,
+        decimals!,
+      );
+    }
+  }, [amt, decimals, jettonMaster, senderAddress, tonconnect]);
 
   const sellTrade = useCallback(
     async (jettonPrice: number) => {
@@ -169,11 +177,11 @@ export const BuySell = () => {
     setActionInProgress(true);
 
     try {
-      if (tradeType === "0") await buyTrade(price);
+      if (tradeType === "0") await buyTrade();
       else await sellTrade(price);
     } catch (error) {
       if (error instanceof Error) {
-        showNotification(error.message, "error");
+        console.error(error.message);
       }
     } finally {
       finallyHandler();
@@ -191,14 +199,37 @@ export const BuySell = () => {
     finallyHandler,
   ]);
 
+  const onClickMax = useCallback(() => {
+    let amount;
+
+    if (tradeType === "0" && tonBalance) {
+      amount = tonBalance / DECIMAL_SCALER;
+    } else {
+      amount = userBalance / DECIMAL_SCALER;
+    }
+
+    if (amount > 0) {
+      setAmt(amount);
+      setBlinked(true);
+      getPrice(amount);
+    }
+  }, [getPrice, tonBalance, tradeType, userBalance]);
+
   useEffect(() => {
+    getUserBalance();
     return () => setActionInProgress(false);
-  }, [setActionInProgress]);
+  }, [getUserBalance, setActionInProgress]);
 
   return (
     <StyledBodyBlock height="313px">
       <ToggleButton tradeType={tradeType} handleChangeType={handleChangeType} />
-      <Box width="341px" textAlign="start" mb={1} display="flex" alignItems="center">
+      <Box
+        width="341px"
+        textAlign="start"
+        mb={1}
+        display="flex"
+        alignItems="center"
+        justifyContent={"space-between"}>
         <Typography
           sx={{
             color: "#fff",
@@ -208,6 +239,18 @@ export const BuySell = () => {
           }}>
           Amount
         </Typography>
+        <Typography
+          onClick={onClickMax}
+          sx={{
+            color: "#FFB800",
+            fontSize: "16px",
+            fontFamily: "Cabin Condensed",
+            letterSpacing: "0.08em",
+            fontWeight: 800,
+            cursor: "pointer",
+          }}>
+          MAX
+        </Typography>
       </Box>
       <AmtContainer>
         <AmtTextField
@@ -215,12 +258,12 @@ export const BuySell = () => {
           variant="outlined"
           value={amt}
           onChange={onChangeAmt}
-          onBlur={getPrice}
+          onBlur={() => getPrice(undefined)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <img
-                  src={socialCreditIcon}
+                  src={tradeType === "0" ? tonLogo : socialCreditIcon}
                   alt="social credit"
                   style={{ width: "24px", height: "24px" }}
                 />
@@ -228,8 +271,6 @@ export const BuySell = () => {
             ),
           }}
         />
-        {/* <SymbolField src={tradeType === "0" ? tonLogo : jettonImage} alt="ton symbol" /> */}
-        {/* <img src={socialCreditIcon} alt="social credit" /> */}
       </AmtContainer>
 
       <TextContainer>
@@ -237,8 +278,8 @@ export const BuySell = () => {
           {blinked
             ? "Previewing..."
             : tradeType === "0" && symbol
-            ? `${Math.floor(price)} ${symbol}`
-            : `${price.toFixed(2)} TON`}
+            ? `${amt} TON = ${Math.floor(price)} ${symbol}`
+            : `${amt} ${symbol} = ${price.toFixed(2)} TON`}
         </BlinkingText>
       </TextContainer>
 
