@@ -32,16 +32,19 @@ export interface UserStoreState {
   tgUserId?: number;
   tokens?: string;
   tgUserName?: string;
+  tonBalance?: number;
 }
 
+// TODO
 const userStateAtom = atom<UserStoreState>({
   key: "userStateAtom",
   default: {
     userId: undefined,
     walletAddress: undefined,
-    tgUserId: 981419972,
+    tgUserId: undefined,
     tokens: undefined,
     tgUserName: undefined,
+    tonBalance: undefined,
   },
 });
 

@@ -609,6 +609,11 @@ class JettonDeployController {
 
     await waiter();
   }
+
+  async getAccBalance(walltAddress: Address) {
+    const tc = await getClient();
+    return await tc.getBalance(walltAddress);
+  }
 }
 
 const jettonDeployController = new JettonDeployController();
