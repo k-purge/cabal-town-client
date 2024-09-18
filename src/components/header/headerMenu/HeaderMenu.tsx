@@ -3,14 +3,9 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppLogo } from "components/appLogo";
 import walletIcon from "assets/icons/wallet.svg";
 import { LogoContainer, CloseMenuButton, DrawerContent, AppMenu, HeaderTypography } from "./styled";
-import {
-  TonConnectButton,
-  TonConnectUI,
-  useTonConnectModal,
-  useTonConnectUI,
-  useTonWallet,
-} from "@tonconnect/ui-react";
+import { useTonConnectModal, useTonWallet } from "@tonconnect/ui-react";
 import { useState } from "react";
+import { UserAvatar } from "components/UserAvatar";
 
 interface MenuProps {
   closeMenu?: () => void;
@@ -48,35 +43,9 @@ const MobileMenu: React.FC<MenuProps> = ({ closeMenu, showMenu }) => {
 const HeaderMenu: React.FC<MenuProps> = (props) => {
   const { open } = useTonConnectModal();
   const wallet = useTonWallet();
-  const [tonConnectUI, _] = useTonConnectUI();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleLogoClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDisconnect = () => {
-    tonConnectUI.disconnect();
-    handleClose();
-  };
   return wallet ? (
-    <>
-      <AppLogo onClick={handleLogoClick} />
-      <Menu
-        sx={{
-          "& .MuiMenu-list": {
-            padding: 0,
-          },
-        }}
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}>
-        <StyledMenuItem onClick={handleDisconnect}>Disconnect</StyledMenuItem>
-      </Menu>
-    </>
+    <UserAvatar />
   ) : (
     <CustomTonConnectButton onClick={open}>
       <img src={walletIcon} alt="wallet" />
@@ -97,9 +66,6 @@ const HeaderMenu: React.FC<MenuProps> = (props) => {
   // </AppMenu>
 };
 
-const LogoWrapper = styled("div")({
-  cursor: "pointer",
-});
 const CustomTonConnectButton = styled(Button)(({ theme }) => ({
   width: 40,
   height: 40,
@@ -115,20 +81,6 @@ const CustomTonConnectButton = styled(Button)(({ theme }) => ({
   "& img": {
     width: 20,
     height: 20,
-  },
-}));
-const StyledMenuItem = styled(MenuItem)(() => ({
-  background: "#000",
-  fontFamily: "'Bungee', sans-serif",
-  fontSize: "14px",
-  fontWeight: "400",
-  lineHeight: "16.8px",
-  letterSpacing: "0.04em",
-  color: "#FFF",
-  borderRadius: "0px",
-  "&.MuiMenuItem-root": {
-    background: "#FFF",
-    color: "#000",
   },
 }));
 

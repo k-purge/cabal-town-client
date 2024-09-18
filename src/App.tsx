@@ -1,4 +1,5 @@
 import { styled } from "@mui/material";
+import { SDKProvider } from "@telegram-apps/sdk-react";
 import { Box } from "@mui/system";
 import { createContext, useEffect, useState } from "react";
 import { APP_GRID, ROUTES } from "consts";
@@ -16,6 +17,7 @@ import useUserStore from "store/user-store/useUserStore";
 import analytics from "services/analytics";
 import { useAuthToken } from "hooks/useAuthToken";
 import axiosService from "services/axios";
+import "./mockTg";
 
 analytics.init();
 
@@ -148,43 +150,45 @@ const App = () => {
 
   return (
     <AppWrapper>
-      <EnvContext.Provider
-        value={{
-          isSandbox: window.location.search.includes("sandbox"),
-          isTestnet: window.location.search.includes("testnet"),
-        }}>
-        <ScreensWrapper>
-          <Routes>
-            <Route
-              path="*"
-              element={
-                <>
-                  <Header />
-                  <Navigate to="/" />
-                  <PageNotFound />
-                </>
-              }
-            />
-            <Route path={ROUTES.gated} element={<GatedPage />} />
-            <Route path="/" element={<Header />}>
-              <Route path="/" element={<ContentWrapper />}>
-                <Route path={"/"} element={<ProtectedRoute />}>
-                  <Route path={ROUTES.explorer} element={<ExplorerPage />} />
-                  <Route path={ROUTES.deployer} element={<DeployerPage />} />
-                  <Route path={ROUTES.jettonId} element={<Jetton />} />
-                  <Route path={ROUTES.profile} element={<ProfilePage />} />
-                  <Route path={ROUTES.faq} element={<FaqPage />} />
+      <SDKProvider>
+        <EnvContext.Provider
+          value={{
+            isSandbox: window.location.search.includes("sandbox"),
+            isTestnet: window.location.search.includes("testnet"),
+          }}>
+          <ScreensWrapper>
+            <Routes>
+              <Route
+                path="*"
+                element={
+                  <>
+                    <Header />
+                    <Navigate to="/" />
+                    <PageNotFound />
+                  </>
+                }
+              />
+              <Route path={ROUTES.gated} element={<GatedPage />} />
+              <Route path="/" element={<Header />}>
+                <Route path="/" element={<ContentWrapper />}>
+                  <Route path={"/"} element={<ProtectedRoute />}>
+                    <Route path={ROUTES.explorer} element={<ExplorerPage />} />
+                    <Route path={ROUTES.deployer} element={<DeployerPage />} />
+                    <Route path={ROUTES.jettonId} element={<Jetton />} />
+                    <Route path={ROUTES.profile} element={<ProfilePage />} />
+                    <Route path={ROUTES.faq} element={<FaqPage />} />
+                  </Route>
                 </Route>
               </Route>
-            </Route>
-          </Routes>
-        </ScreensWrapper>
-        {location.pathname !== ROUTES.gated && (
-          <FooterBox mt={5}>
-            <Footer />
-          </FooterBox>
-        )}
-      </EnvContext.Provider>
+            </Routes>
+          </ScreensWrapper>
+          {location.pathname !== ROUTES.gated && (
+            <FooterBox mt={5}>
+              <Footer />
+            </FooterBox>
+          )}
+        </EnvContext.Provider>
+      </SDKProvider>
     </AppWrapper>
   );
 };
