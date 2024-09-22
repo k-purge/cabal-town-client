@@ -3,9 +3,11 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppLogo } from "components/appLogo";
 import walletIcon from "assets/icons/wallet.svg";
 import { LogoContainer, CloseMenuButton, DrawerContent, AppMenu, HeaderTypography } from "./styled";
-import { useTonConnectModal, useTonWallet } from "@tonconnect/ui-react";
-import { useState } from "react";
+import { useTonAddress, useTonConnectModal, useTonWallet } from "@tonconnect/ui-react";
+import { useEffect, useState } from "react";
 import { UserAvatar } from "components/UserAvatar";
+import useUserStore from "store/user-store/useUserStore";
+import { useInitData } from "@telegram-apps/sdk-react";
 
 interface MenuProps {
   closeMenu?: () => void;
@@ -43,6 +45,18 @@ const MobileMenu: React.FC<MenuProps> = ({ closeMenu, showMenu }) => {
 const HeaderMenu: React.FC<MenuProps> = (props) => {
   const { open } = useTonConnectModal();
   const wallet = useTonWallet();
+  const { getUser } = useUserStore();
+  const initData = useInitData();
+  const tgUserId = initData?.user?.id;
+  const walletAddress = useTonAddress();
+
+  useEffect(() => {
+    console.log("wallet address changed: ", walletAddress);
+    console.log("tgUserId: ", tgUserId);
+    if (tgUserId && walletAddress) {
+      getUser(tgUserId, walletAddress, walletAddress);
+    }
+  }, [getUser, tgUserId, walletAddress]);
 
   return wallet ? (
     <UserAvatar />

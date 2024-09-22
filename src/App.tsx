@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { SDKProvider } from "@telegram-apps/sdk-react";
+import { SDKProvider, useInitData } from "@telegram-apps/sdk-react";
 import { Box } from "@mui/system";
 import { createContext, useEffect, useState } from "react";
 import { APP_GRID, ROUTES } from "consts";
@@ -9,7 +9,7 @@ import { Footer } from "components/footer";
 import { Header } from "components/header";
 import { FaqPage } from "pages/faq";
 import { ProfilePage } from "pages/profile";
-import { useTonAddress } from "@tonconnect/ui-react";
+import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { useJettonLogo } from "hooks/useJettonLogo";
 import useNotification from "hooks/useNotification";
 import useJettonStore from "store/jetton-store/useJettonStore";
@@ -127,28 +127,12 @@ declare global {
 }
 
 const App = () => {
-  const { tgUserId, getTgUserId, tgUserName, getUser } = useUserStore();
   const { resetJetton } = useJettonLogo();
   const location = useLocation();
-  const rawAddress = useTonAddress(false);
-  const walletAddress = useTonAddress();
-  const { jettonWalletAddress } = useJettonStore();
 
   useEffect(() => {
     resetJetton();
   }, [location.pathname, resetJetton]);
-
-  useEffect(() => {
-    if (!tgUserId || !tgUserName) {
-      getTgUserId();
-    }
-  }, [getTgUserId, tgUserId, tgUserName]);
-
-  useEffect(() => {
-    if (tgUserId && walletAddress && jettonWalletAddress) {
-      getUser(tgUserId, walletAddress, jettonWalletAddress);
-    }
-  }, [getUser, rawAddress, tgUserId, walletAddress, jettonWalletAddress]);
 
   return (
     <AppWrapper>

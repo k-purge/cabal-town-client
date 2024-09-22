@@ -4,10 +4,10 @@ import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useState } from "react";
 
 export const UserAvatar = () => {
-  const initData = useInitData()!;
+  const initData = useInitData();
   const [tonConnectUI] = useTonConnectUI();
 
-  const { user } = initData;
+  const user = initData?.user;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleLogoClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
