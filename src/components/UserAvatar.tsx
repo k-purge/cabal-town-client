@@ -27,7 +27,7 @@ export const UserAvatar = () => {
       <Avatar
         onClick={handleLogoClick}
         src={user?.photoUrl}
-        sx={{ width: 40, height: 40, cursor: "pointer" }}></Avatar>
+        sx={{ width: 40, height: 40 }}></Avatar>
       <Menu
         sx={{
           "& .MuiMenu-list": {

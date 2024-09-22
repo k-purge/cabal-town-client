@@ -18,8 +18,10 @@ import analytics from "services/analytics";
 import { useAuthToken } from "hooks/useAuthToken";
 import axiosService from "services/axios";
 import "./mockTg";
+import { OnboardingPage } from "pages/onboarding";
 
 analytics.init();
+const ExclueFooterRoutes = [ROUTES.gated, ROUTES.onboarding];
 
 const AppWrapper = styled(Box)(() => ({
   display: "flex",
@@ -177,12 +179,13 @@ const App = () => {
                     <Route path={ROUTES.jettonId} element={<Jetton />} />
                     <Route path={ROUTES.profile} element={<ProfilePage />} />
                     <Route path={ROUTES.faq} element={<FaqPage />} />
+                    <Route path={ROUTES.onboarding} element={<OnboardingPage />} />
                   </Route>
                 </Route>
               </Route>
             </Routes>
           </ScreensWrapper>
-          {location.pathname !== ROUTES.gated && (
+          {!ExclueFooterRoutes.includes(location.pathname) && (
             <FooterBox mt={5}>
               <Footer />
             </FooterBox>
