@@ -1,4 +1,5 @@
 import { styled } from "@mui/material";
+import { SDKProvider, useInitData } from "@telegram-apps/sdk-react";
 import { Box } from "@mui/system";
 import { createContext, useEffect, useState } from "react";
 import { APP_GRID, ROUTES } from "consts";
@@ -8,7 +9,7 @@ import { Footer } from "components/footer";
 import { Header } from "components/header";
 import { FaqPage } from "pages/faq";
 import { ProfilePage } from "pages/profile";
-import { useTonAddress } from "@tonconnect/ui-react";
+import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { useJettonLogo } from "hooks/useJettonLogo";
 import useNotification from "hooks/useNotification";
 import useJettonStore from "store/jetton-store/useJettonStore";
@@ -16,8 +17,11 @@ import useUserStore from "store/user-store/useUserStore";
 import analytics from "services/analytics";
 import { useAuthToken } from "hooks/useAuthToken";
 import axiosService from "services/axios";
+import "./mockTg";
+import { OnboardingPage } from "pages/onboarding";
 
 analytics.init();
+const ExclueFooterRoutes = [ROUTES.gated, ROUTES.onboarding];
 
 const AppWrapper = styled(Box)(() => ({
   display: "flex",
@@ -123,68 +127,55 @@ declare global {
 }
 
 const App = () => {
-  const { tgUserId, getTgUserId, tgUserName, getUser } = useUserStore();
   const { resetJetton } = useJettonLogo();
   const location = useLocation();
-  const rawAddress = useTonAddress(false);
-  const walletAddress = useTonAddress();
-  const { jettonWalletAddress } = useJettonStore();
 
   useEffect(() => {
     resetJetton();
   }, [location.pathname, resetJetton]);
 
-  useEffect(() => {
-    if (!tgUserId || !tgUserName) {
-      getTgUserId();
-    }
-  }, [getTgUserId, tgUserId, tgUserName]);
-
-  useEffect(() => {
-    if (tgUserId && walletAddress && jettonWalletAddress) {
-      getUser(tgUserId, walletAddress, jettonWalletAddress);
-    }
-  }, [getUser, rawAddress, tgUserId, walletAddress, jettonWalletAddress]);
-
   return (
     <AppWrapper>
-      <EnvContext.Provider
-        value={{
-          isSandbox: window.location.search.includes("sandbox"),
-          isTestnet: window.location.search.includes("testnet"),
-        }}>
-        <ScreensWrapper>
-          <Routes>
-            <Route
-              path="*"
-              element={
-                <>
-                  <Header />
-                  <Navigate to="/" />
-                  <PageNotFound />
-                </>
-              }
-            />
-            <Route path={ROUTES.gated} element={<GatedPage />} />
-            <Route path="/" element={<Header />}>
-              <Route path="/" element={<ContentWrapper />}>
-                <Route path={"/"} element={<ProtectedRoute />}>
-                  <Route path={ROUTES.explorer} element={<ExplorerPage />} />
-                  <Route path={ROUTES.deployer} element={<DeployerPage />} />
-                  <Route path={ROUTES.jettonId} element={<Jetton />} />
-                  <Route path={ROUTES.profile} element={<ProfilePage />} />
-                  <Route path={ROUTES.faq} element={<FaqPage />} />
+      <SDKProvider>
+        <EnvContext.Provider
+          value={{
+            isSandbox: window.location.search.includes("sandbox"),
+            isTestnet: window.location.search.includes("testnet"),
+          }}>
+          <ScreensWrapper>
+            <Routes>
+              <Route
+                path="*"
+                element={
+                  <>
+                    <Header />
+                    <Navigate to="/" />
+                    <PageNotFound />
+                  </>
+                }
+              />
+              <Route path={ROUTES.gated} element={<GatedPage />} />
+              <Route path="/" element={<Header />}>
+                <Route path="/" element={<ContentWrapper />}>
+                  <Route path={"/"} element={<ProtectedRoute />}>
+                    <Route path={ROUTES.explorer} element={<ExplorerPage />} />
+                    <Route path={ROUTES.deployer} element={<DeployerPage />} />
+                    <Route path={ROUTES.jettonId} element={<Jetton />} />
+                    <Route path={ROUTES.profile} element={<ProfilePage />} />
+                    <Route path={ROUTES.faq} element={<FaqPage />} />
+                    <Route path={ROUTES.onboarding} element={<OnboardingPage />} />
+                  </Route>
                 </Route>
               </Route>
-            </Route>
-          </Routes>
-        </ScreensWrapper>
-        {location.pathname !== ROUTES.gated && (
-          <FooterBox mt={5}>
-            <Footer />
-          </FooterBox>
-        )}
-      </EnvContext.Provider>
+            </Routes>
+          </ScreensWrapper>
+          {!ExclueFooterRoutes.includes(location.pathname) && (
+            <FooterBox mt={5}>
+              <Footer />
+            </FooterBox>
+          )}
+        </EnvContext.Provider>
+      </SDKProvider>
     </AppWrapper>
   );
 };

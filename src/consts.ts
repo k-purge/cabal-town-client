@@ -7,6 +7,7 @@ const ROUTES = {
   jettonId: "/jetton/:id",
   profile: "/profile",
   faq: "/faq",
+  onboarding: "/onboarding",
 };
 
 const APP_GRID = 1156;

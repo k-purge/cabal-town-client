@@ -5,10 +5,13 @@ import { useRecoilState } from "recoil";
 import { userStateAtom } from ".";
 import { jettonDeployController } from "lib/jetton-controller";
 import axiosService from "services/axios";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "consts";
 
 function useUserStore() {
   const [state, setState] = useRecoilState(userStateAtom);
   const walletAddress = useTonAddress();
+  const navigate = useNavigate();
 
   const createUser = useCallback(
     async (tgUserId: number, jettonWalletAddress: string) => {
@@ -39,6 +42,7 @@ function useUserStore() {
   const getUser = useCallback(
     async (tgUserId: number, walletAddress: string, jettonWalletAddress: string) => {
       let tokens: string;
+      console.log("tgUserId", tgUserId);
 
       try {
         const { res } = await axiosService.loginUser({ tgUserId });
@@ -51,8 +55,8 @@ function useUserStore() {
           jettonWalletAddress,
         });
         tokens = res.tokens;
+        navigate(ROUTES.onboarding);
       }
-
       if (tokens) {
         setState((prevState) => {
           return {

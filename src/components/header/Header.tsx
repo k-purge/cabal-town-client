@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { HeaderMenu, MobileMenu } from "components/header/headerMenu/HeaderMenu";
-import { AppLogo } from "components/appLogo";
 import {
   HeaderRight,
   HeaderContent,
@@ -49,7 +48,7 @@ export const Header = () => {
             </HeaderLeft>
 
             <HeaderRight>
-              <HeaderMenu />
+              {options.showAvatar && <HeaderMenu />}
               {/* <IconButton onClick={() => setMobileMenu(true)}>
                 <MenuRoundedIcon style={{ width: 38, height: 38, color: "#FFB800" }} />
               </IconButton> */}

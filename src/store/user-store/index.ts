@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
 export interface ILoginUser {
   tgUserId: number;
@@ -35,6 +36,10 @@ export interface UserStoreState {
   tonBalance?: number;
 }
 
+const { persistAtom } = recoilPersist({
+  key: "userStateAtom",
+});
+
 // TODO
 const userStateAtom = atom<UserStoreState>({
   key: "userStateAtom",
@@ -46,6 +51,7 @@ const userStateAtom = atom<UserStoreState>({
     tgUserName: undefined,
     tonBalance: undefined,
   },
+  effects_UNSTABLE: [persistAtom],
 });
 
 export { userStateAtom };

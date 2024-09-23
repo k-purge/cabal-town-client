@@ -6,7 +6,7 @@ import {
   CardImage,
   CardOverlay,
   CardBodyNumber,
-} from "../styles";
+} from "./styles";
 import { IJetton } from "store/jetton-list-store/";
 
 export const Card = ({
