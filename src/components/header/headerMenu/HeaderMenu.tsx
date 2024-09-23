@@ -1,10 +1,10 @@
-import { Button, Drawer, Menu, MenuItem, styled, SvgIcon } from "@mui/material";
+import { Button, Drawer, styled } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppLogo } from "components/appLogo";
 import walletIcon from "assets/icons/wallet.svg";
-import { LogoContainer, CloseMenuButton, DrawerContent, AppMenu, HeaderTypography } from "./styled";
+import { LogoContainer, CloseMenuButton, DrawerContent, HeaderTypography } from "./styled";
 import { useTonAddress, useTonConnectModal, useTonWallet } from "@tonconnect/ui-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { UserAvatar } from "components/UserAvatar";
 import useUserStore from "store/user-store/useUserStore";
 import { useInitData } from "@telegram-apps/sdk-react";

@@ -1,4 +1,4 @@
-import { Avatar, Chip, Menu, MenuItem, styled, Typography } from "@mui/material";
+import { Avatar, Menu, MenuItem, styled } from "@mui/material";
 import { useInitData } from "@telegram-apps/sdk-react";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useState } from "react";

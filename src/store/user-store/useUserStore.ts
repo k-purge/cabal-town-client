@@ -66,7 +66,7 @@ function useUserStore() {
         });
       }
     },
-    [setState],
+    [navigate, setState],
   );
 
   const getTgUserId = useCallback(async () => {

@@ -20,7 +20,9 @@ function useJettonListStore() {
         jettonLoading: true,
       }));
 
-      const { res: jettonList } = await axiosService.getJettonList(network);
+      const {
+        res: { results: jettonList },
+      } = await axiosService.getJettonList(network);
 
       if (!jettonList) {
         console.log("empty");
