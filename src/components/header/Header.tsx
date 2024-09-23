@@ -48,7 +48,7 @@ export const Header = () => {
             </HeaderLeft>
 
             <HeaderRight>
-              <HeaderMenu />
+              {options.showAvatar && <HeaderMenu />}
               {/* <IconButton onClick={() => setMobileMenu(true)}>
                 <MenuRoundedIcon style={{ width: 38, height: 38, color: "#FFB800" }} />
               </IconButton> */}

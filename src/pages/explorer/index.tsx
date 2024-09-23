@@ -5,7 +5,7 @@ import { ListContainer, ButtonContainer, SelectedButton, UnselectedButton } from
 import { Screen, ScreenContent } from "components/Screen";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { ROUTES } from "consts";
-import { Card } from "./card";
+import { Card } from "../../components/card";
 import { IJetton } from "store/jetton-list-store";
 import useJettonListStore from "store/jetton-list-store/useJettonListStore";
 import { useHeader } from "hooks/useHeader";
