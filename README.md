@@ -1,6 +1,6 @@
-# Purge.fun - Webclient
+# Cabal.town - Webclient
 
-Purge.fun is a social survival game that rewards the most loyal and purges the rest. The app combines crypto, social interaction, and gamified elements to create a fun and rewarding experience.
+Cabal.town is a social survival game that rewards the most loyal and purges the rest. The app combines crypto, social interaction, and gamified elements to create a fun and rewarding experience.
 
 ### How do I start?
 

@@ -1,13 +1,13 @@
 import { Box, Fade } from "@mui/material";
 import { Screen, ScreenContent } from "components/Screen";
-import { StyledWrapper, StyledHeading, StyledTitle, StyledParagraph } from "./styles";
+import { StyledWrapper, StyledTitle, StyledParagraph } from "./styles";
 import { useHeader } from "hooks/useHeader";
 import { useEffect } from "react";
 
 const faq = [
   {
-    question: "What is Purge.fun?",
-    answer: `<b>Purge.fun</b> is a social survival game that rewards the most loyal and purges the rest. The app combines crypto, social interaction, and gamified elements to create a fun and rewarding experience.`,
+    question: "What is Cabal.town?",
+    answer: `<b>Cabal.town</b> is a social survival game that rewards the most loyal and purges the rest. The app combines crypto, social interaction, and gamified elements to create a fun and rewarding experience.`,
   },
   {
     question: "How do I start?",

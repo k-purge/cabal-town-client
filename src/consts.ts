@@ -14,7 +14,7 @@ const APP_GRID = 1156;
 
 const LOCAL_STORAGE_PROVIDER = "wallet_provider";
 
-const APP_DISPLAY_NAME = "Purge.fun";
+const APP_DISPLAY_NAME = "Cabal.town";
 
 const JETTON_DEPLOYER_CONTRACTS_GITHUB = "https://github.com/";
 
