@@ -7,7 +7,6 @@ const CardContainer = styled(Box)(({ theme }) => ({
   boxShadow: "2px 2px 0px 0px #000000",
   padding: "24px 16px 24px 16px",
   marginBottom: 18,
-
   width: "353px",
   height: "163px",
   display: "flex",
@@ -52,7 +51,7 @@ const SubmitButton = styled(LoadingButton)(({ theme }) => ({
   "&:disabled, &:hover": {
     background: "#494846",
     color: "#727272",
-    border: "none",
+    border: "2px solid #494846",
   },
 }));
 

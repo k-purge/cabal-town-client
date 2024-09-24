@@ -41,7 +41,7 @@ function ProfilePage() {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  height: "100vh",
+                  height: "70vh",
                   width: "100%",
                   color: "white",
                 }}>

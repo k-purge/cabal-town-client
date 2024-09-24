@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { CardText, CardContainer, CardContent, SubmitButton } from "./styles";
 import walletIcon from "assets/icons/wallet.svg";
-import { MobileMenu } from "components/header/headerMenu/HeaderMenu";
 import { useTonConnectModal } from "@tonconnect/ui-react";
 
 interface EmptyCardProps {
