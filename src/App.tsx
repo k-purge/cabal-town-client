@@ -19,6 +19,9 @@ import { useAuthToken } from "hooks/useAuthToken";
 import axiosService from "services/axios";
 import "./mockTg";
 import { OnboardingPage } from "pages/onboarding";
+import eruda from "eruda";
+
+eruda.init();
 
 analytics.init();
 const ExclueFooterRoutes = [ROUTES.gated, ROUTES.onboarding];
