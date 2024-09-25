@@ -159,10 +159,10 @@ const App = () => {
               />
               <Route path={ROUTES.gated} element={<GatedPage />} />
               <Route path="/" element={<Header />}>
-                <Route path="/" element={<ContentWrapper />}>
-                  <Route path={"/"} element={<ProtectedRoute />}>
+                <Route path={"/"} element={<ProtectedRoute />}>
+                  <Route path={ROUTES.deployer} element={<DeployerPage />} />
+                  <Route path="/" element={<ContentWrapper />}>
                     <Route path={ROUTES.explorer} element={<ExplorerPage />} />
-                    <Route path={ROUTES.deployer} element={<DeployerPage />} />
                     <Route path={ROUTES.jettonId} element={<Jetton />} />
                     <Route path={ROUTES.profile} element={<ProfilePage />} />
                     <Route path={ROUTES.faq} element={<FaqPage />} />
@@ -173,7 +173,7 @@ const App = () => {
             </Routes>
           </ScreensWrapper>
           {!ExclueFooterRoutes.includes(location.pathname) && (
-            <FooterBox mt={5}>
+            <FooterBox>
               <Footer />
             </FooterBox>
           )}

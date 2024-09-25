@@ -167,6 +167,7 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
         gap: "24px",
         flex: 1,
         alignItems: "center",
+        justifyContent: "center",
         width: "100%",
       }}>
       <CardPreview imageUri={userPhoto ?? ""} name={cabalName} />

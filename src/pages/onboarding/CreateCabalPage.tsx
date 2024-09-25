@@ -69,9 +69,6 @@ export function CreateCabalPage({ setStep }: { setStep: (step: OnboardingStep) =
               sx={{
                 width: "40vw",
                 maxWidth: "160px",
-                ".MuiLoadingButton-loadingIndicator": {
-                  color: "#FFB800 ",
-                },
               }}
               onClick={() => setStep("success")}>
               LATER
@@ -80,9 +77,6 @@ export function CreateCabalPage({ setStep }: { setStep: (step: OnboardingStep) =
               sx={{
                 width: "40vw",
                 maxWidth: "160px",
-                ".MuiLoadingButton-loadingIndicator": {
-                  color: "#000",
-                },
               }}
               loading={isLoading}
               onClick={handleCreateCabal}>
