@@ -5,7 +5,7 @@ import { OnboardingScreenContainer } from "./styles";
 import { Screen } from "../../components/Screen";
 import { CreateCabal, CreateCabalRef } from "components/CreateCabal";
 import { Box, Typography } from "@mui/material";
-import { ContainedButton, OutlinedButton, SubmitButton } from "components/Buttons";
+import { ContainedButton, OutlinedButton } from "components/Buttons";
 import { LoadingButton } from "@mui/lab";
 
 export function CreateCabalPage({ setStep }: { setStep: (step: OnboardingStep) => void }) {
