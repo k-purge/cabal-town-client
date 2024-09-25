@@ -34,10 +34,10 @@ const formSpec = isOffchainInternal ? offchainFormSpec : onchainFormSpec;
 function DeployerPage() {
   const [isDeploying, setIsDeploying] = useState(false);
   const cabalRef = useRef<CreateCabalRef>(null);
-  const onDeployCabal = () => {
+  const onDeployCabal = async () => {
     try {
       setIsDeploying(true);
-      cabalRef.current?.deployContract();
+      await cabalRef.current?.deployContract();
     } catch (error) {
       console.error(error);
     } finally {
@@ -55,18 +55,19 @@ function DeployerPage() {
     <Box
       sx={{
         backgroundColor: "rgba(0, 0, 0, 0.9)",
+
         width: "100%",
         height: "calc(100vh - 80px - 74px)",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding: "0 20px",
+        padding: "32px 20px",
       }}>
       <CreateCabal ref={cabalRef} />
       <ContainedButton
         loading={isDeploying}
-        sx={{ width: "100%", marginBottom: "20px" }}
+        sx={{ width: "100%", fontSize: "16px" }}
         onClick={onDeployCabal}>
         CREATE CABAL
       </ContainedButton>

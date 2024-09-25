@@ -43,19 +43,3 @@ export const OutlinedButton = styled(BaseButton)(({ theme }) => ({
     color: "#FFB800 ",
   },
 }));
-export const SubmitButton = styled(LoadingButton)(({ theme }) => ({
-  fontSize: 14,
-  color: "#000000",
-  background: "#FFB800",
-  fontFamily: "Bungee, Sans-Serif",
-  border: "2px solid #FFB800",
-  marginBlock: 12,
-  borderRadius: 0,
-  width: "100%",
-
-  "&:disabled, &:hover": {
-    background: "#494846",
-    color: "#727272",
-    border: "none",
-  },
-}));
