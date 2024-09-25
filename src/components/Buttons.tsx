@@ -28,6 +28,9 @@ export const ContainedButton = styled(BaseButton)(({ theme }) => ({
   "&:hover": {
     backgroundColor: primary,
   },
+  ".MuiLoadingButton-loadingIndicator": {
+    color: "#000",
+  },
 }));
 
 export const OutlinedButton = styled(BaseButton)(({ theme }) => ({
@@ -35,6 +38,9 @@ export const OutlinedButton = styled(BaseButton)(({ theme }) => ({
   color: primary,
   "&:hover": {
     backgroundColor: "#000",
+  },
+  ".MuiLoadingButton-loadingIndicator": {
+    color: "#FFB800 ",
   },
 }));
 export const SubmitButton = styled(LoadingButton)(({ theme }) => ({
