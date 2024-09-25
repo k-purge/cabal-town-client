@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const primary = "#FFB800";
-const BaseButton = styled(Button)(({ theme }) => ({
-  height: "40px",
+const BaseButton = styled(LoadingButton)(({ theme }) => ({
+  height: "48px",
   minWidth: "auto",
   whiteSpace: "nowrap",
   marginRight: "8px",
@@ -34,5 +35,21 @@ export const OutlinedButton = styled(BaseButton)(({ theme }) => ({
   color: primary,
   "&:hover": {
     backgroundColor: "#000",
+  },
+}));
+export const SubmitButton = styled(LoadingButton)(({ theme }) => ({
+  fontSize: 14,
+  color: "#000000",
+  background: "#FFB800",
+  fontFamily: "Bungee, Sans-Serif",
+  border: "2px solid #FFB800",
+  marginBlock: 12,
+  borderRadius: 0,
+  width: "100%",
+
+  "&:disabled, &:hover": {
+    background: "#494846",
+    color: "#727272",
+    border: "none",
   },
 }));

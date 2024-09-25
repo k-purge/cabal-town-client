@@ -6,7 +6,7 @@ import { CreateCabalPage } from "./CreateCabalPage";
 export type OnboardingStep = "intro" | "create_cabal" | "success";
 
 export function OnboardingPage() {
-  const [step, setStep] = useState<OnboardingStep>("intro");
+  const [step, setStep] = useState<OnboardingStep>("create_cabal");
   switch (step) {
     case "intro":
       return <IntroPage setStep={setStep} />;

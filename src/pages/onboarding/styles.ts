@@ -9,18 +9,3 @@ export const OnboardingScreenContainer = styled(Box)(({ theme }) => ({
   backgroundColor: "rgba(0, 0, 0, 0.9)",
   padding: "32px 20px",
 }));
-
-export const SpaceBetween = styled(Box)(({ theme }) => ({
-  width: "100%",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-}));
-export const Label = styled(Typography)(({ theme }) => ({
-  fontFamily: "Cabin Condensed",
-  fontWeight: 500,
-  fontSize: "16px",
-  lineHeight: "20px",
-  letterSpacing: "0.08em",
-  color: "#FFB800",
-}));
