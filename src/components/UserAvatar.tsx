@@ -23,7 +23,7 @@ export const UserAvatar = () => {
   };
   useEffect(() => {
     console.log("user: ", user);
-  }, [user, chat]);
+  }, [user]);
 
   return (
     <>

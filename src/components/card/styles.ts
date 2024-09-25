@@ -60,6 +60,7 @@ const CardHeader = styled(Typography)(() => ({
   color: "#fff",
   padding: "0 12px", // Added padding
   letterSpacing: "0.08em",
+  height: "21px",
 }));
 
 const CardBody = styled(Typography)(() => ({
