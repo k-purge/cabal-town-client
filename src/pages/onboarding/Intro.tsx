@@ -8,7 +8,7 @@ import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { ROUTES } from "consts";
 import { useNavigate } from "react-router-dom";
 import { OnboardingStep } from ".";
-import { OnboardingScreenContainer } from "./styles";
+import { DescriptionText, OnboardingScreenContainer, TitleText } from "./styles";
 
 const carouselItems = [
   {
@@ -100,33 +100,8 @@ export function IntroPage({ setStep }: { setStep: (step: OnboardingStep) => void
                   justifyContent: "center",
                   alignItems: "center",
                 }}>
-                <Typography
-                  sx={{
-                    fontFamily: "Bungee",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    fontSize: "20px",
-                    lineHeight: "24px",
-                    textAlign: "center",
-                    letterSpacing: "0.04em",
-                    color: "#FFB800",
-                    marginBottom: "20px",
-                  }}>
-                  {item.subtitle}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: "Cabin Condensed",
-                    fontStyle: "normal",
-                    fontWeight: 600,
-                    fontSize: "16px",
-                    lineHeight: "24px",
-                    textAlign: "center",
-                    letterSpacing: "0.08em",
-                    color: "#FFFFFF",
-                  }}>
-                  {item.description}
-                </Typography>
+                <TitleText>{item.subtitle}</TitleText>
+                <DescriptionText>{item.description}</DescriptionText>
               </Box>
             </Box>
           ))}
