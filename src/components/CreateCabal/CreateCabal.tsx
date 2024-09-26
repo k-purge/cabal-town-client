@@ -148,7 +148,9 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
       navigate(`${ROUTES.jetton}/${Address.normalize(result)}`);
     } catch (err) {
       if (err instanceof Error) {
+        console.error(err);
         showNotification(`Ton Testnet Timeout, Please try again.`, "error");
+        throw err;
       }
     }
   }
