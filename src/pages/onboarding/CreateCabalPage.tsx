@@ -23,12 +23,12 @@ export function CreateCabalPage({ setStep }: { setStep: (step: OnboardingStep) =
     try {
       setIsLoading(true);
       await createCabalRef.current?.deployContract();
+      setStep("success");
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
-    setStep("success");
   };
   return (
     <Screen>

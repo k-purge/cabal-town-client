@@ -160,6 +160,7 @@ const App = () => {
               <Route path={ROUTES.gated} element={<GatedPage />} />
               <Route path="/" element={<Header />}>
                 <Route path={"/"} element={<ProtectedRoute />}>
+                  {/* don't want to apply content wrapper here */}
                   <Route path={ROUTES.deployer} element={<DeployerPage />} />
                   <Route path="/" element={<ContentWrapper />}>
                     <Route path={ROUTES.explorer} element={<ExplorerPage />} />

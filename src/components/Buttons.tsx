@@ -13,9 +13,9 @@ const BaseButton = styled(LoadingButton)(({ theme }) => ({
   letterSpacing: "0.04em",
   fontFamily: "Bungee, sans-serif",
   boxShadow: "3px 3px 0px  #000000",
-  fontSize: "12px",
+  fontSize: "16px",
   fontWeight: 400,
-  lineHeight: "14.4px",
+  lineHeight: "19px",
   border: `2px solid ${primary}`,
   "&:last-child": {
     marginRight: 0,
