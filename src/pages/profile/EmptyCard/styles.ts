@@ -33,6 +33,7 @@ const CardText = styled(Typography)(() => ({
   fontSize: "16px",
   color: "#ffff",
   marginTop: "3px",
+  fontWeight: 600,
 }));
 
 const SubmitButton = styled(LoadingButton)(({ theme }) => ({
