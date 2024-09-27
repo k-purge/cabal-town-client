@@ -17,7 +17,7 @@ type SuccessPageProps = {
 };
 
 const defaultDescription =
-  "Explore the cabals, connect with top thought leaders, and unlock exclusive alpha.";
+  "Welcome to Cabal.town! Your onboarding is complete, and you're ready to start your journey. Dive in and explore what we have in store for you.";
 const defaultButtonText = "LET'S GO!";
 
 export function SuccessPage({ description, buttonText, buttonOnClick }: SuccessPageProps) {
@@ -51,13 +51,13 @@ export function SuccessPage({ description, buttonText, buttonOnClick }: SuccessP
           <Box
             component="img"
             sx={{
-              height: "280px",
+              height: "360px",
               width: "280px",
               overflow: "hidden",
               objectFit: "contain",
-              margin: "56px 0px",
+              margin: "10px 0px",
             }}
-            src="/success.png"
+            src="/SuccessPage.png"
           />
           <DescriptionText>{description || defaultDescription}</DescriptionText>
         </Box>
