@@ -47,7 +47,7 @@ export function IntroPage({ setStep }: { setStep: (step: OnboardingStep) => void
   const { setHeader } = useHeader();
 
   useEffect(() => {
-    setHeader("WELCOME, PLAYER 1", { showBackButton: false, showAvatar: false });
+    setHeader("ONBOARDING", { showBackButton: false, showAvatar: false });
   }, [setHeader]);
 
   return (
