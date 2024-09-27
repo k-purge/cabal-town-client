@@ -1,8 +1,8 @@
 import { Box, Fade } from "@mui/material";
 import { Screen, ScreenContent } from "components/Screen";
-import { StyledHeading } from "./styles";
 import { useEffect } from "react";
 import { Card } from "./Card";
+import { EmptyCard } from "./EmptyCard";
 import { ROUTES } from "consts";
 import { IJetton } from "store/jetton-list-store";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
@@ -32,9 +32,22 @@ function ProfilePage() {
       <ScreenContent removeBackground>
         <Fade in>
           <Box>
-            {userProfileList?.map((item) => (
-              <Card item={item} onClickCard={onClickCard} />
-            ))}
+            {userProfileList ? (
+              userProfileList.map((item) => <Card item={item} onClickCard={onClickCard} />)
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "70vh",
+                  width: "100%",
+                  color: "white",
+                }}>
+                <EmptyCard />
+              </Box>
+            )}
           </Box>
         </Fade>
       </ScreenContent>
