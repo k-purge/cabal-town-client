@@ -6,14 +6,17 @@ import { Screen } from "../../components/Screen";
 import { CreateCabal, CreateCabalRef } from "components/CreateCabal";
 import { Box, Typography } from "@mui/material";
 import { ContainedButton, OutlinedButton } from "components/Buttons";
-import { LoadingButton } from "@mui/lab";
 
 export function CreateCabalPage({ setStep }: { setStep: (step: OnboardingStep) => void }) {
   const { setHeader } = useHeader();
   const createCabalRef = useRef<CreateCabalRef>(null);
   useEffect(() => {
-    setHeader("CREATE YOUR CABAL", { showBackButton: false, showAvatar: false });
-  }, [setHeader]);
+    setHeader("CREATE YOUR CABAL", {
+      showBackButton: true,
+      showAvatar: false,
+      onBackButtonClick: () => setStep("intro"),
+    });
+  }, [setHeader, setStep]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCreateCabal = async () => {

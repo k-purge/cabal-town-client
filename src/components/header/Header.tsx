@@ -40,7 +40,7 @@ export const Header = () => {
             {/* <AppLogo /> */}
             <HeaderLeft>
               {options.showBackButton && (
-                <IconButton onClick={handleBackClick}>
+                <IconButton onClick={options.onBackButtonClick || handleBackClick}>
                   <ArrowBackIcon />
                 </IconButton>
               )}
