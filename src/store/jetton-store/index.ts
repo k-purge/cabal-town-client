@@ -15,6 +15,7 @@ export interface IJettonProfile {
   name: string;
   balance?: string;
   players?: any[];
+  ownerAddress: string;
   id: string;
 }
 

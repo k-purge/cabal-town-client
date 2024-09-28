@@ -4,11 +4,18 @@ const CardContainer = styled(Box)(({ theme }) => ({
   background: "#1E1E1E",
   border: "2px solid #000000",
   boxShadow: "2px 2px 0px 0px #000000",
-  padding: "12px",
+  // padding: "12px",
   marginBottom: 18,
 
   width: "353px",
   height: "104px",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+}));
+
+const CardContentContainer = styled(Box)(({ theme }) => ({
+  padding: "12px",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
@@ -65,4 +72,28 @@ const CardText = styled(Typography)(() => ({
   marginTop: "3px",
 }));
 
-export { CardText, CardBody, CardHeader, CardContainer, CardImage, CardContent };
+const CardOwnerText = styled(Typography)(() => ({
+  fontFamily: "Bungee, sans-serif",
+  fontWeight: 400,
+  fontSize: "12px",
+  lineHeight: "14.4px",
+  backgroundColor: "#FFB800",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  writingMode: "vertical-rl" /* Makes the text run vertically */,
+  textAlign: "center",
+  width: "14px" /* Width of the yellow strip */,
+  transform: "rotate(180deg)",
+}));
+
+export {
+  CardText,
+  CardBody,
+  CardHeader,
+  CardContentContainer,
+  CardContainer,
+  CardImage,
+  CardContent,
+  CardOwnerText,
+};
