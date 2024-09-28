@@ -300,28 +300,13 @@ export const BuySell = () => {
 
       {/* <DividerLine /> */}
 
-      {/* <TradeButton
+      <TradeButton
         background="#00B2FF"
         loading={actionInProgress}
         onClick={onClickTrade}
         loadingIndicator={<CircularProgress style={{ color: "white", width: 20, height: 20 }} />}>
         TRADE
-      </TradeButton> */}
-      <TradeButton
-        background="#00B2FF"
-        loading={actionInProgress}
-        onClick={() => {
-          console.log("changed loading");
-        }}
-        loadingIndicator={<CircularProgress style={{ color: "white", width: 20, height: 20 }} />}>
-        TRADE
       </TradeButton>
-      <button
-        onClick={() => {
-          setActionInProgress(!actionInProgress);
-        }}>
-        toggle actionInProgress
-      </button>
     </StyledBodyBlock>
   );
 };
