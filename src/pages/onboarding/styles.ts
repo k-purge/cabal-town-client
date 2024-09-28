@@ -10,17 +10,25 @@ export const OnboardingScreenContainer = styled(Box)(({ theme }) => ({
   padding: "32px 20px",
 }));
 
-export const SpaceBetween = styled(Box)(({ theme }) => ({
-  width: "100%",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-}));
-export const Label = styled(Typography)(({ theme }) => ({
+export const DescriptionText = styled(Typography)(() => ({
   fontFamily: "Cabin Condensed",
-  fontWeight: 500,
+  fontStyle: "normal",
+  fontWeight: 600,
   fontSize: "16px",
-  lineHeight: "20px",
+  lineHeight: "24px",
+  textAlign: "center",
   letterSpacing: "0.08em",
+  color: "#FFFFFF",
+}));
+
+export const TitleText = styled(Typography)(() => ({
+  fontFamily: "Bungee",
+  fontStyle: "normal",
+  fontWeight: 400,
+  fontSize: "20px",
+  lineHeight: "24px",
+  textAlign: "center",
+  letterSpacing: "0.04em",
   color: "#FFB800",
+  marginBottom: "20px",
 }));

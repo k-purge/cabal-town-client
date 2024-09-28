@@ -24,6 +24,7 @@
     "bignumber.js": "^9.1.0",
     "buffer": "^6.0.3",
     "date-fns": "^3.6.0",
+    "eruda": "^3.3.0",
     "lightweight-charts": "^4.1.7",
     "notistack": "^2.0.5",
     "prettier": "^2.7.1",

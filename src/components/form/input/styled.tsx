@@ -20,7 +20,7 @@ const StyledInputContainer = styled(Box)(({ error }: { error: boolean }) => ({
 const StyledInputWrapper = styled(Box)({
   backgroundColor: "#F7F9FB",
   width: "100%",
-  height: 45,
+  height: "48px",
 });
 
 const StyledInput = styled("input")({
@@ -28,13 +28,15 @@ const StyledInput = styled("input")({
   width: "100%",
   height: "100%",
   border: "unset",
-  textIndent: 16,
+  padding: "0px 16px",
+  // textIndent: 16,
   background: "transparent",
   outline: "none",
   color: "#000",
   fontFamily: "Cabin Condensed",
   fontSize: 16,
   caretColor: "#728A96",
+  letterSpacing: "0.08em",
   "&::placeholder": {
     color: "#728A96",
     fontFamily: "Cabin Condensed",

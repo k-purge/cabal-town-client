@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const primary = "#FFB800";
-const BaseButton = styled(Button)(({ theme }) => ({
-  height: "40px",
+const BaseButton = styled(LoadingButton)(({ theme }) => ({
+  height: "48px",
   minWidth: "auto",
   whiteSpace: "nowrap",
   marginRight: "8px",
@@ -12,9 +13,9 @@ const BaseButton = styled(Button)(({ theme }) => ({
   letterSpacing: "0.04em",
   fontFamily: "Bungee, sans-serif",
   boxShadow: "3px 3px 0px  #000000",
-  fontSize: "12px",
+  fontSize: "16px",
   fontWeight: 400,
-  lineHeight: "14.4px",
+  lineHeight: "19px",
   border: `2px solid ${primary}`,
   "&:last-child": {
     marginRight: 0,
@@ -27,6 +28,9 @@ export const ContainedButton = styled(BaseButton)(({ theme }) => ({
   "&:hover": {
     backgroundColor: primary,
   },
+  ".MuiLoadingButton-loadingIndicator": {
+    color: "#000",
+  },
 }));
 
 export const OutlinedButton = styled(BaseButton)(({ theme }) => ({
@@ -34,5 +38,8 @@ export const OutlinedButton = styled(BaseButton)(({ theme }) => ({
   color: primary,
   "&:hover": {
     backgroundColor: "#000",
+  },
+  ".MuiLoadingButton-loadingIndicator": {
+    color: "#FFB800 ",
   },
 }));

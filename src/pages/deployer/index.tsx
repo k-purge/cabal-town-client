@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Address } from "ton";
 import { Box, Fade } from "@mui/material";
 import { jettonDeployController, JettonDeployParams } from "lib/jetton-controller";
@@ -22,6 +22,8 @@ import { useNetwork } from "lib/hooks/useNetwork";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import useUserStore from "store/user-store/useUserStore";
 import { useHeader } from "hooks/useHeader";
+import { CreateCabal, CreateCabalRef } from "components/CreateCabal";
+import { ContainedButton } from "components/Buttons";
 
 const DEFAULT_DECIMALS = 9;
 
@@ -30,117 +32,47 @@ const isOffchainInternal = getUrlParam("offchainINTERNAL") !== null;
 const formSpec = isOffchainInternal ? offchainFormSpec : onchainFormSpec;
 
 function DeployerPage() {
-  const { showNotification } = useNotification();
-  const { network } = useNetwork();
-  const walletAddress = useTonAddress();
-  const rawAddress = useTonAddress(false);
-  const [tonconnect] = useTonConnectUI();
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigatePreserveQuery();
-  const { reset } = useJettonStore();
-  const { tgUserId } = useUserStore();
-
-  useEffect(() => {
-    reset();
-  }, [reset]);
-
-  async function deployContract(data: any) {
-    if (!walletAddress || !tonconnect) {
-      throw new Error("Wallet not connected");
-    }
-
-    // TODO
-    // assume all decimals are 9
-    let decimals = DEFAULT_DECIMALS;
-    const owner = Address.parse(process.env.REACT_APP_JETTON_OWNER!);
-
-    const params: JettonDeployParams = {
-      owner,
-      deployer: Address.parse(walletAddress),
-      onchainMetaData: {
-        name: data.name,
-        symbol: data.symbol,
-        image: data.tokenImage,
-        description: data.description,
-        decimals: decimals.toFixed(0),
-      },
-      offchainUri: data.offchainUri,
-    };
-
-    setIsLoading(true);
-    const deployParams = createDeployParams(params, data.offchainUri);
-    const contractAddress = new ContractDeployer().addressForContract(deployParams);
-
-    const isDeployed = await WalletConnection.isContractDeployed(contractAddress);
-
-    if (isDeployed) {
-      showNotification(
-        <>
-          Contract already deployed,{" "}
-          <ReactRouterLink to={`${ROUTES.jetton}/${Address.normalize(contractAddress)}/`}>
-            View contract
-          </ReactRouterLink>
-        </>,
-        "warning",
-      );
-      setIsLoading(false);
-      return;
-    }
-
+  const [isDeploying, setIsDeploying] = useState(false);
+  const cabalRef = useRef<CreateCabalRef>(null);
+  const onDeployCabal = async () => {
     try {
-      const result = await jettonDeployController.createJetton(params, tonconnect, walletAddress);
-
-      const jettonData: IInsertJetton = {
-        name: data.name,
-        imageUri: data.tokenImage,
-        lastSurvivors: data.numOfSurvivors,
-        masterAddress: Address.normalize(result),
-        ownerAddress: process.env.REACT_APP_JETTON_OWNER!,
-        creatorAddress: rawAddress,
-        chain: network,
-        walletAddress,
-        tgUserId,
-      };
-      await axiosService.insertJetton(jettonData);
-
-      analytics.sendEvent(
-        AnalyticsCategory.DEPLOYER_PAGE,
-        AnalyticsAction.DEPLOY,
-        contractAddress.toFriendly(),
-      );
-
-      navigate(`${ROUTES.jetton}/${Address.normalize(result)}`);
-    } catch (err) {
-      if (err instanceof Error) {
-        showNotification(`Ton Testnet Timeout, Please try again.`, "error");
-      }
+      setIsDeploying(true);
+      await cabalRef.current?.deployContract();
+    } catch (error) {
+      console.error(error);
     } finally {
-      setIsLoading(false);
+      setIsDeploying(false);
     }
-  }
+  };
+
   const { setHeader } = useHeader();
   useEffect(() => {
     setHeader("CREATE CABAL", { showBackButton: false });
   }, [setHeader]);
 
   return (
-    <Screen>
-      <ScreenContent removeBackground>
-        <Fade in>
-          <Box>
-            <FormWrapper>
-              <Form
-                isLoading={isLoading}
-                submitText="Create cabal"
-                onSubmit={deployContract}
-                inputs={formSpec}
-                gameDetailInputs={gameDetailSpec}
-              />
-            </FormWrapper>
-          </Box>
-        </Fade>
-      </ScreenContent>
-    </Screen>
+    // <Screen>
+    <Box
+      sx={{
+        backgroundColor: "rgba(0, 0, 0, 0.9)",
+
+        width: "100%",
+        height: "calc(100vh - 80px - 74px)",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "32px 20px",
+      }}>
+      <CreateCabal ref={cabalRef} />
+      <ContainedButton
+        loading={isDeploying}
+        sx={{ width: "100%", fontSize: "16px" }}
+        onClick={onDeployCabal}>
+        CREATE CABAL
+      </ContainedButton>
+    </Box>
+    // </Screen>
   );
 }
 

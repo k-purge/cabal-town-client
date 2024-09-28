@@ -4799,6 +4799,11 @@ error-stack-parser@^2.0.6:
   dependencies:
     stackframe "^1.3.4"
 
+eruda@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/eruda/-/eruda-3.3.0.tgz#16fd6fc91f8b396cf67b7466bd28f19e76497588"
+  integrity sha512-WsAEUIa9SNgLqaROMqnSvNeq6bySpjiG2ZQJYYGZw6VHmJ3zBBPCYyZDz0Dmymm9azh8TalkY2pEX2C2PiHIjw==
+
 es-abstract@^1.17.2, es-abstract@^1.17.5, es-abstract@^1.22.1, es-abstract@^1.22.3, es-abstract@^1.23.0, es-abstract@^1.23.1, es-abstract@^1.23.2, es-abstract@^1.23.3:
   version "1.23.3"
   resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.23.3.tgz#8f0c5a35cd215312573c5a27c87dfd6c881a0aa0"

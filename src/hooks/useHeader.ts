@@ -4,6 +4,7 @@ import { atom, useRecoilState } from "recoil";
 interface HeaderOptions {
   showBackButton: boolean;
   showAvatar: boolean;
+  onBackButtonClick?: () => void | Promise<void>;
   // Add more options here in the future
 }
 
@@ -17,6 +18,7 @@ export const headerOptionsState = atom<HeaderOptions>({
   default: {
     showBackButton: false,
     showAvatar: true,
+    onBackButtonClick: undefined,
     // Initialize future options here
   },
 });

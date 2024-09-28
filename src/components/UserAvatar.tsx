@@ -1,7 +1,7 @@
 import { Avatar, Menu, MenuItem, styled } from "@mui/material";
 import { useInitData } from "@telegram-apps/sdk-react";
 import { useTonConnectUI } from "@tonconnect/ui-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const UserAvatar = () => {
   const initData = useInitData();
@@ -21,6 +21,9 @@ export const UserAvatar = () => {
     tonConnectUI.disconnect();
     handleClose();
   };
+  useEffect(() => {
+    console.log("user: ", user);
+  }, [user]);
 
   return (
     <>
