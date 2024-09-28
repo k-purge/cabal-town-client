@@ -1,5 +1,5 @@
 import { styled } from "@mui/material";
-import { SDKProvider, useInitData } from "@telegram-apps/sdk-react";
+import { SDKProvider } from "@telegram-apps/sdk-react";
 import { Box } from "@mui/system";
 import { createContext, useEffect, useState } from "react";
 import { APP_GRID, ROUTES } from "consts";
@@ -9,11 +9,8 @@ import { Footer } from "components/footer";
 import { Header } from "components/header";
 import { FaqPage } from "pages/faq";
 import { ProfilePage } from "pages/profile";
-import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { useJettonLogo } from "hooks/useJettonLogo";
 import useNotification from "hooks/useNotification";
-import useJettonStore from "store/jetton-store/useJettonStore";
-import useUserStore from "store/user-store/useUserStore";
 import analytics from "services/analytics";
 import { useAuthToken } from "hooks/useAuthToken";
 import axiosService from "services/axios";

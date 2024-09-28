@@ -5,13 +5,15 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { IJetton, jettonListStateAtom } from "./index";
 import { useNetwork } from "lib/hooks/useNetwork";
 import { useNavigate } from "react-router-dom";
+import { useAuthToken } from "hooks/useAuthToken";
 
 function useJettonListStore() {
-  const { network } = useNetwork();
-  const [state, setState] = useRecoilState(jettonListStateAtom);
-  const reset = useResetRecoilState(jettonListStateAtom);
   const { showNotification } = useNotification();
+  const { setTokens } = useAuthToken();
+  const { network } = useNetwork();
   const navigate = useNavigate();
+  const reset = useResetRecoilState(jettonListStateAtom);
+  const [state, setState] = useRecoilState(jettonListStateAtom);
 
   const getJettonList = useCallback(async () => {
     try {
@@ -39,6 +41,7 @@ function useJettonListStore() {
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
         console.log("error.response: ", error.response);
+        setTokens();
         navigate("/");
         showNotification("Please get a secret code first", "error");
       } else if (error instanceof Error) {
@@ -56,7 +59,7 @@ function useJettonListStore() {
         jettonLoading: false,
       }));
     }
-  }, [navigate, network, setState, showNotification]);
+  }, [navigate, network, setState, setTokens, showNotification]);
 
   const setSelectedJetton = useCallback(
     (selectedJetton: IJetton) => {

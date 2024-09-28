@@ -32,7 +32,7 @@ function ProfilePage() {
       <ScreenContent removeBackground>
         <Fade in>
           <Box>
-            {userProfileList ? (
+            {userProfileList?.length ? (
               userProfileList.map((item) => <Card item={item} onClickCard={onClickCard} />)
             ) : (
               <Box
