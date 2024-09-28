@@ -20,6 +20,7 @@ import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { sleep } from "lib/utils";
 import { DECIMAL_SCALER } from "consts";
 import useUserStore from "store/user-store/useUserStore";
+import { useSnackbar, SnackbarKey } from "notistack";
 
 const schema = object().shape({
   amount: number().required().min(0),
@@ -41,6 +42,8 @@ export const BuySell = () => {
   const { tonBalance, getUserBalance } = useUserStore();
   const { jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
+  const [loadingNotificationKey, setLoadingNotificationKey] = useState<SnackbarKey | undefined>();
+  const { closeSnackbar } = useSnackbar();
   const [tonconnect] = useTonConnectUI();
   const [actionInProgress, setActionInProgress] = useRecoilState(jettonActionsState);
   const [tradeType, setTradeType] = useState("0");
@@ -220,6 +223,18 @@ export const BuySell = () => {
     return () => setActionInProgress(false);
   }, [getUserBalance, setActionInProgress]);
 
+  useEffect(() => {
+    if (actionInProgress) {
+      setLoadingNotificationKey(showNotification("Loading...", "info", undefined, null));
+    } else {
+      if (loadingNotificationKey !== undefined) {
+        closeSnackbar(loadingNotificationKey);
+        setLoadingNotificationKey(undefined);
+        showNotification("Operation Successful!", "success");
+      }
+    }
+  }, [actionInProgress]);
+
   return (
     <StyledBodyBlock height="313px">
       <ToggleButton tradeType={tradeType} handleChangeType={handleChangeType} />
@@ -285,13 +300,28 @@ export const BuySell = () => {
 
       {/* <DividerLine /> */}
 
-      <TradeButton
+      {/* <TradeButton
         background="#00B2FF"
         loading={actionInProgress}
         onClick={onClickTrade}
         loadingIndicator={<CircularProgress style={{ color: "white", width: 20, height: 20 }} />}>
         TRADE
+      </TradeButton> */}
+      <TradeButton
+        background="#00B2FF"
+        loading={actionInProgress}
+        onClick={() => {
+          console.log("changed loading");
+        }}
+        loadingIndicator={<CircularProgress style={{ color: "white", width: 20, height: 20 }} />}>
+        TRADE
       </TradeButton>
+      <button
+        onClick={() => {
+          setActionInProgress(!actionInProgress);
+        }}>
+        toggle actionInProgress
+      </button>
     </StyledBodyBlock>
   );
 };
