@@ -126,7 +126,7 @@ const BlinkingText = styled(Typography, {
 export const StyledDetailRow = styled(Box)({
   display: "flex",
   justifyContent: "space-between",
-  width: "100%",
+  width: "500px",
   height: "24px",
 });
 
