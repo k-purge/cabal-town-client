@@ -10,11 +10,12 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import { useHeader } from "hooks/useHeader";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { IJettonProfile } from "store/jetton-store";
+import { CardListContainer } from "./styles";
 
 function orderProfilesByOwnerAddress(
   targetOwnerAddress: string,
   userProfileList: IJettonProfile[],
-) {
+): IJettonProfile[] {
   return userProfileList.sort((a, b) => {
     const aMatches = a.ownerAddress === targetOwnerAddress ? 1 : 0;
     const bMatches = b.ownerAddress === targetOwnerAddress ? 1 : 0;
@@ -24,92 +25,12 @@ function orderProfilesByOwnerAddress(
 
 function ProfilePage() {
   const navigate = useNavigatePreserveQuery();
-  // const ownerAddress = useTonAddress();
-  const ownerAddress = "0xOwnerAddress";
-  // const { userProfileList, getUserProfileList } = useJettonStore();
+  const ownerAddress = useTonAddress();
+  const { userProfileList, getUserProfileList } = useJettonStore();
 
-  // useEffect(() => {
-  //   getUserProfileList();
-  // }, [getUserProfileList]);
-
-  var userProfileList: IJettonProfile[] = [
-    {
-      masterAddress: "0x123123213",
-      imageUri: "1231313k1j",
-      name: "Coin",
-      balance: "1000",
-      players: [
-        {
-          name: "1",
-        },
-        {
-          name: "2",
-        },
-        {
-          name: "3",
-        },
-      ],
-      ownerAddress: "0xOwnerAddress",
-      id: "10293210931",
-    },
-    {
-      masterAddress: "0x123123213",
-      imageUri: "1231313k1j",
-      name: "Coing",
-      balance: "1000",
-      players: [
-        {
-          name: "1",
-        },
-        {
-          name: "2",
-        },
-        {
-          name: "3",
-        },
-      ],
-      ownerAddress: "0xOwnerAddress123123",
-      id: "10293210931",
-    },
-    {
-      masterAddress: "0x123123213",
-      imageUri: "1231313k1j",
-      name: "MemeCoin",
-      balance: "1000",
-      players: [
-        {
-          name: "1",
-        },
-        {
-          name: "2",
-        },
-        {
-          name: "3",
-        },
-      ],
-      ownerAddress: "0xOwnerAddress",
-      id: "10293210931",
-    },
-    {
-      masterAddress: "0xqkwjeqkj",
-      imageUri: "1231313k1j",
-      name: "Coin1",
-      balance: "100021",
-      players: [
-        {
-          name: "1",
-        },
-        {
-          name: "2",
-        },
-        {
-          name: "3",
-        },
-      ],
-      ownerAddress: "0xBadAddress",
-      id: "10293210931",
-    },
-  ];
+  useEffect(() => {
+    getUserProfileList();
+  }, [getUserProfileList]);
 
   const onClickCard = (item: IJetton | undefined) => {
     if (item) {
@@ -122,13 +43,15 @@ function ProfilePage() {
   }, [setHeader]);
 
   // Order the list with Owners on top
-  const orderedProfileList = orderProfilesByOwnerAddress(ownerAddress, userProfileList);
+  const orderedProfileList = userProfileList
+    ? orderProfilesByOwnerAddress(ownerAddress, userProfileList)
+    : undefined;
 
   return (
     <Screen>
       <ScreenContent removeBackground>
         <Fade in>
-          <Box>
+          <CardListContainer>
             {orderedProfileList?.length ? (
               orderedProfileList.map((item) => (
                 <Card
@@ -151,7 +74,7 @@ function ProfilePage() {
                 <EmptyCard />
               </Box>
             )}
-          </Box>
+          </CardListContainer>
         </Fade>
       </ScreenContent>
     </Screen>
