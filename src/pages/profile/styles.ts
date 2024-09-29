@@ -1,5 +1,13 @@
 import { Box, styled, Typography } from "@mui/material";
 
+const CardListContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "12px",
+}));
+
 const StyledWrapper = styled(Box)(({ theme }) => ({
   flex: 5,
   background: "#1E1E1E",
@@ -31,4 +39,4 @@ const StyledParagraph = styled(Typography)(({ theme }) => ({
   marginBottom: 24,
 }));
 
-export { StyledWrapper, StyledHeading, StyledTitle, StyledParagraph };
+export { CardListContainer, StyledWrapper, StyledHeading, StyledTitle, StyledParagraph };

@@ -8,9 +8,24 @@ import { IJetton } from "store/jetton-list-store";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import { useHeader } from "hooks/useHeader";
+import { useTonAddress } from "@tonconnect/ui-react";
+import { IJettonProfile } from "store/jetton-store";
+import { CardListContainer } from "./styles";
+
+function orderProfilesByOwnerAddress(
+  targetOwnerAddress: string,
+  userProfileList: IJettonProfile[],
+): IJettonProfile[] {
+  return userProfileList.sort((a, b) => {
+    const aMatches = a.ownerAddress === targetOwnerAddress ? 1 : 0;
+    const bMatches = b.ownerAddress === targetOwnerAddress ? 1 : 0;
+    return bMatches - aMatches; // Profiles with matching ownerAddress come first
+  });
+}
 
 function ProfilePage() {
   const navigate = useNavigatePreserveQuery();
+  const ownerAddress = useTonAddress();
   const { userProfileList, getUserProfileList } = useJettonStore();
 
   useEffect(() => {
@@ -27,13 +42,24 @@ function ProfilePage() {
     setHeader("Portfolio", { showBackButton: false });
   }, [setHeader]);
 
+  // Order the list with Owners on top
+  const orderedProfileList = userProfileList
+    ? orderProfilesByOwnerAddress(ownerAddress, userProfileList)
+    : undefined;
+
   return (
     <Screen>
       <ScreenContent removeBackground>
         <Fade in>
-          <Box>
-            {userProfileList?.length ? (
-              userProfileList.map((item) => <Card item={item} onClickCard={onClickCard} />)
+          <CardListContainer>
+            {orderedProfileList?.length ? (
+              orderedProfileList.map((item) => (
+                <Card
+                  item={item}
+                  onClickCard={onClickCard}
+                  isOwner={item.ownerAddress === ownerAddress}
+                />
+              ))
             ) : (
               <Box
                 sx={{
@@ -48,7 +74,7 @@ function ProfilePage() {
                 <EmptyCard />
               </Box>
             )}
-          </Box>
+          </CardListContainer>
         </Fade>
       </ScreenContent>
     </Screen>
