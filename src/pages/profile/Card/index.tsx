@@ -1,5 +1,14 @@
 import { Box } from "@mui/material";
-import { CardText, CardBody, CardHeader, CardContainer, CardContent, CardImage } from "./styles";
+import {
+  CardOwnerText,
+  CardText,
+  CardBody,
+  CardHeader,
+  CardContentContainer,
+  CardContainer,
+  CardContent,
+  CardImage,
+} from "./styles";
 import { IJetton } from "store/jetton-list-store/";
 import { useMemo } from "react";
 import { DECIMAL_SCALER } from "consts";
@@ -9,9 +18,11 @@ import { IJettonProfile } from "store/jetton-store";
 export const Card = ({
   item,
   onClickCard,
+  isOwner,
 }: {
   item: IJettonProfile | undefined;
   onClickCard: (jetton: IJetton | undefined) => void;
+  isOwner: Boolean;
 }) => {
   const balance = useMemo(() => {
     if (item?.balance) {
@@ -21,17 +32,20 @@ export const Card = ({
 
   return (
     <CardContainer onClick={() => onClickCard(item)}>
-      <CardImage>
-        <img src={item?.imageUri} alt="Logo" />
-      </CardImage>
-      <CardContent>
-        <CardHeader>{item?.name}</CardHeader>
-        <Box display="flex" flexDirection={"row"} gap={"5px"}>
-          <UserIcon color="#767676" />
-          <CardBody>{item?.players?.length} Players in game</CardBody>
-        </Box>
-        {balance ? <CardText>Amount: {balance}</CardText> : null}
-      </CardContent>
+      <CardContentContainer>
+        <CardImage>
+          <img src={item?.imageUri} alt="Logo" />
+        </CardImage>
+        <CardContent>
+          <CardHeader>{item?.name}</CardHeader>
+          <Box display="flex" flexDirection={"row"} gap={"5px"}>
+            <UserIcon color="#767676" />
+            <CardBody>{item?.players?.length} Players in game</CardBody>
+          </Box>
+          {balance ? <CardText>Amount: {balance}</CardText> : null}
+        </CardContent>
+      </CardContentContainer>
+      {isOwner ? <CardOwnerText>Owner</CardOwnerText> : null}
     </CardContainer>
   );
 };
