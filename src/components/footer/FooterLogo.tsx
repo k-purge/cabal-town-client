@@ -5,6 +5,7 @@ import ExplorerIcon from "components/icons/Explorer.icon";
 import ProfileIcon from "components/icons/Profile.icon";
 import DeployerIcon from "components/icons/Deployer.icon";
 import HowItWorksIcon from "components/icons/HowItWorks.icon ";
+import QuestIcon from "components/icons/Quest.icon";
 
 export const FooterLogo = ({
   selectedRoute,
@@ -25,6 +26,8 @@ export const FooterLogo = ({
         return <ProfileIcon isfocus={Boolean(selectedRoute === title)} />;
       case "Create cabal":
         return <DeployerIcon isfocus={Boolean(selectedRoute === title)} />;
+      case "Quest":
+        return <QuestIcon isfocus={Boolean(selectedRoute === title)} />;
       default:
         return <HowItWorksIcon isfocus={Boolean(selectedRoute === title)} />;
     }

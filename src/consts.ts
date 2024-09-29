@@ -8,6 +8,7 @@ const ROUTES = {
   profile: "/profile",
   faq: "/faq",
   onboarding: "/onboarding",
+  quest: "/quest",
 };
 
 const APP_GRID = 1156;

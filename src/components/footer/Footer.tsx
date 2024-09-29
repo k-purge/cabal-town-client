@@ -19,6 +19,10 @@ const footerLogos = [
     route: ROUTES.deployer,
   },
   {
+    title: "Quest",
+    route: ROUTES.quest,
+  },
+  {
     title: "How it works",
     route: ROUTES.faq,
   },

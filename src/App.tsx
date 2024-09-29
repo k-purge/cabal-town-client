@@ -10,12 +10,13 @@ import { Header } from "components/header";
 import { FaqPage } from "pages/faq";
 import { ProfilePage } from "pages/profile";
 import { useJettonLogo } from "hooks/useJettonLogo";
+import { useAuthToken } from "hooks/useAuthToken";
+import { OnboardingPage } from "pages/onboarding";
+import { QuestPage } from "pages/quest";
 import useNotification from "hooks/useNotification";
 import analytics from "services/analytics";
-import { useAuthToken } from "hooks/useAuthToken";
 import axiosService from "services/axios";
 import "./mockTg";
-import { OnboardingPage } from "pages/onboarding";
 // import eruda from "eruda";
 
 // eruda.init();
@@ -165,6 +166,7 @@ const App = () => {
                     <Route path={ROUTES.profile} element={<ProfilePage />} />
                     <Route path={ROUTES.faq} element={<FaqPage />} />
                     <Route path={ROUTES.onboarding} element={<OnboardingPage />} />
+                    <Route path={ROUTES.quest} element={<QuestPage />} />
                   </Route>
                 </Route>
               </Route>
