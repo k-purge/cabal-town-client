@@ -20,11 +20,13 @@ function useNotification() {
       message: ReactNode | string,
       variant: VariantType,
       onClose?: () => void,
-      autoHideDuration?: number,
+      autoHideDuration?: number | null,
     ) => {
+      const effectiveAutoHideDuration = autoHideDuration === undefined ? 5000 : autoHideDuration;
+
       const key = enqueueSnackbar(<StyledMessage>{message}</StyledMessage>, {
         variant,
-        autoHideDuration: autoHideDuration || 5000,
+        autoHideDuration: autoHideDuration,
         onClose,
         onClick: () => closeSnackbar(key),
         action: () => (
@@ -33,6 +35,8 @@ function useNotification() {
           </IconButton>
         ),
       });
+
+      return key;
     },
     [closeSnackbar, enqueueSnackbar],
   );
