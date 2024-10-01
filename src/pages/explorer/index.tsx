@@ -10,11 +10,17 @@ import { IJetton } from "store/jetton-list-store";
 import useJettonListStore from "store/jetton-list-store/useJettonListStore";
 import { useHeader } from "hooks/useHeader";
 
+const categories = [
+  { category: "All", value: "all" },
+  { category: "Popular", value: "popular" },
+  { category: "Blue Chips", value: "blueChip" },
+  { category: "Trending", value: "trending" },
+];
+
 function ExplorerPage() {
   const { setSelectedJetton, jettonList, getJettonList } = useJettonListStore();
   const [example, setExample] = useState<string | undefined>(undefined);
   const navigate = useNavigatePreserveQuery();
-  const categories = ["All", "Popular", "Blue Chips", "Trending"];
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const resetExample = useCallback(() => {
@@ -32,6 +38,14 @@ function ExplorerPage() {
   );
   const { setHeader } = useHeader();
 
+  const onClickCategory = useCallback(
+    (cat: string, val: string) => {
+      setSelectedCategory(cat);
+      getJettonList(val);
+    },
+    [getJettonList],
+  );
+
   useEffect(() => {
     setHeader("Explore", { showBackButton: false });
   }, [setHeader]);
@@ -46,13 +60,13 @@ function ExplorerPage() {
         <Fade in>
           <Box>
             <ButtonContainer>
-              {categories.map((category) =>
+              {categories.map(({ category, value }) =>
                 selectedCategory === category ? (
-                  <SelectedButton key={category} onClick={() => setSelectedCategory(category)}>
+                  <SelectedButton key={category} onClick={() => onClickCategory(category, value)}>
                     {category}
                   </SelectedButton>
                 ) : (
-                  <UnselectedButton key={category} onClick={() => setSelectedCategory(category)}>
+                  <UnselectedButton key={category} onClick={() => onClickCategory(category, value)}>
                     {category}
                   </UnselectedButton>
                 ),
@@ -69,7 +83,7 @@ function ExplorerPage() {
 
             <ListContainer>
               {jettonList.map((item, index) => (
-                <Card key={index} index={index} item={item} onClickCard={onClickCard} />
+                <Card key={index} item={item} onClickCard={onClickCard} />
               ))}
             </ListContainer>
           </Box>

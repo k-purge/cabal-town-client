@@ -11,17 +11,13 @@ import { IJetton } from "store/jetton-list-store/";
 
 export const Card = ({
   item,
-  index,
   onClickCard,
 }: {
   item: IJetton | undefined;
-  index: number;
   onClickCard: (jetton: IJetton | undefined) => void;
 }) => {
-  const basePrice = 0.0016;
-  const variation = 0.22; // 22% variation
-  const buyInPrice = basePrice * (1 + variation) * (index + 1);
-  const isIncreasing = index > 1;
+  const isIncreasing = item?.percent && item?.percent > 1;
+
   return (
     <CardOverlay>
       <CardContainer onClick={() => onClickCard(item)}>
@@ -44,13 +40,13 @@ export const Card = ({
           <Box display="flex" flexDirection={"column"}>
             <CardBody>Buy-in Price</CardBody>
             <CardBodyNumber>
-              ${buyInPrice.toFixed(5)}
+              ${item?.price?.toFixed(8)}
               <span
                 style={{
                   marginLeft: "4px",
                   color: isIncreasing ? "#3FF400" : "#FF0000",
                 }}>
-                ({isIncreasing ? "+" : "-"}20%)
+                ({item?.percent}%)
               </span>
             </CardBodyNumber>
           </Box>

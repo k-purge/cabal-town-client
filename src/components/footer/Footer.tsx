@@ -18,10 +18,11 @@ const footerLogos = [
     title: "Create cabal",
     route: ROUTES.deployer,
   },
-  {
-    title: "Quest",
-    route: ROUTES.quest,
-  },
+  // TODO
+  // {
+  //   title: "Quest",
+  //   route: ROUTES.quest,
+  // },
   {
     title: "How it works",
     route: ROUTES.faq,

@@ -24,8 +24,9 @@ async function insertJetton(data: IInsertJetton) {
   };
 }
 
-async function getJettonList(chain: string) {
-  const endpoint = `${REACT_APP_API_URL}/v1/jettons?sortBy=createdAt:desc&chain=${chain}`;
+async function getJettonList(chain: string, field?: string) {
+  let endpoint = `${REACT_APP_API_URL}/v1/jettons?sortBy=createdAt:desc&chain=${chain}`;
+  if (field) endpoint += `&field=${field}`;
   return {
     res: (await axiosInstance.get(endpoint)).data,
   };

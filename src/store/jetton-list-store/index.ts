@@ -40,6 +40,13 @@ export interface IJetton {
   totalRewardBalance?: number;
   lockedDepositAmt?: number;
   unclaimedReward?: number;
+  percent?: number;
+  price?: number;
+  trending48Hour?: {
+    numOfPlayers?: number;
+    percent?: number;
+    timestamp?: number;
+  };
 }
 
 export interface JettonListStoreState {
