@@ -1,5 +1,5 @@
 import { Box, styled, Typography } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import Button from "@mui/material/Button";
 
 const CardContainer = styled(Box)(({ theme }) => ({
   background: "#1E1E1E",
@@ -15,6 +15,9 @@ const CardContainer = styled(Box)(({ theme }) => ({
 }));
 
 const CardContent = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: "24px",
   width: "100%",
   alignItems: "center",
   textAlign: "center", // Ensure text alignment is left within the card
@@ -23,15 +26,20 @@ const CardContent = styled(Box)(({ theme }) => ({
   },
 }));
 
-const CardText = styled(Typography)(() => ({
-  fontFamily: "Cabin Condensed",
+const CardTitle = styled(Typography)(() => ({
+  fontFamily: "Bungee, Sans-Serif",
   fontSize: "16px",
-  color: "#ffff",
-  marginTop: "3px",
-  fontWeight: 600,
+  fontWeight: 400,
 }));
 
-const SubmitButton = styled(LoadingButton)(({ theme }) => ({
+const CardText = styled(Typography)(() => ({
+  fontFamily: "Cabin Condensed",
+  fontSize: "14px",
+  color: "#ffff",
+  fontWeight: 400,
+}));
+
+const ExploreButton = styled(Button)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   gap: "10px",
@@ -39,7 +47,6 @@ const SubmitButton = styled(LoadingButton)(({ theme }) => ({
   color: "#000000",
   background: "#FFB800",
   fontFamily: "Bungee, Sans-Serif",
-  marginBlock: 12,
   borderRadius: 0,
   width: "100%",
   padding: "12px",
@@ -50,4 +57,4 @@ const SubmitButton = styled(LoadingButton)(({ theme }) => ({
   },
 }));
 
-export { CardText, CardContainer, CardContent, SubmitButton };
+export { CardTitle, CardText, CardContainer, CardContent, ExploreButton };
