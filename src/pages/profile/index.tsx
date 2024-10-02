@@ -11,6 +11,7 @@ import { useHeader } from "hooks/useHeader";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { IJettonProfile } from "store/jetton-store";
 import { CardListContainer } from "./styles";
+import { NoCabalsCard } from "./NoCabalsCard";
 
 function orderProfilesByOwnerAddress(
   targetOwnerAddress: string,
@@ -51,8 +52,10 @@ function ProfilePage() {
     <Screen>
       <ScreenContent removeBackground>
         <Fade in>
-          <CardListContainer>
-            {orderedProfileList?.length ? (
+          <Box>
+            {ownerAddress === "" ? (
+              <EmptyCard />
+            ) : orderedProfileList?.length ? (
               orderedProfileList.map((item) => (
                 <Card
                   item={item}
@@ -61,20 +64,9 @@ function ProfilePage() {
                 />
               ))
             ) : (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: "70vh",
-                  width: "100%",
-                  color: "white",
-                }}>
-                <EmptyCard />
-              </Box>
+              <NoCabalsCard />
             )}
-          </CardListContainer>
+          </Box>
         </Fade>
       </ScreenContent>
     </Screen>
