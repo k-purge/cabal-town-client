@@ -1,7 +1,5 @@
-import { Button, IconButton, styled, Typography, useMediaQuery } from "@mui/material";
-import { Box } from "@mui/system";
+import { IconButton, useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { HeaderMenu, MobileMenu } from "components/header/headerMenu/HeaderMenu";
 import {
@@ -13,7 +11,6 @@ import {
   HeaderTitle,
 } from "./styled";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useTonConnectModal, useTonWallet } from "@tonconnect/ui-react";
 import { useHeader } from "hooks/useHeader";
 
 export const Header = () => {
