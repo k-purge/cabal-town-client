@@ -83,21 +83,32 @@ export function IntroPage({ setStep }: { setStep: (step: OnboardingStep) => void
                 flex: "1 1 auto",
               }}>
               <Box
-                component="img"
                 sx={{
-                  height: "70%",
-                  maxWidth: index === 2 ? "70%" : "90%",
+                  display: "flex",
+                  flex: "2 1 auto",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "80%",
                   overflow: "hidden",
-                  objectFit: "contain",
-                }}
-                src={item.image}
-              />
+                  marginBottom: "20px",
+                }}>
+                <Box
+                  component="img"
+                  sx={{
+                    overflow: "hidden",
+                    objectFit: "contain",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  src={item.image}
+                />
+              </Box>
               <Box
                 sx={{
-                  height: "30%",
+                  flex: "1 1 auto",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "center",
+                  justifyContent: "space-evenly",
                   alignItems: "center",
                 }}>
                 <TitleText>{item.subtitle}</TitleText>

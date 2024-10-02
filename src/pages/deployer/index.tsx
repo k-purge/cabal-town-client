@@ -1,29 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { Address } from "ton";
-import { Box, Fade } from "@mui/material";
-import { jettonDeployController, JettonDeployParams } from "lib/jetton-controller";
-import { createDeployParams } from "lib/utils";
-import { ContractDeployer } from "lib/contract-deployer";
-import { Link as ReactRouterLink } from "react-router-dom";
-import { ROUTES } from "consts";
-import axiosService from "services/axios";
-import WalletConnection from "services/wallet-connection";
-import useNotification from "hooks/useNotification";
-import analytics, { AnalyticsAction, AnalyticsCategory } from "services/analytics";
-import { FormWrapper } from "./styles";
-import { Screen, ScreenContent } from "components/Screen";
-import { getUrlParam } from "utils";
-import { offchainFormSpec, onchainFormSpec, gameDetailSpec } from "./data";
-import { Form } from "components/form";
-import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
-import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
-import { IInsertJetton } from "store/jetton-list-store";
-import { useNetwork } from "lib/hooks/useNetwork";
-import useJettonStore from "store/jetton-store/useJettonStore";
-import useUserStore from "store/user-store/useUserStore";
-import { useHeader } from "hooks/useHeader";
-import { CreateCabal, CreateCabalRef } from "components/CreateCabal";
+import { Box } from "@mui/material";
 import { ContainedButton } from "components/Buttons";
+import { CreateCabal, CreateCabalRef } from "components/CreateCabal";
+import { useHeader } from "hooks/useHeader";
+import { useEffect, useRef, useState } from "react";
+import { getUrlParam } from "utils";
+import { offchainFormSpec, onchainFormSpec } from "./data";
 
 const DEFAULT_DECIMALS = 9;
 
@@ -62,9 +43,11 @@ function DeployerPage() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding: "32px 20px",
+        padding: "0px 20px",
       }}>
-      <CreateCabal ref={cabalRef} />
+      <Box sx={{ overflowY: "auto", flex: "1 1 auto", width: "100%", padding: "32px 0px" }}>
+        <CreateCabal ref={cabalRef} />
+      </Box>
       <ContainedButton
         loading={isDeploying}
         sx={{ width: "100%", fontSize: "16px" }}

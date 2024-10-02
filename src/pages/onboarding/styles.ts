@@ -30,5 +30,4 @@ export const TitleText = styled(Typography)(() => ({
   textAlign: "center",
   letterSpacing: "0.04em",
   color: "#FFB800",
-  marginBottom: "20px",
 }));
