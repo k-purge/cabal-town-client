@@ -40,7 +40,7 @@ export const Card = ({
           <Box display="flex" flexDirection={"column"}>
             <CardBody>Buy-in Price</CardBody>
             <CardBodyNumber>
-              ${item?.price?.toFixed(8)}
+              ${item?.price?.toFixed(6)}
               <span
                 style={{
                   marginLeft: "4px",
