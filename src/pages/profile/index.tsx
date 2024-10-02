@@ -28,8 +28,7 @@ function ProfilePage() {
   const navigate = useNavigatePreserveQuery();
   const ownerAddress = useTonAddress();
   const { userProfileList, getUserProfileList } = useJettonStore();
-  // const walletAddress = useTonAddress()
-  const walletAddress: string = "testing";
+  const walletAddress = useTonAddress();
 
   useEffect(() => {
     getUserProfileList();
