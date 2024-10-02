@@ -47,21 +47,19 @@ export function SuccessPage({ description, buttonText, buttonOnClick }: SuccessP
             justifyContent: "center",
             flex: "1 1 auto",
           }}>
-          <TitleText sx={{ fontSize: "32px", marginBottom: "0px" }}>YOU'RE ALL SET!</TitleText>
+          <TitleText sx={{ fontSize: "32px", marginBottom: "20px" }}>YOU'RE ALL SET!</TitleText>
           <Box
             component="img"
             sx={{
-              height: "360px",
-              width: "280px",
+              height: "300px",
               overflow: "hidden",
               objectFit: "contain",
-              margin: "10px 0px",
             }}
             src="/SuccessPage.png"
           />
           <DescriptionText>{description || defaultDescription}</DescriptionText>
         </Box>
-        <ContainedButton onClick={handleContinue} sx={{ marginTop: "60px", width: "100%" }}>
+        <ContainedButton onClick={handleContinue} sx={{ width: "100%" }}>
           {buttonText || defaultButtonText}
         </ContainedButton>
       </OnboardingScreenContainer>

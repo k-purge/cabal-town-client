@@ -48,7 +48,7 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
   const [cabalName, setCabalName] = useState(nameToUse + "'s cabal");
   const [cabalSize, setCabalSize] = useState(1); // Add this state
   // todo: handle image
-  const [cabalImageUrl, setCabalImageUrl] = useState("");
+  const [cabalImageUrl, setCabalImageUrl] = useState(userPhoto ?? "");
 
   const onEditAmt = (newValue: number) => {
     setCabalSize(Math.max(1, newValue)); // Ensure cabal size is at least 1
@@ -72,6 +72,20 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
   // useEffect(() => {
   //   reset();
   // }, [reset]);
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result;
+        if (typeof result === "string") {
+          setCabalImageUrl(result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   async function deployContract() {
     console.log("deployContract");
@@ -167,12 +181,12 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
         display: "flex",
         flexDirection: "column",
         gap: "24px",
-        flex: 1,
+        flex: "1 1 auto",
         alignItems: "center",
         justifyContent: "flex-start",
         width: "100%",
       }}>
-      <CardPreview imageUri={userPhoto ?? ""} name={cabalName} />
+      <CardPreview imageUri={cabalImageUrl} name={cabalName} />
       <Box
         sx={{
           width: "100%",
@@ -186,10 +200,7 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
           <OutlinedButton sx={{ width: "50vw", maxWidth: "200px" }}>
             <label>
               REPLACE
-              <VisuallyHiddenInput
-                type="file"
-                onChange={(event) => console.log(event.target.files)}
-              />
+              <VisuallyHiddenInput type="file" onChange={handleImageUpload} accept="image/*" />
             </label>
           </OutlinedButton>
         </SpaceBetween>

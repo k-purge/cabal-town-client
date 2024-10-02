@@ -41,7 +41,8 @@ export function CreateCabalPage({ setStep }: { setStep: (step: OnboardingStep) =
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            flex: 1,
+            flex: "1 1 auto",
+            overflowY: "auto",
           }}>
           <Typography
             sx={{
@@ -53,39 +54,37 @@ export function CreateCabalPage({ setStep }: { setStep: (step: OnboardingStep) =
               letterSpacing: "0.08em",
               color: "#FFFFFF",
               textAlign: "center",
-              marginBottom: "30px",
+              paddingBottom: "32px",
             }}>
             Each cabal has its own cabal credit. Creating one generates your cabal credit on the
             blockchain. Let others buy in and earn fees as you grow.
           </Typography>
           <CreateCabal ref={createCabalRef} />
-          <Box
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+            paddingTop: "16px",
+          }}>
+          <OutlinedButton
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "24px",
-              width: "100%",
-              alignItems: "flex-end",
-              flexGrow: 1,
-            }}>
-            <OutlinedButton
-              sx={{
-                width: "40vw",
-                maxWidth: "160px",
-              }}
-              onClick={() => setStep("success")}>
-              LATER
-            </OutlinedButton>
-            <ContainedButton
-              sx={{
-                width: "40vw",
-                maxWidth: "160px",
-              }}
-              loading={isLoading}
-              onClick={handleCreateCabal}>
-              CREATE CABAL
-            </ContainedButton>
-          </Box>
+              width: "40vw",
+              maxWidth: "160px",
+            }}
+            onClick={() => setStep("success")}>
+            LATER
+          </OutlinedButton>
+          <ContainedButton
+            sx={{
+              width: "40vw",
+              maxWidth: "160px",
+            }}
+            loading={isLoading}
+            onClick={handleCreateCabal}>
+            CREATE CABAL
+          </ContainedButton>
         </Box>
       </OnboardingScreenContainer>
     </Screen>
