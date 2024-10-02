@@ -124,20 +124,20 @@ async function updateJettonPurge(data: IUpdatePurge) {
   };
 }
 
-async function uploadFile(file: File) {
+async function uploadFile(file: File): Promise<string | undefined> {
   const endpoint = REACT_APP_API_URL + "/v1/utils/upload";
 
   const formData = new FormData();
   formData.append("file", file);
 
   try {
-    const response = await axios.post(endpoint, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    console.debug("response: ", response);
+    return (
+      await axios.post(endpoint, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+    ).data.url;
   } catch (error) {
     console.error("Error uploading file:", error);
   }

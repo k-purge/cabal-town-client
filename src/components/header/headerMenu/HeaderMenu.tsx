@@ -51,8 +51,8 @@ const HeaderMenu: React.FC<MenuProps> = (props) => {
   const walletAddress = useTonAddress();
 
   useEffect(() => {
-    console.log("wallet address changed: ", walletAddress);
-    console.log("tgUserId: ", tgUserId);
+    console.debug("wallet address changed: ", walletAddress);
+    console.debug("tgUserId: ", tgUserId);
     if (tgUserId && walletAddress) {
       getUser(tgUserId, walletAddress, walletAddress);
     }

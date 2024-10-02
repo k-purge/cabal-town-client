@@ -1,9 +1,9 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Label, SpaceBetween, VisuallyHiddenInput } from "./styles";
 import { useInitData } from "@telegram-apps/sdk-react";
 import { CardPreview } from "components/card";
-import { DetailWrapper, DetailNumField } from "components/form/styled";
+import { DetailWrapper } from "components/form/styled";
 import MinusIcon from "assets/icons/minus.svg";
 import PlusIcon from "assets/icons/plus.svg";
 import { Link as ReactRouterLink } from "react-router-dom";
@@ -13,8 +13,6 @@ import useNotification from "hooks/useNotification";
 import { useNetwork } from "lib/hooks/useNetwork";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
-import useJettonStore from "store/jetton-store/useJettonStore";
-import useUserStore from "store/user-store/useUserStore";
 import { jettonDeployController, JettonDeployParams } from "lib/jetton-controller";
 import { Address } from "ton";
 import { createDeployParams } from "lib/utils";
@@ -41,14 +39,15 @@ type CreateCabalProps = {};
 export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, ref) => {
   const initData = useInitData();
   const user = initData?.user;
+  const tgUserId = user?.id;
   const userName = user?.username;
   const fullName = user?.firstName + " " + user?.lastName;
   const nameToUse = userName || fullName;
   const userPhoto = user?.photoUrl;
   const [cabalName, setCabalName] = useState(nameToUse + "'s cabal");
   const [cabalSize, setCabalSize] = useState(1); // Add this state
-  // todo: handle image
   const [cabalImageUrl, setCabalImageUrl] = useState(userPhoto ?? "");
+  const [imageFile, setImageFile] = useState<File | undefined>();
 
   const onEditAmt = (newValue: number) => {
     setCabalSize(Math.max(1, newValue)); // Ensure cabal size is at least 1
@@ -66,16 +65,14 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
   const rawAddress = useTonAddress(false);
   const [tonconnect] = useTonConnectUI();
   const navigate = useNavigatePreserveQuery();
-  const { reset } = useJettonStore();
-  const { tgUserId } = useUserStore();
 
-  // useEffect(() => {
-  //   reset();
-  // }, [reset]);
+  console.log("tgUserId: ", tgUserId);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setImageFile(file);
+
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result;
@@ -89,10 +86,29 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
 
   async function deployContract() {
     console.log("deployContract");
+
+    if (!imageFile) {
+      showNotification(<>Please replace cabal image</>, "warning");
+      return;
+    }
+
+    let imageUrl: string = "";
+
+    try {
+      const url = await axiosService.uploadFile(imageFile);
+      if (url) imageUrl = url;
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(err);
+        showNotification(`Server Timeout, Please try again.`, "error");
+        throw err;
+      }
+    }
+
     const data = {
       cabalName: cabalName,
       cabalSize: cabalSize,
-      cabalImageUrl: cabalImageUrl,
+      cabalImageUrl: imageUrl,
       offchainUri: "",
     };
     if (!walletAddress || !tonconnect) {
@@ -142,7 +158,7 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
 
       const jettonData: IInsertJetton = {
         name: cabalName,
-        imageUri: cabalImageUrl,
+        imageUri: data.cabalImageUrl,
         lastSurvivors: cabalSize,
         masterAddress: Address.normalize(result),
         ownerAddress: process.env.REACT_APP_JETTON_OWNER!,
