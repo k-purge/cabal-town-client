@@ -8,6 +8,7 @@ const fontStyle = {
   fontFamily: "Bungee, sans-serif",
   fontSize: "14px",
   fontWeight: "400",
+  cursor: "pointer",
 };
 
 export const UserAvatar = () => {
@@ -39,7 +40,9 @@ export const UserAvatar = () => {
         user.photoUrl ? (
           <Avatar onClick={handleLogoClick} src={user?.photoUrl} sx={{ width: 40, height: 40 }} />
         ) : (
-          <Typography sx={fontStyle}>{user.username}</Typography>
+          <Typography onClick={handleLogoClick} sx={fontStyle}>
+            {user.username}
+          </Typography>
         )
       ) : (
         <Typography sx={fontStyle}>
