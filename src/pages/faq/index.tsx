@@ -29,7 +29,7 @@ const faq = [
   },
   {
     question: "What is the reward for the final winners?",
-    answer: `<b>On top of</b> being part of a close community, you will also earn 25% of the fees generated via trading the token.`,
+    answer: `<b>On top of</b> being part of a close community, you will also earn addtional fees generated via trading the token.`,
   },
   {
     question: "What happens at the end of the game?",

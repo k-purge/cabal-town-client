@@ -22,7 +22,7 @@ Cabal.town is a social survival game that rewards the most loyal and purges the 
 
 ### What is the reward for the final winners?
 
-**On top of** being part of a close community, you will also earn 25% of the fees generated via trading the token.
+**On top of** being part of a close community, you will also earn addtional fees generated via trading the token.
 
 ### What happens at the end of the game?
 

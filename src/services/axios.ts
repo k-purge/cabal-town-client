@@ -124,6 +124,25 @@ async function updateJettonPurge(data: IUpdatePurge) {
   };
 }
 
+async function uploadFile(file: File) {
+  const endpoint = REACT_APP_API_URL + "/v1/utils/upload";
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await axios.post(endpoint, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.debug("response: ", response);
+  } catch (error) {
+    console.error("Error uploading file:", error);
+  }
+}
+
 const axiosService = {
   getJettonUpdates,
   getJettonPrice,
@@ -140,6 +159,7 @@ const axiosService = {
   updateJettonPurge,
   redeemCode,
   verifyToken,
+  uploadFile,
 };
 
 export default axiosService;
