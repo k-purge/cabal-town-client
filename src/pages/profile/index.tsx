@@ -26,7 +26,8 @@ function orderProfilesByOwnerAddress(
 
 function ProfilePage() {
   const navigate = useNavigatePreserveQuery();
-  const ownerAddress = useTonAddress();
+  // const ownerAddress = useTonAddress();
+  const ownerAddress: string = "test";
   const { userProfileList, getUserProfileList } = useJettonStore();
 
   useEffect(() => {
