@@ -167,7 +167,14 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
         walletAddress,
         tgUserId,
       };
-      await axiosService.insertJetton(jettonData);
+      const res = await axiosService.insertJetton(jettonData);
+      console.debug("res: ", res);
+
+      if (res.status === 208) {
+        // indicate duplicate record
+        showNotification(`The cabal name has been used already.`, "warning");
+        return;
+      }
 
       analytics.sendEvent(
         AnalyticsCategory.DEPLOYER_PAGE,

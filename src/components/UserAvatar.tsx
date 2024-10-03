@@ -9,6 +9,10 @@ const fontStyle = {
   fontSize: "14px",
   fontWeight: "400",
   cursor: "pointer",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  width: "80%",
 };
 
 export const UserAvatar = () => {

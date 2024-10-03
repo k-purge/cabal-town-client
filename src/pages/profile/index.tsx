@@ -10,7 +10,6 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import { useHeader } from "hooks/useHeader";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { IJettonProfile } from "store/jetton-store";
-import { CardListContainer } from "./styles";
 import { NoCabalsCard } from "./NoCabalsCard";
 
 function orderProfilesByOwnerAddress(

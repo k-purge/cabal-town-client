@@ -59,7 +59,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ example, resetExample, clo
           onClick={() => setActive(false)}></Backdrop>
         <SearchBarWrapper>
           <SearchBarInput
-            placeholder="Search Cabal"
+            placeholder="Search cabal jetton address"
             onPaste={(e: any) => setValue(e.target.value)}
             onChange={(e) => setValue(e.target.value)}
             value={addressInput.value}
