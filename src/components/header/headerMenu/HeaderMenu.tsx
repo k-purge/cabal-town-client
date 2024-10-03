@@ -1,13 +1,13 @@
+import { useEffect } from "react";
 import { Button, Drawer, styled } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppLogo } from "components/appLogo";
-import walletIcon from "assets/icons/wallet.svg";
 import { LogoContainer, CloseMenuButton, DrawerContent, HeaderTypography } from "./styled";
 import { useTonAddress, useTonConnectModal, useTonWallet } from "@tonconnect/ui-react";
-import { useEffect } from "react";
 import { UserAvatar } from "components/UserAvatar";
-import useUserStore from "store/user-store/useUserStore";
 import { useInitData } from "@telegram-apps/sdk-react";
+import useUserStore from "store/user-store/useUserStore";
+import walletIcon from "assets/icons/wallet.svg";
 
 interface MenuProps {
   closeMenu?: () => void;
@@ -65,19 +65,6 @@ const HeaderMenu: React.FC<MenuProps> = (props) => {
       <img src={walletIcon} alt="wallet" />
     </CustomTonConnectButton>
   );
-
-  // <AppMenu>
-  //   {/* <div onClick={props.closeMenu}>
-  //     <StyledTonConnectButton />
-  //   </div> */}
-  //   {/* <IconButton
-  //     sx={{ padding: 0, ml: 1.5 }}
-  //     href="https://github.com/ton-blockchain/minter"
-  //     target="_blank">
-  //     <StyledGithubIcon width={20} height={20} src={githubIcon} />
-  //     <HeaderTypography variant="h5">GitHub</HeaderTypography>
-  //   </IconButton> */}
-  // </AppMenu>
 };
 
 const CustomTonConnectButton = styled(Button)(({ theme }) => ({

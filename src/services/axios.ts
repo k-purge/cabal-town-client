@@ -18,9 +18,11 @@ async function verifyToken(refreshToken: string) {
 
 async function insertJetton(data: IInsertJetton) {
   const endpoint = REACT_APP_API_URL + "/v1/jettons/insert";
+  const res = await axios.post(endpoint, data);
 
   return {
-    res: (await axios.post(endpoint, data)).data,
+    res: res.data,
+    status: res.status,
   };
 }
 

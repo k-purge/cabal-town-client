@@ -5,7 +5,7 @@ const CardContainer = styled(Box)(({ theme }) => ({
   border: "2px solid #000000",
   boxShadow: "2px 2px 0px 0px #000000",
   // padding: "12px",
-  width: "353px",
+  width: "100%",
   height: "104px",
   display: "flex",
   flexDirection: "row",

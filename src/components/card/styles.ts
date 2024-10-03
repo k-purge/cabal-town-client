@@ -55,12 +55,16 @@ const CardImage = styled(Box)(() => ({
 }));
 
 const CardHeader = styled(Typography)(() => ({
+  flex: 1,
   fontSize: "14px",
   textAlign: "left",
   color: "#fff",
   padding: "0 12px", // Added padding
   letterSpacing: "0.08em",
   height: "21px",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
 }));
 
 const CardBody = styled(Typography)(() => ({

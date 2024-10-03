@@ -6,7 +6,8 @@ const CardContainer = styled(Box)(({ theme }) => ({
   border: "2px solid #000000",
   boxShadow: "2px 2px 0px 0px #000000",
   padding: "24px 16px 24px 16px",
-  width: "353px",
+  width: "100%",
+  // width: "353px",
   alignItems: "center",
   cursor: "pointer",
   "& > *": {

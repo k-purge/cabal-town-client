@@ -10,7 +10,6 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import { useHeader } from "hooks/useHeader";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { IJettonProfile } from "store/jetton-store";
-import { CardListContainer } from "./styles";
 import { NoCabalsCard } from "./NoCabalsCard";
 
 function orderProfilesByOwnerAddress(
@@ -26,8 +25,7 @@ function orderProfilesByOwnerAddress(
 
 function ProfilePage() {
   const navigate = useNavigatePreserveQuery();
-  // const ownerAddress = useTonAddress();
-  const ownerAddress: string = "test";
+  const ownerAddress = useTonAddress(false);
   const { userProfileList, getUserProfileList } = useJettonStore();
 
   useEffect(() => {
