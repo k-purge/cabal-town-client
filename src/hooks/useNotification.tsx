@@ -16,18 +16,10 @@ function useNotification() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const showNotification = useCallback(
-    (
-      message: ReactNode | string,
-      variant: VariantType,
-      onClose?: () => void,
-      autoHideDuration?: number | null,
-    ) => {
-      const effectiveAutoHideDuration = autoHideDuration === undefined ? 5000 : autoHideDuration;
-
+    (message: ReactNode | string, variant: VariantType, autoHideDuration?: number | null) => {
       const key = enqueueSnackbar(<StyledMessage>{message}</StyledMessage>, {
         variant,
         autoHideDuration: autoHideDuration,
-        onClose,
         onClick: () => closeSnackbar(key),
         action: () => (
           <IconButton>

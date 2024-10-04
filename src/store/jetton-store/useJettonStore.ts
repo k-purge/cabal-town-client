@@ -111,7 +111,7 @@ function useJettonStore() {
     if (queryAddress && !isValidAddress(queryAddress)) {
       window.history.replaceState(null, "", window.location.pathname);
       queryAddress = null;
-      showNotification("Invalid jetton address in query param", "error", undefined, 5000);
+      showNotification("Invalid jetton address in query param", "error", 5000);
     }
 
     const address = queryAddress || connectedWalletAddress;

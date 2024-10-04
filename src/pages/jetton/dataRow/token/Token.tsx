@@ -16,8 +16,8 @@ import UserImg from "assets/icons/userGrey.svg";
 import { DividerLine, TradeButton } from "../trade/styled";
 import axiosService from "services/axios";
 import { useTonAddress } from "@tonconnect/ui-react";
-import useUserStore from "store/user-store/useUserStore";
 import useNotification from "hooks/useNotification";
+import { useInitData } from "@telegram-apps/sdk-react";
 
 export const Token = () => {
   const {
@@ -33,7 +33,8 @@ export const Token = () => {
     jettonMaster,
   } = useJettonStore();
   const { showNotification } = useNotification();
-  const { tgUserId } = useUserStore();
+  const initData = useInitData();
+  const tgUserId = initData?.user?.id;
   const walletAddress = useTonAddress();
   const [timeString, setTimeString] = useState("--");
 
@@ -96,6 +97,7 @@ export const Token = () => {
         window.open(res.invite_link, "_blank");
       } else if (res.status === "success") {
         window.open("tg://", "_blank");
+        showNotification("Join the group successfully.", "success");
       } else {
         showNotification(res.message ?? "Telegram error", "error");
       }
@@ -127,7 +129,7 @@ export const Token = () => {
             disabled={!(selectedJetton?.nextPurgeAt && jettonMaster && tgUserId && walletAddress)}
             background="#FFB800"
             onClick={onClickJoinGame}>
-            JOIN CABAL
+            {selectedJetton?.nextPurgeAt ? "JOIN CABAL" : "Cabal not yet created"}
           </TradeButton>
         </>
       );

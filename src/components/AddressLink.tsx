@@ -50,7 +50,7 @@ const AddressLink: React.FC<AddressLinkProps> = ({
   const { isSandbox } = useContext(EnvContext);
 
   const onCopy = () => {
-    showNotification("Address Copied!", "success", undefined, 3000);
+    showNotification("Address Copied!", "success", 3000);
   };
 
   return (

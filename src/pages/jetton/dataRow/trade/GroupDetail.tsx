@@ -13,7 +13,7 @@ export const GroupDetail = () => {
   const { showNotification } = useNotification();
 
   const onCopy = () => {
-    showNotification("Address Copied!", "success", undefined, 3000);
+    showNotification("Address Copied!", "success", 3000);
   };
 
   const marketCap = useMemo(() => {

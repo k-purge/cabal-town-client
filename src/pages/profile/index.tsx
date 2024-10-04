@@ -16,7 +16,7 @@ function orderProfilesByOwnerAddress(
   targetOwnerAddress: string,
   userProfileList: IJettonProfile[],
 ): IJettonProfile[] {
-  return userProfileList.sort((a, b) => {
+  return [...userProfileList].sort((a, b) => {
     const aMatches = a.ownerAddress === targetOwnerAddress ? 1 : 0;
     const bMatches = b.ownerAddress === targetOwnerAddress ? 1 : 0;
     return bMatches - aMatches; // Profiles with matching ownerAddress come first
@@ -51,7 +51,7 @@ function ProfilePage() {
     <Screen>
       <ScreenContent removeBackground>
         <Fade in>
-          <Box>
+          <Box display="flex" flexDirection="column" gap={2}>
             {ownerAddress === "" ? (
               <EmptyCard />
             ) : orderedProfileList?.length ? (

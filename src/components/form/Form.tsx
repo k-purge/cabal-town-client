@@ -62,7 +62,7 @@ export function Form({
     if (!firstError) {
       return;
     }
-    showNotification(<>{firstError.message}</>, "warning", undefined, 3000);
+    showNotification(<>{firstError.message}</>, "warning", 3000);
   };
 
   const onExampleClick = useCallback(

@@ -4,14 +4,11 @@ import { Popup } from "components/Popup";
 import useNotification from "hooks/useNotification";
 import { jettonDeployController } from "lib/jetton-controller";
 import { useState } from "react";
-import WalletConnection from "services/wallet-connection";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import { Address } from "ton";
 import { toDecimalsBN } from "utils";
 import { AppButton } from "components/appButton";
 import { AppNumberInput } from "components/appInput";
-import { useRecoilState } from "recoil";
-import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 
 function MintJettonsAction() {
