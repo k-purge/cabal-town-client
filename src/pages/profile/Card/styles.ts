@@ -13,6 +13,7 @@ const CardContainer = styled(Box)(({ theme }) => ({
 }));
 
 const CardContentContainer = styled(Box)(({ theme }) => ({
+  width: "100%",
   padding: "12px",
   display: "flex",
   justifyContent: "space-between",
@@ -56,6 +57,10 @@ const CardHeader = styled(Typography)(() => ({
   fontSize: "20px",
   fontFamily: "Bungee, sans-serif",
   color: "#fff",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  width: "90%",
 }));
 
 const CardBody = styled(Typography)(() => ({
