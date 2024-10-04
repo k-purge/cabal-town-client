@@ -80,9 +80,9 @@ const CardOwnerText = styled(Typography)(() => ({
   alignItems: "center",
   justifyContent: "center",
   writingMode: "vertical-rl" /* Makes the text run vertically */,
+  textOrientation: "upright",
   textAlign: "center",
   width: "14px" /* Width of the yellow strip */,
-  transform: "rotate(180deg)",
 }));
 
 export {

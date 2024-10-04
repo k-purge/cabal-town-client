@@ -20,7 +20,7 @@ import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { sleep } from "lib/utils";
 import { DECIMAL_SCALER } from "consts";
 import useUserStore from "store/user-store/useUserStore";
-import { useSnackbar } from "notistack";
+import { SnackbarKey, useSnackbar } from "notistack";
 
 const schema = object().shape({
   amount: number().required().min(0),
@@ -107,32 +107,37 @@ export const BuySell = () => {
     [amt, jettonAddress, showNotification, tradeType],
   );
 
-  const finallyHandler = useCallback(async () => {
-    setPrice(0);
-    setAmt(0);
-    let i = 0;
-    while (i < 10) {
-      i++;
-      await sleep(5000);
-      const newBalance = await getJettonHoldersTxns();
-      if (newBalance !== userBalance) {
-        i = 10;
-        setActionInProgress(false);
-        showNotification("Transaction completed", "success");
+  const finallyHandler = useCallback(
+    async (key: SnackbarKey) => {
+      setPrice(0);
+      setAmt(0);
+      let i = 0;
+      while (i < 10) {
+        i++;
+        await sleep(5000);
+        const newBalance = await getJettonHoldersTxns();
+        if (newBalance !== userBalance) {
+          i = 10;
+          setActionInProgress(false);
+          showNotification("Transaction completed", "success");
+          closeSnackbar(key);
+        }
       }
-    }
-    await getJettonWallet();
-    await updateJettonPurge();
-    getJettonFromDb();
-  }, [
-    getJettonFromDb,
-    getJettonHoldersTxns,
-    getJettonWallet,
-    setActionInProgress,
-    showNotification,
-    updateJettonPurge,
-    userBalance,
-  ]);
+      await getJettonWallet();
+      await updateJettonPurge();
+      getJettonFromDb();
+    },
+    [
+      closeSnackbar,
+      getJettonFromDb,
+      getJettonHoldersTxns,
+      getJettonWallet,
+      setActionInProgress,
+      showNotification,
+      updateJettonPurge,
+      userBalance,
+    ],
+  );
 
   const buyTrade = useCallback(async () => {
     // const nanoAmt = toNano(amt).toNumber();
@@ -182,7 +187,7 @@ export const BuySell = () => {
     try {
       if (tradeType === "0") await buyTrade();
       else await sellTrade(price);
-      finallyHandler();
+      finallyHandler(key);
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
