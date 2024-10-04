@@ -1,11 +1,8 @@
 import useNotification from "hooks/useNotification";
 import { jettonDeployController } from "lib/jetton-controller";
-import WalletConnection from "services/wallet-connection";
 import useJettonStore from "store/jetton-store/useJettonStore";
 import { Address } from "ton";
 import { AppButton } from "components/appButton";
-import { useSetRecoilState } from "recoil";
-import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { useState } from "react";
 import { CenteringWrapper } from "components/footer/styled";
 import { Popup } from "components/Popup";

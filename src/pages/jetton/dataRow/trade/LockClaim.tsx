@@ -142,7 +142,7 @@ export const LockClaim = () => {
     const balance = tradeType === "0" ? userBalance : selectedJetton?.lockedDepositAmt;
     const error = validateTradeParams(type, senderAddress, nanoAmt, balance);
     if (error) {
-      showNotification(error, "warning", undefined, 3000);
+      showNotification(error, "warning", 3000);
       return;
     }
 
@@ -173,12 +173,12 @@ export const LockClaim = () => {
 
   const onClickClaim = useCallback(async () => {
     if (!senderAddress) {
-      showNotification("Invalid Sender wallet address", "warning", undefined, 3000);
+      showNotification("Invalid Sender wallet address", "warning", 3000);
       return;
     }
 
     if (!selectedJetton?.stakingAddress) {
-      showNotification("Ton network error.", "warning", undefined, 3000);
+      showNotification("Ton network error.", "warning", 3000);
       return;
     }
 

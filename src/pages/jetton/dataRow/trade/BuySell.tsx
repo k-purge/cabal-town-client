@@ -20,7 +20,7 @@ import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { sleep } from "lib/utils";
 import { DECIMAL_SCALER } from "consts";
 import useUserStore from "store/user-store/useUserStore";
-import { useSnackbar, SnackbarKey } from "notistack";
+import { useSnackbar } from "notistack";
 
 const schema = object().shape({
   amount: number().required().min(0),
@@ -42,14 +42,13 @@ export const BuySell = () => {
   const { tonBalance, getUserBalance } = useUserStore();
   const { jettonAddress } = useJettonAddress();
   const { showNotification } = useNotification();
-  const [loadingNotificationKey, setLoadingNotificationKey] = useState<SnackbarKey | undefined>();
-  const { closeSnackbar } = useSnackbar();
   const [tonconnect] = useTonConnectUI();
   const [actionInProgress, setActionInProgress] = useRecoilState(jettonActionsState);
   const [tradeType, setTradeType] = useState("0");
   const [price, setPrice] = useState(jettonPrice);
   const [amt, setAmt] = useState<number>(0);
   const [blinked, setBlinked] = useState(false);
+  const { closeSnackbar } = useSnackbar();
 
   const handleChangeType = (event: any, newTradeType: string) => {
     if (!newTradeType) {
@@ -173,21 +172,24 @@ export const BuySell = () => {
     const error = validateTradeParams(tradeType, senderAddress, nanoAmt, userBalance);
     const price = await getPrice();
     if (error || price === 0) {
-      showNotification(error ?? "Server error, please try again.", "warning", undefined, 3000);
+      showNotification(error ?? "Server error, please try again.", "warning", 3000);
       return;
     }
 
     setActionInProgress(true);
+    const key = showNotification("Loading...", "info", null);
 
     try {
       if (tradeType === "0") await buyTrade();
       else await sellTrade(price);
+      finallyHandler();
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
+        closeSnackbar(key);
+        showNotification("Operation aborted!", "warning", 3000);
+        setActionInProgress(false);
       }
-    } finally {
-      finallyHandler();
     }
   }, [
     amt,
@@ -200,6 +202,7 @@ export const BuySell = () => {
     buyTrade,
     sellTrade,
     finallyHandler,
+    closeSnackbar,
   ]);
 
   const onClickMax = useCallback(() => {
@@ -222,18 +225,6 @@ export const BuySell = () => {
     getUserBalance();
     return () => setActionInProgress(false);
   }, [getUserBalance, setActionInProgress]);
-
-  useEffect(() => {
-    if (actionInProgress) {
-      setLoadingNotificationKey(showNotification("Loading...", "info", undefined, null));
-    } else {
-      if (loadingNotificationKey !== undefined) {
-        closeSnackbar(loadingNotificationKey);
-        setLoadingNotificationKey(undefined);
-        showNotification("Operation Successful!", "success");
-      }
-    }
-  }, [actionInProgress]);
 
   return (
     <StyledBodyBlock height="313px">

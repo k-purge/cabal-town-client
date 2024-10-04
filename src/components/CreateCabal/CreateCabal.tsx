@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { Label, SpaceBetween, VisuallyHiddenInput } from "./styles";
 import { useInitData } from "@telegram-apps/sdk-react";
@@ -65,8 +65,7 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
   const rawAddress = useTonAddress(false);
   const [tonconnect] = useTonConnectUI();
   const navigate = useNavigatePreserveQuery();
-
-  console.log("tgUserId: ", tgUserId);
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -198,6 +197,12 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
     deployContract,
   }));
 
+  const onClickReplace = useCallback(() => {
+    if (fileInput.current) {
+      fileInput.current.click();
+    }
+  }, []);
+
   return (
     <Box
       sx={{
@@ -220,10 +225,15 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
         }}>
         <SpaceBetween>
           <Label>Cabal Image</Label>
-          <OutlinedButton sx={{ width: "50vw", maxWidth: "200px" }}>
+          <OutlinedButton sx={{ width: "50vw", maxWidth: "200px" }} onClick={onClickReplace}>
             <label>
               REPLACE
-              <VisuallyHiddenInput type="file" onChange={handleImageUpload} accept="image/*" />
+              <VisuallyHiddenInput
+                ref={fileInput}
+                type="file"
+                onChange={handleImageUpload}
+                accept="image/*"
+              />
             </label>
           </OutlinedButton>
         </SpaceBetween>

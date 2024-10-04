@@ -36,7 +36,7 @@ export const TransferAction = () => {
       decimals,
     );
     if (error) {
-      showNotification(error, "warning", undefined, 3000);
+      showNotification(error, "warning", 3000);
       return;
     }
 
@@ -55,7 +55,6 @@ export const TransferAction = () => {
       showNotification(
         `Successfully transfered ${amount?.toLocaleString()} ${symbol}`,
         "warning",
-        undefined,
         4000,
       );
     } catch (error) {

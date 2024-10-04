@@ -8,8 +8,6 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import { AppButton } from "components/appButton";
 import { AppNumberInput } from "components/appInput";
 import { toDecimalsBN } from "utils";
-import { useRecoilState } from "recoil";
-import { jettonActionsState } from "pages/jetton/actions/jettonActions";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
 
 function BurnJettonsAction() {
@@ -51,7 +49,7 @@ function BurnJettonsAction() {
           Maximum amount to burn is <BigNumberDisplay value={balance} />
         </>
       );
-      showNotification(msg, "warning", undefined, 3000);
+      showNotification(msg, "warning", 3000);
       return;
     }
 
