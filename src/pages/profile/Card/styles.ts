@@ -25,7 +25,7 @@ const CardContentContainer = styled(Box)(({ theme }) => ({
 }));
 
 const CardContent = styled(Box)(({ theme }) => ({
-  width: "100%",
+  width: "80%",
   alignItems: "center",
   marginLeft: "18px",
   textAlign: "left", // Ensure text alignment is left within the card
@@ -36,7 +36,7 @@ const CardContent = styled(Box)(({ theme }) => ({
 
 const CardImage = styled(Box)(() => ({
   border: "2px solid #FFFFFF",
-  width: "100px",
+  width: "20%",
   height: "72px",
   overflow: "hidden",
   display: "flex",
@@ -44,8 +44,10 @@ const CardImage = styled(Box)(() => ({
   alignItems: "center",
 
   "& img": {
-    maxWidth: "100%",
-    maxHeight: "100%",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    aspectRatio: 1 / 1,
   },
 
   "& p": {
