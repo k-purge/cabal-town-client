@@ -229,15 +229,13 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
         <SpaceBetween>
           <Label>Cabal Image</Label>
           <OutlinedButton sx={{ width: "50vw", maxWidth: "200px" }} onClick={onClickReplace}>
-            <label>
-              REPLACE
-              <VisuallyHiddenInput
-                ref={fileInput}
-                type="file"
-                onChange={handleImageUpload}
-                accept="image/*"
-              />
-            </label>
+            REPLACE
+            <VisuallyHiddenInput
+              ref={fileInput}
+              type="file"
+              onChange={handleImageUpload}
+              accept="image/*"
+            />
           </OutlinedButton>
         </SpaceBetween>
         <SpaceBetween>
