@@ -17,7 +17,7 @@ import { DividerLine, TradeButton } from "../trade/styled";
 import axiosService from "services/axios";
 import { useTonAddress } from "@tonconnect/ui-react";
 import useNotification from "hooks/useNotification";
-import { useInitData } from "@telegram-apps/sdk-react";
+import useUserStore from "store/user-store/useUserStore";
 
 export const Token = () => {
   const {
@@ -33,8 +33,7 @@ export const Token = () => {
     jettonMaster,
   } = useJettonStore();
   const { showNotification } = useNotification();
-  const initData = useInitData();
-  const tgUserId = initData?.user?.id;
+  const { tgUserId } = useUserStore();
   const walletAddress = useTonAddress();
   const [timeString, setTimeString] = useState("--");
 
@@ -82,7 +81,11 @@ export const Token = () => {
   }, [selectedJetton, holders, jettonPrice, tonPrice]);
 
   const onClickJoinGame = useCallback(async () => {
-    if (!jettonMaster || !tgUserId || !walletAddress) {
+    if (!tgUserId) {
+      return showNotification("Please switch to telegram.", "warning");
+    }
+
+    if (!jettonMaster || !walletAddress) {
       return;
     }
 
