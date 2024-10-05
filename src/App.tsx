@@ -15,7 +15,6 @@ import { QuestPage } from "pages/quest";
 import useNotification from "hooks/useNotification";
 import analytics from "services/analytics";
 import axiosService from "services/axios";
-import "./mockTg";
 import useUserStore from "store/user-store/useUserStore";
 // import eruda from "eruda";
 
