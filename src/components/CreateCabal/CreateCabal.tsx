@@ -1,7 +1,6 @@
 import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { Label, SpaceBetween, VisuallyHiddenInput } from "./styles";
-import { useInitData } from "@telegram-apps/sdk-react";
 import { CardPreview } from "components/card";
 import { DetailWrapper } from "components/form/styled";
 import MinusIcon from "assets/icons/minus.svg";
@@ -18,11 +17,11 @@ import { Address } from "ton";
 import { createDeployParams } from "lib/utils";
 import { ContractDeployer } from "lib/contract-deployer";
 import WalletConnection from "services/wallet-connection";
-import { ROUTES } from "consts";
+import { ROUTES, DEFAULT_DECIMALS } from "consts";
 import { IInsertJetton } from "store/jetton-list-store";
 import axiosService from "services/axios";
 import analytics, { AnalyticsAction, AnalyticsCategory } from "services/analytics";
-const DEFAULT_DECIMALS = 9;
+import useUserStore from "store/user-store/useUserStore";
 
 // Define the ref type
 type CreateCabalData = {
@@ -37,16 +36,11 @@ export interface CreateCabalRef {
 type CreateCabalProps = {};
 
 export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, ref) => {
-  const initData = useInitData();
-  const user = initData?.user;
-  const tgUserId = user?.id;
-  const userName = user?.username;
-  const fullName = user?.firstName + " " + user?.lastName;
-  const nameToUse = userName || fullName;
-  const userPhoto = user?.photoUrl;
-  const [cabalName, setCabalName] = useState(nameToUse + "'s cabal");
+  const { tgUserId, tgUserName } = useUserStore();
+  // const userPhoto = user?.photoUrl;
+  const [cabalName, setCabalName] = useState((tgUserName ?? "Degen") + "'s cabal");
   const [cabalSize, setCabalSize] = useState(1); // Add this state
-  const [cabalImageUrl, setCabalImageUrl] = useState(userPhoto ?? "");
+  const [cabalImageUrl, setCabalImageUrl] = useState("/logo512.png");
   const [imageFile, setImageFile] = useState<File | undefined>();
 
   const onEditAmt = (newValue: number) => {
@@ -87,6 +81,10 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
 
   async function deployContract() {
     console.log("deployContract");
+    if (!tgUserId) {
+      showNotification("Please switch to telegram.", "warning");
+      return;
+    }
 
     if (!imageFile) {
       showNotification(<>Please replace cabal image</>, "warning");

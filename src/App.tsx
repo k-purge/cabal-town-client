@@ -1,5 +1,4 @@
 import { styled } from "@mui/material";
-import { SDKProvider } from "@telegram-apps/sdk-react";
 import { Box } from "@mui/system";
 import { createContext, useEffect, useState } from "react";
 import { APP_GRID, ROUTES } from "consts";
@@ -17,6 +16,7 @@ import useNotification from "hooks/useNotification";
 import analytics from "services/analytics";
 import axiosService from "services/axios";
 import "./mockTg";
+import useUserStore from "store/user-store/useUserStore";
 // import eruda from "eruda";
 
 // eruda.init();
@@ -129,56 +129,56 @@ declare global {
 
 const App = () => {
   const { resetJetton } = useJettonLogo();
+  const { getTgUserId } = useUserStore();
   const location = useLocation();
 
   useEffect(() => {
     resetJetton();
-  }, [location.pathname, resetJetton]);
+    getTgUserId();
+  }, [getTgUserId, location.pathname, resetJetton]);
 
   return (
     <AppWrapper>
-      <SDKProvider>
-        <EnvContext.Provider
-          value={{
-            isSandbox: window.location.search.includes("sandbox"),
-            isTestnet: window.location.search.includes("testnet"),
-          }}>
-          <ScreensWrapper>
-            <Routes>
-              <Route
-                path="*"
-                element={
-                  <>
-                    <Header />
-                    <Navigate to="/" />
-                    <PageNotFound />
-                  </>
-                }
-              />
-              <Route path={ROUTES.gated} element={<GatedPage />} />
-              <Route path="/" element={<Header />}>
-                <Route path={"/"} element={<ProtectedRoute />}>
-                  {/* don't want to apply content wrapper here */}
-                  <Route path={ROUTES.deployer} element={<DeployerPage />} />
-                  <Route path="/" element={<ContentWrapper />}>
-                    <Route path={ROUTES.explorer} element={<ExplorerPage />} />
-                    <Route path={ROUTES.jettonId} element={<Jetton />} />
-                    <Route path={ROUTES.profile} element={<ProfilePage />} />
-                    <Route path={ROUTES.faq} element={<FaqPage />} />
-                    <Route path={ROUTES.onboarding} element={<OnboardingPage />} />
-                    <Route path={ROUTES.quest} element={<QuestPage />} />
-                  </Route>
+      <EnvContext.Provider
+        value={{
+          isSandbox: window.location.search.includes("sandbox"),
+          isTestnet: window.location.search.includes("testnet"),
+        }}>
+        <ScreensWrapper>
+          <Routes>
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header />
+                  <Navigate to="/" />
+                  <PageNotFound />
+                </>
+              }
+            />
+            <Route path={ROUTES.gated} element={<GatedPage />} />
+            <Route path="/" element={<Header />}>
+              <Route path={"/"} element={<ProtectedRoute />}>
+                {/* don't want to apply content wrapper here */}
+                <Route path={ROUTES.deployer} element={<DeployerPage />} />
+                <Route path="/" element={<ContentWrapper />}>
+                  <Route path={ROUTES.explorer} element={<ExplorerPage />} />
+                  <Route path={ROUTES.jettonId} element={<Jetton />} />
+                  <Route path={ROUTES.profile} element={<ProfilePage />} />
+                  <Route path={ROUTES.faq} element={<FaqPage />} />
+                  <Route path={ROUTES.onboarding} element={<OnboardingPage />} />
+                  <Route path={ROUTES.quest} element={<QuestPage />} />
                 </Route>
               </Route>
-            </Routes>
-          </ScreensWrapper>
-          {!ExclueFooterRoutes.includes(location.pathname) && (
-            <FooterBox>
-              <Footer />
-            </FooterBox>
-          )}
-        </EnvContext.Provider>
-      </SDKProvider>
+            </Route>
+          </Routes>
+        </ScreensWrapper>
+        {!ExclueFooterRoutes.includes(location.pathname) && (
+          <FooterBox>
+            <Footer />
+          </FooterBox>
+        )}
+      </EnvContext.Provider>
     </AppWrapper>
   );
 };

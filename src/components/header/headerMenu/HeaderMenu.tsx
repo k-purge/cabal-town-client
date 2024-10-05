@@ -5,7 +5,6 @@ import { AppLogo } from "components/appLogo";
 import { LogoContainer, CloseMenuButton, DrawerContent, HeaderTypography } from "./styled";
 import { useTonAddress, useTonConnectModal, useTonWallet } from "@tonconnect/ui-react";
 import { UserAvatar } from "components/UserAvatar";
-import { useInitData } from "@telegram-apps/sdk-react";
 import useUserStore from "store/user-store/useUserStore";
 import walletIcon from "assets/icons/wallet.svg";
 
@@ -45,14 +44,10 @@ const MobileMenu: React.FC<MenuProps> = ({ closeMenu, showMenu }) => {
 const HeaderMenu: React.FC<MenuProps> = (props) => {
   const { open } = useTonConnectModal();
   const wallet = useTonWallet();
-  const { getUser } = useUserStore();
-  const initData = useInitData();
-  const tgUserId = initData?.user?.id;
+  const { getUser, tgUserId } = useUserStore();
   const walletAddress = useTonAddress();
 
   useEffect(() => {
-    console.debug("wallet address changed: ", walletAddress);
-    console.debug("tgUserId: ", tgUserId);
     if (tgUserId && walletAddress) {
       getUser(tgUserId, walletAddress, walletAddress);
     }

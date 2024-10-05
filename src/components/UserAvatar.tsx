@@ -1,7 +1,7 @@
 import { Avatar, Menu, MenuItem, styled, Typography } from "@mui/material";
-import { useInitData } from "@telegram-apps/sdk-react";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import useUserStore from "store/user-store/useUserStore";
 
 const fontStyle = {
   color: "#ffffff",
@@ -16,11 +16,10 @@ const fontStyle = {
 };
 
 export const UserAvatar = () => {
-  const initData = useInitData();
+  const { tgUserId, tgUserName } = useUserStore();
   const walletAddress = useTonAddress();
   const [tonConnectUI] = useTonConnectUI();
 
-  const user = initData?.user;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleLogoClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -34,22 +33,19 @@ export const UserAvatar = () => {
     tonConnectUI.disconnect();
     handleClose();
   };
-  useEffect(() => {
-    console.log("user: ", user);
-  }, [user]);
 
   return (
     <>
-      {user ? (
-        user.photoUrl ? (
-          <Avatar onClick={handleLogoClick} src={user?.photoUrl} sx={{ width: 40, height: 40 }} />
+      {tgUserId ? (
+        !tgUserName ? (
+          <Avatar onClick={handleLogoClick} src={""} sx={{ width: 40, height: 40 }} />
         ) : (
           <Typography onClick={handleLogoClick} sx={fontStyle}>
-            {user.username}
+            {tgUserName}
           </Typography>
         )
       ) : (
-        <Typography sx={fontStyle}>
+        <Typography onClick={handleLogoClick} sx={fontStyle}>
           {walletAddress.slice(0, 3) + "..." + walletAddress.slice(-3)}
         </Typography>
       )}
