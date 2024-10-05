@@ -46,7 +46,7 @@ export const Card = ({
                   marginLeft: "4px",
                   color: isIncreasing ? "#3FF400" : "#FF0000",
                 }}>
-                ({item?.percent}%)
+                ({item?.percent?.toFixed(2)}%)
               </span>
             </CardBodyNumber>
           </Box>

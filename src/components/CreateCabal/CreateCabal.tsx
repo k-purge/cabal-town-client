@@ -62,9 +62,7 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
   const fileInput = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("event: ", event);
     const file = event.target.files?.[0];
-    console.log("file: ", file);
     if (file) {
       setImageFile(file);
 
