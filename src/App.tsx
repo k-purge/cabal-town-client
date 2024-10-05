@@ -173,7 +173,7 @@ const App = () => {
                   </Route>
                 </Route>
               </Route>
-            </Route>
+            </Routes>
           </ScreensWrapper>
           {!ExclueFooterRoutes.includes(location.pathname) && (
             <FooterBox>
