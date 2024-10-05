@@ -1,9 +1,13 @@
 import { Box, styled, Typography } from "@mui/material";
 import { CardTitle, CardText, CardContainer, CardContent, ExploreButton } from "./styles";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "consts";
 
 export const NoCabalsCard = (): JSX.Element => {
+  const navigate = useNavigate();
+
   const open = () => {
-    console.log("Go to homepage");
+    navigate(ROUTES.explorer);
   };
 
   return (

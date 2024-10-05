@@ -1,11 +1,16 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { FooterWrapper, SocialsWrapper } from "./styled";
 import { FooterLogo } from "./FooterLogo";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { ROUTES } from "consts";
 
-const footerLogos = [
+type footerLogo = {
+  title: string;
+  route: string;
+};
+
+const footerLogos: footerLogo[] = [
   {
     title: "Explorer",
     route: ROUTES.explorer,
@@ -31,6 +36,7 @@ const footerLogos = [
 
 export const Footer = () => {
   const navigate = useNavigatePreserveQuery();
+  const location = useLocation();
   const [selectedRoute, setSelectedRoute] = useState("Explorer");
 
   const onClickIcon = useCallback(
@@ -40,6 +46,11 @@ export const Footer = () => {
     },
     [navigate],
   );
+
+  useEffect(() => {
+    console.log("this gets called", location.pathname);
+    setSelectedRoute(footerLogos.find((logo) => logo.route === location.pathname)!.title);
+  }, [location]);
 
   return (
     <FooterWrapper>

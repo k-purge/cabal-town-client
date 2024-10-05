@@ -161,7 +161,10 @@ const App = () => {
                   {/* don't want to apply content wrapper here */}
                   <Route path={ROUTES.deployer} element={<DeployerPage />} />
                   <Route path="/" element={<ContentWrapper />}>
-                    <Route path={ROUTES.explorer} element={<ExplorerPage />} />
+                    <Route
+                      path={ROUTES.explorer}
+                      element={<ExplorerPage key={ROUTES.explorer} />}
+                    />
                     <Route path={ROUTES.jettonId} element={<Jetton />} />
                     <Route path={ROUTES.profile} element={<ProfilePage />} />
                     <Route path={ROUTES.faq} element={<FaqPage />} />
