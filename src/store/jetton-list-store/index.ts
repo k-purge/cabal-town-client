@@ -18,6 +18,7 @@ export interface IInsertJetton {
   chain: string;
   tgUserId?: number;
   walletAddress?: string;
+  tgUserName?: string;
 }
 
 export interface IJetton {

@@ -33,7 +33,7 @@ export const Token = () => {
     jettonMaster,
   } = useJettonStore();
   const { showNotification } = useNotification();
-  const { tgUserId } = useUserStore();
+  const { tgUserName } = useUserStore();
   const walletAddress = useTonAddress();
   const [timeString, setTimeString] = useState("--");
 
@@ -81,7 +81,7 @@ export const Token = () => {
   }, [selectedJetton, holders, jettonPrice, tonPrice]);
 
   const onClickJoinGame = useCallback(async () => {
-    if (!tgUserId) {
+    if (!tgUserName) {
       return showNotification("Please switch to telegram.", "warning");
     }
 
@@ -93,7 +93,7 @@ export const Token = () => {
       const { res } = await axiosService.joinGroup({
         masterAddress: jettonMaster,
         walletAddress,
-        tgUserId,
+        tgUserName,
       });
 
       if (res.invite_link) {
@@ -109,7 +109,7 @@ export const Token = () => {
       console.error("Error joining group:", error);
       return;
     }
-  }, [jettonMaster, showNotification, tgUserId, walletAddress]);
+  }, [jettonMaster, showNotification, tgUserName, walletAddress]);
 
   const renderJoinGame = () => {
     if (userBalance > 0) {
@@ -129,7 +129,7 @@ export const Token = () => {
             </Typography>
           </Box>
           <TradeButton
-            disabled={!(selectedJetton?.nextPurgeAt && jettonMaster && tgUserId && walletAddress)}
+            disabled={!(selectedJetton?.nextPurgeAt && jettonMaster && tgUserName && walletAddress)}
             background="#FFB800"
             onClick={onClickJoinGame}>
             {selectedJetton?.nextPurgeAt ? "JOIN CABAL" : "Cabal not yet created"}

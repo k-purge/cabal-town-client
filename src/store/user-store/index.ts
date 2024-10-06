@@ -14,7 +14,7 @@ export interface IInsertUser {
 export interface IJoinGroup {
   masterAddress: string;
   walletAddress: string;
-  tgUserId: number;
+  tgUserName: string;
 }
 
 export interface IUpdatePurge {
