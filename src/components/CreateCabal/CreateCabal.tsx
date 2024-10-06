@@ -163,6 +163,7 @@ export const CreateCabal = forwardRef<CreateCabalRef, CreateCabalProps>((props, 
         chain: network,
         walletAddress,
         tgUserId,
+        tgUserName,
       };
       const res = await axiosService.insertJetton(jettonData);
       console.debug("res: ", res);
