@@ -32,7 +32,6 @@ export const LockClaim = () => {
   const {
     userBalance,
     jettonImage,
-    symbol,
     isImageBroken,
     jettonWalletAddress,
     decimals,
@@ -219,12 +218,12 @@ export const LockClaim = () => {
       <Box width="341px" textAlign="start" mb={1}>
         <EllipsisText>Total Locked Token</EllipsisText>
         <BungeeText>
-          {(selectedJetton?.totalDepositAmt ?? 0) / DECIMAL_SCALER} {symbol}
+          {(selectedJetton?.totalDepositAmt ?? 0) / DECIMAL_SCALER} Cabal Credits
         </BungeeText>
 
         <EllipsisText>Your Locked Tokens</EllipsisText>
         <BungeeText>
-          {(selectedJetton?.lockedDepositAmt ?? 0) / DECIMAL_SCALER} {symbol}
+          {(selectedJetton?.lockedDepositAmt ?? 0) / DECIMAL_SCALER} Cabal Credits
         </BungeeText>
 
         <EllipsisText>Unclaimed Rewards</EllipsisText>
@@ -244,7 +243,7 @@ export const LockClaim = () => {
         <>
           <TextContainer>
             <BlinkingText>
-              {"Available " + (userBalance ?? 0) / DECIMAL_SCALER + " " + symbol}
+              {"Available " + (userBalance ?? 0) / DECIMAL_SCALER + "Cabal Credits"}
             </BlinkingText>
           </TextContainer>
           <TradeButton
@@ -262,7 +261,9 @@ export const LockClaim = () => {
         <>
           <TextContainer>
             <BlinkingText>
-              {"Locked " + (selectedJetton?.lockedDepositAmt ?? 0) / DECIMAL_SCALER + " " + symbol}
+              {"Locked " +
+                (selectedJetton?.lockedDepositAmt ?? 0) / DECIMAL_SCALER +
+                "Cabal Credits"}
             </BlinkingText>
           </TextContainer>
           <TradeButton
