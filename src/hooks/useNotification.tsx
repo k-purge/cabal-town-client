@@ -19,6 +19,7 @@ function useNotification() {
     (message: ReactNode | string, variant: VariantType, autoHideDuration?: number | null) => {
       const key = enqueueSnackbar(<StyledMessage>{message}</StyledMessage>, {
         variant,
+        anchorOrigin: { horizontal: "left", vertical: "top" },
         autoHideDuration: autoHideDuration,
         onClick: () => closeSnackbar(key),
         action: () => (
