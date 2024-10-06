@@ -30,7 +30,6 @@ export const BuySell = () => {
   const senderAddress = useTonAddress();
   const {
     userBalance,
-    symbol,
     jettonMaster,
     jettonPrice,
     decimals,
@@ -288,9 +287,9 @@ export const BuySell = () => {
         <BlinkingText blinked={blinked}>
           {blinked
             ? "Previewing..."
-            : tradeType === "0" && symbol
-            ? `${amt} TON = ${Math.floor(price)} ${symbol}`
-            : `${amt} ${symbol} = ${price.toFixed(2)} TON`}
+            : tradeType === "0"
+            ? `${amt} TON = ${Math.floor(price)} Cabal Credits`
+            : `${amt} Cabal Credits = ${price.toFixed(2)} TON`}
         </BlinkingText>
       </TextContainer>
 

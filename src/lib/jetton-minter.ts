@@ -203,7 +203,7 @@ export function initData(
   return beginCell()
     .storeUint(new BN("1000000000000000000"), 64)
     .storeUint(new BN("1000000000000000"), 64)
-    .storeUint(new BN("500000"), 32)
+    .storeUint(new BN("900000"), 32)
     .storeUint(new BN("1000000000"), 64)
     .storeAddress(owner)
     .storeRef(

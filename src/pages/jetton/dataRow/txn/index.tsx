@@ -13,7 +13,7 @@ import useJettonStore from "store/jetton-store/useJettonStore";
 import { DECIMAL_SCALER } from "consts";
 
 export const Txn = () => {
-  const { symbol, txns: jettonTxns } = useJettonStore();
+  const { txns: jettonTxns } = useJettonStore();
 
   const txns = useMemo(() => {
     return jettonTxns
@@ -70,7 +70,7 @@ export const Txn = () => {
                 <Typography sx={{ float: "left" }}>{txn?.in_msg.value / DECIMAL_SCALER}</Typography>
               </Box>
               <Box textAlign="end">
-                <Typography sx={{ fontSize: "16px" }}>{symbol}</Typography>
+                <Typography sx={{ fontSize: "16px" }}>Cabal Credits</Typography>
                 <Typography>{valueConvertor(txn?.out_msgs[0])}</Typography>
               </Box>
             </TextConainer>
