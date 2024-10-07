@@ -96,10 +96,12 @@ export const Token = () => {
         tgUserName,
       });
 
+      console.debug("res: ", res);
+
       if (res.invite_link) {
-        window.open(res.invite_link, "_blank");
+        // window.open(res.invite_link, "_blank");
       } else if (res.status === "success") {
-        window.open("tg://", "_blank");
+        // window.open("tg://", "_blank");
         showNotification("Join the group successfully.", "success");
       } else {
         showNotification(res.message ?? "Telegram error", "error");
