@@ -143,43 +143,40 @@ const App = () => {
           isSandbox: window.location.search.includes("sandbox"),
           isTestnet: window.location.search.includes("testnet"),
         }}>
-          <ScreensWrapper>
-            <Routes>
-              <Route
-                path="*"
-                element={
-                  <>
-                    <Header />
-                    <Navigate to="/" />
-                    <PageNotFound />
-                  </>
-                }
-              />
-              <Route path={ROUTES.gated} element={<GatedPage />} />
-              <Route path="/" element={<Header />}>
-                <Route path={"/"} element={<ProtectedRoute />}>
-                  {/* don't want to apply content wrapper here */}
-                  <Route path={ROUTES.deployer} element={<DeployerPage />} />
-                  <Route path="/" element={<ContentWrapper />}>
-                    <Route
-                      path={ROUTES.explorer}
-                      element={<ExplorerPage key={ROUTES.explorer} />}
-                    />
-                    <Route path={ROUTES.jettonId} element={<Jetton />} />
-                    <Route path={ROUTES.profile} element={<ProfilePage />} />
-                    <Route path={ROUTES.faq} element={<FaqPage />} />
-                    <Route path={ROUTES.onboarding} element={<OnboardingPage />} />
-                    <Route path={ROUTES.quest} element={<QuestPage />} />
-                  </Route>
+        <ScreensWrapper>
+          <Routes>
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header />
+                  <Navigate to="/" />
+                  <PageNotFound />
+                </>
+              }
+            />
+            <Route path={ROUTES.gated} element={<GatedPage />} />
+            <Route path="/" element={<Header />}>
+              <Route path={"/"} element={<ProtectedRoute />}>
+                {/* don't want to apply content wrapper here */}
+                <Route path={ROUTES.deployer} element={<DeployerPage />} />
+                <Route path="/" element={<ContentWrapper />}>
+                  <Route path={ROUTES.explorer} element={<ExplorerPage />} />
+                  <Route path={ROUTES.jettonId} element={<Jetton />} />
+                  <Route path={ROUTES.profile} element={<ProfilePage />} />
+                  <Route path={ROUTES.faq} element={<FaqPage />} />
+                  <Route path={ROUTES.onboarding} element={<OnboardingPage />} />
+                  <Route path={ROUTES.quest} element={<QuestPage />} />
                 </Route>
               </Route>
-            </Routes>
-          </ScreensWrapper>
-          {!ExclueFooterRoutes.includes(location.pathname) && (
-            <FooterBox>
-              <Footer />
-            </FooterBox>
-          )}
+            </Route>
+          </Routes>
+        </ScreensWrapper>
+        {!ExclueFooterRoutes.includes(location.pathname) && (
+          <FooterBox>
+            <Footer />
+          </FooterBox>
+        )}
       </EnvContext.Provider>
     </AppWrapper>
   );
