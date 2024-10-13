@@ -1,10 +1,10 @@
 import { Box, styled, Typography } from "@mui/material";
 import { CardTitle, CardText, CardContainer, CardContent, ExploreButton } from "./styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
 import { ROUTES } from "consts";
 
 export const NoCabalsCard = (): JSX.Element => {
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
 
   const open = () => {
     navigate(ROUTES.explorer);
