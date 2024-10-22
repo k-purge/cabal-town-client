@@ -1,22 +1,16 @@
 import { NorthWestSharp, SouthWestSharp } from "@mui/icons-material";
 import { HolderBox } from "./styled";
 import { Box, Typography } from "@mui/material";
+import { AlphaCardProps } from "store/tg-store";
 
-type AlphaCardProps = {
-  name: string;
-  timesMentioned: number;
-  performance: number;
-  iconUrl?: string;
-};
-
-export const AlphaCard = ({ name, timesMentioned, performance, iconUrl }: AlphaCardProps) => {
+export const AlphaCard = ({ token, token_image, count, h24 }: AlphaCardProps) => {
   return (
     <HolderBox>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, marginBottom: 2 }}>
-        <img src={iconUrl} alt={name} style={{ width: 24, height: 24 }} />
+        <img src={token_image} alt={token} style={{ width: 24, height: 24 }} />
         <Typography
           sx={{ fontSize: 20, fontWeight: 400, fontFamily: "Bungee", letterSpacing: "0.04em" }}>
-          {name}
+          {token}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
@@ -45,7 +39,7 @@ export const AlphaCard = ({ name, timesMentioned, performance, iconUrl }: AlphaC
               fontFamily: "Cabin Condensed",
               letterSpacing: "0.04em",
             }}>
-            {timesMentioned}
+            {count}
           </Typography>
         </Box>
         <Box
@@ -63,16 +57,16 @@ export const AlphaCard = ({ name, timesMentioned, performance, iconUrl }: AlphaC
               fontFamily: "Cabin Condensed",
               letterSpacing: "0.08em",
             }}>
-            36H Performance %
+            24H Performance %
           </Typography>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               gap: 0.5,
-              color: performance > 0 ? "#04AA23" : "#FF0000",
+              color: h24 > 0 ? "#04AA23" : "#FF0000",
             }}>
-            {performance > 0 ? (
+            {h24 > 0 ? (
               <NorthWestSharp sx={{ width: "16px", height: "16px" }} />
             ) : (
               <SouthWestSharp sx={{ width: "16px", height: "16px" }} />
@@ -85,7 +79,7 @@ export const AlphaCard = ({ name, timesMentioned, performance, iconUrl }: AlphaC
                 fontFamily: "Cabin Condensed",
                 letterSpacing: "0.04em",
               }}>
-              {performance}%
+              {h24}%
             </Typography>
           </Box>
         </Box>

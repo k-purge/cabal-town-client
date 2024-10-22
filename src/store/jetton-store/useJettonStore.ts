@@ -142,8 +142,8 @@ function useJettonStore() {
       // get jetton price
       const jettonPrice =
         result.minter.reserveBalance.toNumber() /
-          ((result.minter.circulatingSupply.toNumber() * result.minter.reserveRate.toNumber()) /
-            RATE_SCALER) ?? 0;
+        ((result.minter.circulatingSupply.toNumber() * result.minter.reserveRate.toNumber()) /
+          RATE_SCALER);
 
       // get ton price
       const {

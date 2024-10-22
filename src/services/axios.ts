@@ -145,6 +145,16 @@ async function uploadFile(file: File): Promise<string | undefined> {
   }
 }
 
+async function getGroupChatMsgs(groupId: string) {
+  const endpoint = REACT_APP_API_URL + "/v1/jettons/groupChat?tgGroupId=" + groupId;
+
+  try {
+    return (await axios.get(endpoint)).data;
+  } catch (error) {
+    console.error("Error getGroupChatMsgs:", error);
+  }
+}
+
 const axiosService = {
   getJettonUpdates,
   getJettonPrice,
@@ -162,6 +172,7 @@ const axiosService = {
   redeemCode,
   verifyToken,
   uploadFile,
+  getGroupChatMsgs,
 };
 
 export default axiosService;

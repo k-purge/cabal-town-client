@@ -68,7 +68,6 @@ export interface JettonStoreState {
   txns?: any[];
   fetch: number;
   userReward?: number;
-  tgUserId?: string;
 }
 
 const jettonStateAtom = atom<JettonStoreState>({
@@ -102,7 +101,6 @@ const jettonStateAtom = atom<JettonStoreState>({
     txns: undefined,
     fetch: 0,
     userReward: undefined,
-    tgUserId: undefined,
   },
 });
 

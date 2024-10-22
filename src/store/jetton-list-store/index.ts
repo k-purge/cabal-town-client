@@ -43,6 +43,7 @@ export interface IJetton {
   unclaimedReward?: number;
   percent?: number;
   price?: number;
+  tgGroupId?: string;
   trending48Hour?: {
     numOfPlayers?: number;
     percent?: number;

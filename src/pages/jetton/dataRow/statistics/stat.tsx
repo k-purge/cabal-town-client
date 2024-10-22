@@ -1,40 +1,41 @@
 import { Box, Typography } from "@mui/material";
 import { BoxConainer, BoxText, HolderContainer, StyledBlock } from "./styled";
 import { AlphaCard } from "./AlphaCard";
+import { useEffect } from "react";
+import useJettonStore from "store/jetton-store/useJettonStore";
+import useTgStore from "store/tg-store/useTgStore";
 
 const alphaData = [
   {
-    name: "AAVE",
-    timesMentioned: 10,
-    performance: 100,
-    iconUrl: require("assets/icons/aave.jpeg"),
+    token: "AAVE",
+    count: 10,
+    h24: 100,
+    token_image: require("assets/icons/aave.jpeg"),
   },
   {
-    name: "AERO",
-    timesMentioned: 7,
-    performance: 200,
-    iconUrl: require("assets/icons/aero.jpeg"),
+    token: "AERO",
+    count: 7,
+    h24: 200,
+    token_image: require("assets/icons/aero.jpeg"),
   },
   {
-    name: "AAVE",
-    timesMentioned: 10,
-    performance: 100,
-    iconUrl: require("assets/icons/aave.jpeg"),
-  },
-  {
-    name: "AERO",
-    timesMentioned: 7,
-    performance: 200,
-    iconUrl: require("assets/icons/aero.jpeg"),
-  },
-  {
-    name: "AERO",
-    timesMentioned: 7,
-    performance: 200,
-    iconUrl: require("assets/icons/aero.jpeg"),
+    token: "AAVE",
+    count: 10,
+    h24: 100,
+    token_image: require("assets/icons/aave.jpeg"),
   },
 ];
+
 export const Stat = () => {
+  const { selectedJetton } = useJettonStore();
+  const { getGroupMsgs, chatsCount, tokenList } = useTgStore();
+
+  useEffect(() => {
+    if (selectedJetton?.tgGroupId) {
+      getGroupMsgs(selectedJetton?.tgGroupId);
+    }
+  }, [getGroupMsgs, selectedJetton?.tgGroupId]);
+
   return (
     <>
       <Box>
@@ -75,7 +76,7 @@ export const Stat = () => {
                 fontFamily: "Bungee",
                 letterSpacing: "0.04em",
               }}>
-              128
+              {chatsCount}
             </Typography>
           </Box>
         </Box>
@@ -87,7 +88,7 @@ export const Stat = () => {
 
         <HolderContainer>
           {/* Least holders */}
-          {alphaData?.slice(0, 2).map((data, index) => (
+          {tokenList?.map((data, index) => (
             <AlphaCard key={index} {...data} />
           ))}
           {/* blur the cards */}
@@ -124,7 +125,7 @@ export const Stat = () => {
               </Typography>
             </Box>
             <Box sx={{ filter: "blur(8px)" }}>
-              {alphaData?.slice(2, 5).map((data, index) => (
+              {alphaData?.map((data, index) => (
                 <AlphaCard key={index} {...data} />
               ))}
             </Box>
