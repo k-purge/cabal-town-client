@@ -1,9 +1,13 @@
 import { Box, styled, Typography } from "@mui/material";
 import { CardTitle, CardText, CardContainer, CardContent, ExploreButton } from "./styles";
+import { useNavigatePreserveQuery } from "lib/hooks/useNavigatePreserveQuery";
+import { ROUTES } from "consts";
 
 export const NoCabalsCard = (): JSX.Element => {
+  const navigate = useNavigatePreserveQuery();
+
   const open = () => {
-    console.log("Go to homepage");
+    navigate(ROUTES.explorer);
   };
 
   return (
